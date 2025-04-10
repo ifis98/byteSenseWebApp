@@ -4,3 +4,40 @@ html, body, #__next {
     height: 100%;
   }
   
+/* styles/globals.scss */
+
+/* Custom styles for react-datepicker day cells */
+.red-date {
+    background-color: red;
+    color: white;
+  }
+  .red-date.react-datepicker__day--selected {
+    background-color: darkred;
+  }
+  
+  .white-date {
+    background-color: white;
+    color: black;
+  }
+  .white-date.react-datepicker__day--selected {
+    background-color: #cccccc;
+  }
+  
+  .green-date {
+    background-color: green;
+    color: white;
+  }
+  .green-date.react-datepicker__day--selected {
+    background-color: darkgreen;
+  }
+  
+  .yellow-date {
+    background-color: yellow;
+    color: black;
+  }
+  .yellow-date.react-datepicker__day--selected {
+    background-color: goldenrod;
+  }
+  
+  /* (You can add other global styles here as needed) */
+  

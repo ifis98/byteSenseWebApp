@@ -107,7 +107,7 @@ class PatientDetailedData extends Component {
         episodes,
         loading2: false,
       });
-    });
+    }).catch(() => this.setState({ loading2: false }));
   };
 
   getChartData = (date) => {
@@ -135,7 +135,7 @@ class PatientDetailedData extends Component {
         chartOptions: { ...this.state.chartOptions, series },
         loading: false,
       });
-    });
+    }).catch(() => this.setState({ loading: false }));
   };
 
   formatDate = (date, format) => {
@@ -197,38 +197,69 @@ class PatientDetailedData extends Component {
               </Box>
             ) : (
               <Box>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ p: 3 }}>
-                      <Typography variant="h6">Patient: {patientName}</Typography>
-                      <Typography variant="body2">Date: {this.formatDate(startDate, 'YYYY/MM/DD')}</Typography>
-                      <Typography mt={2}>Bruxism Total Episodes: {totalEpisodes}</Typography>
-                      <Typography>Bruxism Total Duration: {totalDuration} sec</Typography>
-                    </Card>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <Card sx={{ p: 3 }}>
-                      <Typography variant="h6">Dentist: Dr. {doctorName}</Typography>
-                      <Box mt={2}>
-                        <DatePicker
-                          selected={startDate}
-                          onChange={this.handleDateChange}
-                          inline
-                          filterDate={(date) => moment().isAfter(date)}
+                {/* Flex container for Chart & DatePicker */}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 3,
+                    flexDirection: { xs: 'column', md: 'row' },
+                  }}
+                >
+                  {/* Left Side: Chart & Metrics */}
+                  <Box
+                    sx={{
+                      flex: 3,
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}
+                  >
+                    <Card sx={{ p: 3, height: { xs: 'auto', md: '70vh' }, display: 'flex', flexDirection: 'column' }}>
+                      <Box>
+                        <Typography variant="h6" gutterBottom>
+                          Patient: {patientName}
+                        </Typography>
+                        <Typography variant="subtitle1" gutterBottom>
+                          Bruxism Total Episodes: {totalEpisodes}
+                        </Typography>
+                        <Typography variant="subtitle1" gutterBottom>
+                          Bruxism Total Duration: {totalDuration} sec
+                        </Typography>
+                      </Box>
+                      <Box mt={3} sx={{ flex: 1, minHeight: '300px' }}>
+                        <HighchartsReact
+                          highcharts={Highcharts}
+                          constructorType="stockChart"
+                          options={chartOptions}
+                          containerProps={{ style: { height: '100%', width: '100%' } }}
                         />
                       </Box>
                     </Card>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <Card sx={{ p: 2 }}>
-                      <HighchartsReact
-                        highcharts={Highcharts}
-                        constructorType={'stockChart'}
-                        options={chartOptions}
+                  </Box>
+
+                  {/* Right Side: DatePicker */}
+                  <Box sx={{ flex: 1 }}>
+                    <Card sx={{ p: 3, height: { xs: 'auto', md: '70vh' } }}>
+                      <DatePicker
+                        selected={startDate}
+                        onChange={this.handleDateChange}
+                        inline
+                        filterDate={(date) => moment().isAfter(date)}
+                        dayClassName={(date) => {
+                          const day = date.getDate();
+                          if (day % 4 === 0) {
+                            return 'red-date';
+                          } else if (day % 4 === 1) {
+                            return 'white-date';
+                          } else if (day % 4 === 2) {
+                            return 'green-date';
+                          } else {
+                            return 'yellow-date';
+                          }
+                        }}
                       />
                     </Card>
-                  </Grid>
-                </Grid>
+                  </Box>
+                </Box>
 
                 {episodes.length > 0 && (
                   <Box mt={4}>
@@ -243,7 +274,24 @@ class PatientDetailedData extends Component {
                       }}
                     >
                       {episodes.map((value, index) => (
-                        <Card key={index} sx={{ m: 1, p: 2, textAlign: 'center', minHeight: 100 }}>
+                        <Card
+                          key={index}
+                          sx={{
+                            m: 1,
+                            p: 2,
+                            textAlign: 'center',
+                            minHeight: 100,
+                            border: 2,
+                            borderColor: this.state.cardSelected === index ? '#5D82FA' : 'transparent',
+                          }}
+                          onClick={() => {
+                            this.setState({ cardSelected: index });
+                            this.$chart.current?.chart?.xAxis[0]?.setExtremes(
+                              parseInt(value.time) - 5000,
+                              parseInt(value.time2) + 5000
+                            );
+                          }}
+                        >
                           <Typography>Episode {index + 1}</Typography>
                           <Typography variant="body2">
                             {value.timeFormated} - {value.timeFormated2}

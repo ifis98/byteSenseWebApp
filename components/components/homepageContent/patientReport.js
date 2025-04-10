@@ -114,31 +114,31 @@ class PatientReport extends Component {
     const patientId = this.props.getPatientId.patientDataUser;
     const daysOfWeek = this.getDaysOfCurrentWeek();
   
-    const tempEp = [];
-    const tempDur = [];
+    const fetchReports = daysOfWeek.map(async (day) => {
+      try {
+        const response = await doctor
+          .doctorRequests()
+          .getDailyReport(patientId, this.formatDate(day, 'YYYY/MM/DD'));
   
-    await Promise.all(
-      daysOfWeek.map(async (day) => {
-        try {
-          const response = await doctor
-            .doctorRequests()
-            .getDailyReport(patientId, this.formatDate(day, 'YYYY/MM/DD'));
-  
-          if (!response.data || !response.data.length) {
-            tempEp.push(null);
-            tempDur.push(null);
-          } else {
-            const data = response.data[0];
-            tempEp.push(data.total_episodes ? Number(data.total_episodes) : null);
-            tempDur.push(data.total_duration ? Number(data.total_duration) : null);
-          }
-        } catch (error) {
-          console.warn(`Failed to fetch report for ${day}:`, error.message);
-          tempEp.push(null);
-          tempDur.push(null);
+        if (!response.data || !response.data.length) {
+          return { episodes: null, duration: null };
         }
-      })
-    );
+  
+        const data = response.data[0];
+        return {
+          episodes: data.total_episodes ? Number(data.total_episodes) : null,
+          duration: data.total_duration ? Number(data.total_duration) : null,
+        };
+      } catch (error) {
+        console.warn(`Report error for ${day}:`, error.message);
+        return { episodes: null, duration: null };
+      }
+    });
+  
+    const results = await Promise.all(fetchReports);
+  
+    const tempEp = results.map((r) => r.episodes);
+    const tempDur = results.map((r) => r.duration);
   
     this.setState((prev) => ({
       dataBar: {
@@ -153,6 +153,7 @@ class PatientReport extends Component {
       loading2: false,
     }));
   };
+  
   
 
   getDaysOfCurrentWeek = () => {
@@ -207,7 +208,7 @@ class PatientReport extends Component {
 
     return (
       <Box className="homePageContent" sx={{ px: 4, py: 2 }}>
-        {/* Header: Title left and PatientDetailedData right */}
+        {/* Header: Title on the left and PatientDetailedData on the right */}
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
           <Typography variant="h5" sx={{ color: '#5D82FA', fontWeight: 600 }}>
             Patient Report
@@ -222,16 +223,17 @@ class PatientReport extends Component {
           </Box>
         ) : (
           <>
-            {/* Grid container without explicit row heights */}
+            {/* Layout using CSS grid without explicit height */}
             <Box
               sx={{
                 display: 'grid',
                 gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+                gridTemplateRows: { xs: 'repeat(4, auto)', md: '150px 400px' },
                 gap: 3,
               }}
             >
               {/* Top Left Card: Patient Name */}
-              <Card sx={{ height: { xs: 'auto', md: 150 } }}>
+              <Card sx={{ height: '100%' }}>
                 <CardContent
                   sx={{
                     display: 'flex',
@@ -251,7 +253,7 @@ class PatientReport extends Component {
               </Card>
 
               {/* Top Right Card: Compliance */}
-              <Card sx={{ height: { xs: 'auto', md: 150 } }}>
+              <Card sx={{ height: '100%' }}>
                 <CardContent
                   sx={{
                     display: 'flex',
@@ -263,11 +265,7 @@ class PatientReport extends Component {
                   <NightsStayIcon sx={{ fontSize: 100, color: '#333f48', mr: 2 }} />
                   <Box>
                     <Typography variant="subtitle1">Compliance</Typography>
-                    <Typography
-                      variant="h6"
-                      fontWeight={700}
-                      sx={{ fontSize: 30, color: '#5D82FA' }}
-                    >
+                    <Typography variant="h6" fontWeight={700} sx={{ fontSize: 30, color: '#5D82FA' }}>
                       {ComplianceN}
                     </Typography>
                     <Typography variant="body2">Nights</Typography>
@@ -276,7 +274,7 @@ class PatientReport extends Component {
               </Card>
 
               {/* Bottom Left Card (Graph) */}
-              <Card sx={{ height: { xs: 'auto', md: 400 }, p: 2 }}>
+              <Card sx={{ height: '100%', p: 2 }}>
                 {lineDataPresent && (
                   <Line
                     data={dataBar}
@@ -302,7 +300,7 @@ class PatientReport extends Component {
               </Card>
 
               {/* Bottom Right Card (Graph) */}
-              <Card sx={{ height: { xs: 'auto', md: 400 }, p: 2 }}>
+              <Card sx={{ height: '100%', p: 2 }}>
                 {lineDataPresent && (
                   <Line
                     data={dataLine}
@@ -328,7 +326,7 @@ class PatientReport extends Component {
               </Card>
             </Box>
 
-            {/* Remove Patient button clearly below the grid */}
+            {/* Remove Patient button below the grid */}
             <Box mt={3} display="flex" justifyContent="center">
               <Button variant="contained" color="error" onClick={this.deletePatient}>
                 Remove Patient
