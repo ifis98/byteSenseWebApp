@@ -1,7 +1,6 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import HomePageNav from './components/common/nav';
 import Sidebar from './components/common/drawer';
 import PatientRequest from './components/homepageContent/patientRequest';
@@ -15,26 +14,41 @@ function HomePage() {
   const [hash, setHash] = useState('');
 
   useEffect(() => {
-    const updateHash = () => {
+    // Set initial hash
+    setHash(window.location.hash);
+
+    // Listen for hash changes
+    const handleHashChange = () => {
       setHash(window.location.hash);
     };
 
-    updateHash(); // Set initial hash on mount
-    window.addEventListener('hashchange', updateHash);
-
+    window.addEventListener('hashchange', handleHashChange);
+    
+    // Cleanup listener on unmount
     return () => {
-      window.removeEventListener('hashchange', updateHash);
+      window.removeEventListener('hashchange', handleHashChange);
     };
   }, []);
 
   const renderComponent = () => {
-    if (path === '/list' && hash === '#report') return <PatientReport />;
+    // For debugging
+    console.log('Current path:', path);
+    console.log('Current hash:', hash);
+
+    if (path === '/list') {
+      if (hash === '#report') {
+        return <PatientReport />;
+      } else {
+        return <PatientList />;
+      }
+    }
+
     if (path === '/' || path === '/home') return <ComingSoon />;
-    if (path.startsWith('/list')) return <PatientList />;
     if (path.startsWith('/request')) return <PatientRequest />;
     if (path.startsWith('/chat') || path.startsWith('/alerts') || path.startsWith('/help')) {
       return <ComingSoon />;
     }
+    
     return <ComingSoon />;
   };
 

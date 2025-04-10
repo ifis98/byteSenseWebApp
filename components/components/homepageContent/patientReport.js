@@ -113,28 +113,33 @@ class PatientReport extends Component {
   getReportOfCurrentWeek = async () => {
     const patientId = this.props.getPatientId.patientDataUser;
     const daysOfWeek = this.getDaysOfCurrentWeek();
-    const promiseArray = daysOfWeek.map((day) =>
-      doctor.doctorRequests().getDailyReport(
-        patientId,
-        this.formatDate(day, 'YYYY/MM/DD')
-      )
-    );
-
+  
     const tempEp = [];
     const tempDur = [];
-    await Promise.all(promiseArray).then((values) => {
-      values.forEach((report) => {
-        if (!report.data || !report.data.length) {
+  
+    await Promise.all(
+      daysOfWeek.map(async (day) => {
+        try {
+          const response = await doctor
+            .doctorRequests()
+            .getDailyReport(patientId, this.formatDate(day, 'YYYY/MM/DD'));
+  
+          if (!response.data || !response.data.length) {
+            tempEp.push(null);
+            tempDur.push(null);
+          } else {
+            const data = response.data[0];
+            tempEp.push(data.total_episodes ? Number(data.total_episodes) : null);
+            tempDur.push(data.total_duration ? Number(data.total_duration) : null);
+          }
+        } catch (error) {
+          console.warn(`Failed to fetch report for ${day}:`, error.message);
           tempEp.push(null);
           tempDur.push(null);
-        } else {
-          const data = report.data[0];
-          tempEp.push(data.total_episodes ? Number(data.total_episodes) : null);
-          tempDur.push(data.total_duration ? Number(data.total_duration) : null);
         }
-      });
-    });
-
+      })
+    );
+  
     this.setState((prev) => ({
       dataBar: {
         ...prev.dataBar,
@@ -148,6 +153,7 @@ class PatientReport extends Component {
       loading2: false,
     }));
   };
+  
 
   getDaysOfCurrentWeek = () => {
     const currentDate = this.dateCheck();
