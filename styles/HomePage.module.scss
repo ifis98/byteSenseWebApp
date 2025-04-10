@@ -1,31 +1,14 @@
-#homePage {
-    min-width: 1200px;
-    display: grid;
-    grid-template-columns: 270px 1fr;
-    grid-template-rows: 60px 1fr;
-  
-    .dropdown-menu {
-      right: 0;
-      left: auto !important;
-    }
-  }
-  
-  .homePageNav {
-    grid-column: 2/3;
-    grid-row: 1/2;
-    background-color: rgb(231, 64, 64);
-  }
-  
-  .homePageDrawer {
-    grid-column: 1/3;
-    grid-row: 1/3;
-    background-color: white;
-    height:100vh;
-    width: 270px;
-  }
-  
-  .homePageContent {
-    grid-column: 2/3;
-    grid-row: 2/3;
-    background-color: #f8f8f8;
-  }
+.pageWrapper {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.mainContent {
+  flex-grow: 1;
+  width: calc(100% - 240px);
+  padding: 0;
+  overflow-y: auto;
+  background-color: #ffffff;
+}

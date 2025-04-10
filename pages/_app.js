@@ -4,6 +4,8 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from '../store/store';
 import "../styles/homepageContent.scss";
+import "../styles/globals.scss";
+import "../styles/Profile.scss";
 
 
 function MyApp({ Component, pageProps }) {

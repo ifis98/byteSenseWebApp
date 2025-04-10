@@ -35,7 +35,7 @@ const PatientList = () => {
 
   const columns = useMemo(
     () => [
-      { accessorKey: 'Patient', header: 'Patient' },
+      { accessorKey: 'Patient', header: 'Patient' , enableHiding: false,},
       { accessorKey: 'DOB', header: 'DOB' },
       { accessorKey: 'Place_of_Residence', header: 'Place of Residence' },
       { accessorKey: 'Last_Visited', header: 'Last Visited' },
@@ -138,23 +138,15 @@ const PatientList = () => {
         </Modal.Footer>
       </Modal>
 
-      <Row>
-        <Col>
-          <div id="patientListTitle">Patient List</div>
-        </Col>
-        <Col>
-          <InputGroup>
-            <Form.Control
-              value={searchText}
-              onChange={handleSearchChange}
-              placeholder="Search..."
-            />
-            <Button variant="outline-secondary" onClick={() => setSearchText('')}>
-              Clear
-            </Button>
-          </InputGroup>
-        </Col>
-      </Row>
+      <Card className="mt-4 p-3 border-0">
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
+          <div>
+            <h2 className="mb-1" style={{ color: '#5D82FA', fontWeight: 600 }}>
+              Patient List
+            </h2>
+          </div>
+        </div>
+      </Card>
 
       {loading ? (
         <div className="loadingContainer">

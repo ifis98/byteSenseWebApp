@@ -1,42 +1,75 @@
 'use client';
 
-import React from "react";
-import { ListGroup } from "react-bootstrap";
-import styles from "../../../styles/common.module.scss";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Drawer,
+  Toolbar,
+} from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import PersonIcon from '@mui/icons-material/PermIdentity';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import HelpCenterIcon from '@mui/icons-material/HelpCenter';
 
-const Drawer = () => {
+const drawerWidth = 240;
+
+const navItems = [
+  { href: '/', icon: <HomeIcon />, label: 'Home' },
+  { href: '/list', icon: <PersonIcon />, label: 'Patient List' },
+  { href: '/request', icon: <GroupAddIcon />, label: 'Patient Request' },
+  { href: '/chat', icon: <ChatBubbleOutlineIcon />, label: 'Chat Room' },
+  { href: '/alerts', icon: <MailOutlineIcon />, label: 'Alerts' },
+  { href: '/help', icon: <HelpCenterIcon />, label: 'Help Center' },
+];
+
+const Sidebar = () => {
   const pathname = usePathname();
 
-  const links = [
-    { href: "/", icon: "home", label: "Home" },
-    { href: "/list", icon: "perm_identity", label: "Patient List" },
-    { href: "/request", icon: "group_add", label: "Patient Request" },
-    { href: "/chat", icon: "chat_bubble_outline", label: "Chat Room" },
-    { href: "/alerts", icon: "mail_outline", label: "Alerts" },
-    { href: "/help", icon: "help_center", label: "Help Center" },
-  ];
-
   return (
-    <div id="Drawer" className={styles.homePageDrawer}>
-      <img
-        id="drawerLogo"
-        src="/image.png"
-        alt="EPIC's Logo"
-      />
-      <ListGroup variant="flush">
-        {links.map(({ href, icon, label }) => (
+    <Drawer
+      variant="permanent"
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        [`& .MuiDrawer-paper`]: {
+          width: drawerWidth,
+          boxSizing: 'border-box',
+          backgroundColor: '#F8F8F8',
+          padding: 0,
+        },
+      }}
+    >
+      <Toolbar disableGutters sx={{ justifyContent: 'center', px: 0 }}>
+        <img src="/image.png" alt="Logo" style={{ width: 120 }} />
+      </Toolbar>
+      <List>
+        {navItems.map(({ href, icon, label }) => (
           <Link key={href} href={href} passHref legacyBehavior>
-            <ListGroup.Item action active={pathname === href}>
-              <span className="material-icons">{icon}</span>
-              <span className={styles.textDrawer}> {label}</span>
-            </ListGroup.Item>
+            <ListItem disablePadding>
+              <ListItemButton selected={pathname === href}>
+                <ListItemIcon sx={{ color: '#5D82FA' }}>{icon}</ListItemIcon>
+                <ListItemText
+                  primary={label}
+                  primaryTypographyProps={{
+                    fontWeight: pathname === href ? 'bold' : 'normal',
+                    color: pathname === href ? '#5D82FA' : 'inherit',
+                  }}
+                />
+              </ListItemButton>
+            </ListItem>
           </Link>
         ))}
-      </ListGroup>
-    </div>
+      </List>
+    </Drawer>
   );
 };
 
-export default Drawer;
+export default Sidebar;
