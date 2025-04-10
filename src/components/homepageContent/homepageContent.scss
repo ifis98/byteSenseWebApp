@@ -1,0 +1,524 @@
+
+#comingSoon{
+  #comingSoonLogo{
+    text-align: center;
+
+  }
+}
+
+#PatientList {
+  .circular--square {
+    border-radius: 50%;
+    width: 67px;
+    height: 67px;
+    margin-left: 14px;
+    margin-top: 6px;
+  }
+
+  #patientListTable {
+    width: 95%;
+    height: 90%;
+    margin: 30px auto;
+    background-color: #f8f8f8;
+  }
+
+  #patientListTitle {
+    font-size: 26px;
+    padding-left: 30px;
+    color: #5D82FA;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 290px;
+    grid-gap: 20px;
+    padding: 2%;
+    min-height: 650px;
+  }
+  th {
+    background-color: #f5f6fa;
+    color: #5D82FA;
+  }
+  tr {
+    font-size: 16px;
+  }
+
+  .grid-child-one,
+  .grid-child-two {
+    .patientList_container {
+      padding: 30px 30px 20px;
+      background-color: white;
+    }
+  }
+  #gct_title {
+    font-size: 20px;
+    color: #5D82FA;
+    margin-top: 25px;
+    margin-left: 10px;
+  }
+
+  .page-item.active .page-link {
+    background-color: #5D82FA;
+    border-color: #5D82FA;
+  }
+  .grid-container-two {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    grid-gap: 10px;
+  }
+  #gct_account_circle {
+    font-size: 80px;
+    margin-left: 10px;
+  }
+
+  .gct_name {
+    font-size: 19px;
+    font-weight: bold;
+  }
+  .gct_description {
+    color: #5D82FA;
+  }
+  .row {
+    margin-top: 40px;
+  }
+  .col-text-left {
+    padding-right: 15px;
+  }
+  #patient_dropdown {
+    margin-top: 45px;
+    padding: 0 12px;
+  }
+  #Contact_Patient {
+    margin: auto 30px;
+    background-color: #5D82FA;
+    border-color: #5D82FA;
+  }
+  #Remove_Patient {
+    margin: auto 30px;
+    background-color:#023CF7 ;
+    border-color: #023CF7;
+  }
+  #mail_button {
+    vertical-align: bottom;
+  }
+  .spinner-border {
+    display: inline-block;
+    width: 6rem;
+    height: 6rem;
+    vertical-align: text-bottom;
+    border: 0.55em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+  }
+
+  .loadingContainer {
+    text-align: center;
+    margin-top: 180px;
+  }
+}
+
+#PatientReport {
+  padding: 45px 70px;
+  min-height: 700px;
+
+  .spinner-border {
+    display: inline-block;
+    width: 6rem;
+    height: 6rem;
+    vertical-align: text-bottom;
+    border: 0.55em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+  }
+
+  .loadingContainer {
+    text-align: center;
+    margin-top: 180px;
+  }
+
+  #patientReportTitle {
+    color: #5D82FA;
+    font-size: 27px;
+  }
+
+  .patientReportGrid {
+    display: grid;
+    grid-template-columns: 230px 1fr 1fr 1fr;
+    grid-template-rows: 85px;
+    grid-gap: 23px;
+    margin-top: 20px;
+  }
+  .material-icons {
+    font-size: 60px;
+    margin: 13px 0;
+    margin-left: 10px;
+    color: #333f48;
+  }
+
+  .PR1 {
+    grid-column: 1/2;
+    grid-row: 1/2;
+    background-color: white;
+    box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.05);
+  }
+  .PR2 {
+    grid-column: 2/3;
+    grid-row: 1/2;
+    background-color: white;
+    box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.05);
+  }
+  .PR3 {
+    grid-column: 3/4;
+    grid-row: 1/2;
+    background-color: white;
+    box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.05);
+  }
+  .PR4 {
+    grid-column: 4/5;
+    grid-row: 1/2;
+    background-color: white;
+    box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.05);
+  }
+  #toothIcon {
+    font-size: 60px;
+    margin: 13px 0;
+    margin-left: 10px;
+    color: #333f48;
+  }
+
+  .grid-container-firstrow {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+  }
+  .patientReport-text-firstRow {
+    color: #5D82FA;
+    margin-top: 8px;
+    font-size: 17px;
+    text-align: center;
+  }
+
+  .patientReport-first-text {
+    font-size: 30px;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  .patientReport-first-row-text {
+    font-size: 18px;
+    color: #5D82FA;
+    margin-top: 16px;
+  }
+  .patientReport-first-row-text-two {
+    font-size: 14px;
+  }
+  .patientReport-first-row-dots {
+    text-align: right;
+    font-size: 10px;
+    margin-right: 10px;
+
+    .material-icons {
+      margin-top: 30px;
+      font-size: 27px;
+
+    }
+  }
+  .patientReport-text-two {
+    color: #5D82FA;
+    margin-top: 32px;
+    font-size: 19px;
+    text-align: center;
+    
+  }
+  .grid-container-firstrow-two {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+  }
+  
+  .row-container {
+    margin-left: 15px;
+  }
+
+  .patientReportContainer-two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 140px 300px;
+    grid-gap: 23px;
+    grid-row-gap: 40px;
+    margin-top: 30px;
+  }
+
+  
+  .patientReportContainer-box-style {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+  }
+  .patientReportContainer-rowTwo-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 0.9fr 1fr;
+    height: 100%;
+  }
+
+  .patientReportContainer-rowTwo-grid-2 {
+    display: grid;
+    grid-template-columns: 2fr 6fr;
+    height: 100%;
+    .material-icons{
+      font-size: 95px;
+      margin: 25px 0px 0px auto;
+      color: #333f48;
+    }
+  }
+  .ptc-tw-text {
+    font-size: 30px;
+    font-weight: 600;
+    text-align: center;
+    margin-top: 45px;
+    
+  }
+
+  .dashStyle {
+    border-bottom: dashed 2px #000;
+    width: 90px;
+    margin: 0 auto;
+  }
+  .textStyle-r2 {
+    font-size: 34px;
+    color: #5D82FA;
+  }
+
+  .textContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    }
+
+  .pr-2rI {
+    display: grid;
+    grid-template-columns: 1fr;
+    #pr-2rImoon {
+      font-size: 90px;
+      margin: 25px auto 0;
+      color: #333f48;
+    }
+
+    #pr-2rIdots {
+      font-size: 27px;
+      text-align: right;
+      margin-right: 15px;
+      margin-top: 57px;
+    }
+  }
+  .pt-graph-key {
+    font-size: 17px;
+    .material-icons {
+      font-size: 21px;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+  }
+  .textDrawer {
+    vertical-align: middle;
+  }
+  #pt-graph-color-1 {
+    color: #99ECFA;
+  }
+  #pt-graph-color-2 {
+    color: #5D82FA;
+  }
+  #pt-graph-color-3 {
+    color: #0032F3;
+  }
+  .lastC {
+    padding-top: 11px;
+  }
+
+  #barStyle {
+    margin: 10px auto;
+  }
+  #lineStyle {
+    margin: 10px auto;
+  }
+
+  @media screen and (max-width: 1500px) {
+    .ptc-tw-text {
+      font-size: 22px;
+      margin: 50px auto 0;
+    }
+  }
+}
+.declineButton {
+  float: left;
+}
+.markText{
+background-color:white;
+font-weight:bold;
+}
+
+.modal-90w { 
+  max-width: 1350px !important;
+  min-width: 1200px;
+
+}
+#infoWrapper{
+  padding-top: 15px;
+  padding-left: 25px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background-color: white;
+  padding-bottom: 20px;
+}
+
+#wrapper{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin-top: 25px;
+  padding-bottom: 55px;
+}
+.userDataBANR{
+  color: #5D82FA;
+  font-weight: 600;
+  font-size: 18px;
+  margin-top: 6px;
+}
+
+.DesntistDataBANR{
+  color: #5D82FA;
+  text-align: right;
+  margin-right: 30px;
+  margin-bottom: 107px;
+  font-weight: 600;
+  font-size: 18px;
+  margin-top: 6px;
+}
+
+
+.infoTitleBANR{
+  font-weight: 600;
+  font-size: 18px;
+  margin-top: 6px;
+}
+
+.infoTitleBANRSubText{
+  color: #5D82FA;
+
+
+}
+
+
+
+// .react-datepicker__input-container{
+//   input{
+//     width: 80%;
+//     height: 40px;
+//     font-size: 28px;
+//     text-align: center;
+//     color: #bf5701;
+
+
+//   }
+// }
+
+.react-datepicker {
+  font-size: 1.0rem !important;
+}
+
+.react-datepicker__current-month {
+  font-size: 1.2rem !important;
+}
+
+.react-datepicker__header {
+  padding-top: 5px !important;
+}
+
+.rdtPicker tr {
+  height: 100px; //Choose the height of each row so that the overall height will change
+}
+.react-datepicker__navigation {
+  top: 13px !important;
+}
+
+.react-datepicker__day-name, .react-datepicker__day {
+  margin: 0.2rem !important;
+}
+
+.modal-header .close {
+ 
+  display: none;
+}
+.table{
+}
+
+.firstColumn{
+  width: 150px;
+  font-weight: bold;
+
+}
+
+.table td, .table th {
+  border-top: 0px !important;
+}
+
+.EpisodeZoomData{
+
+  height: 100%;
+  width: 90%;
+  margin: 0 auto;
+}
+
+.loadingContainerNightlyReport {
+  text-align: center;
+  margin-top: 180px;
+  margin-bottom: 180px;
+
+  .spinner-border {
+    display: inline-block;
+    width: 6rem;
+    height: 6rem;
+    vertical-align: text-bottom;
+    border: 0.4em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+  }
+
+}
+
+.highcharts-range-selector-buttons{
+  display: none;
+}
+
+.highcharts-credits{
+  display: none;
+}
+.highcharts-subtitle{
+  color:#335cad !important;
+  fill: #335cad !important;
+}
+
+.react-multi-carousel-list{
+  margin-top: 30px;
+}  
+
+.modal-dialog-scrollable .modal-body{
+  background-color:  #f8f8f8;
+}
+
+.borderModal{
+  background-color: white;
+  box-shadow: 0 0 4px 1px rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.textDrawer {
+  vertical-align: bottom;
+}
