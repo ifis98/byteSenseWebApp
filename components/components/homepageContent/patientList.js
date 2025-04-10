@@ -19,7 +19,7 @@ import { backendLink } from '../../../exports/variable';
 import { updatePatientID } from '../../../actions/PageActions';
 import { updatePatientDetail } from '../../../actions/APIAction';
 
-const PatientList = () => {
+const PatientList = ({ setIsLoading }) => {
   const pageSize = 10;
   const router = useRouter();
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const PatientList = () => {
 
   const columns = useMemo(
     () => [
-      { accessorKey: 'Patient', header: 'Patient' , enableHiding: false,},
+      { accessorKey: 'Patient', header: 'Patient', enableHiding: false },
       { accessorKey: 'DOB', header: 'DOB' },
       { accessorKey: 'Place_of_Residence', header: 'Place of Residence' },
       { accessorKey: 'Last_Visited', header: 'Last Visited' },
@@ -98,11 +98,24 @@ const PatientList = () => {
   };
 
   const handleRowClick = (row) => {
-    setLoading(true);
+    // Set loading state through props
+    if (setIsLoading) setIsLoading(true);
+    
+    // Store patient ID
     dispatch(updatePatientID({ patientDataUser: row.original.id }));
-    dispatch(updatePatientDetail(row.original.id)).then((results) => {
-      if (results) router.push('/list#report');
-    });
+    
+    // Load patient data then navigate
+    dispatch(updatePatientDetail(row.original.id))
+      .then((results) => {
+        if (results) {
+          // Use window.location to ensure full page reload with hash
+          window.location.href = '/list#report';
+        }
+      })
+      .catch(error => {
+        console.error("Error loading patient details:", error);
+        if (setIsLoading) setIsLoading(false);
+      });
   };
 
   const handleRowHover = (row) => {
