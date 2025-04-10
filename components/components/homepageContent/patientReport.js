@@ -7,15 +7,38 @@ import { doctor } from '../../../exports/apiCalls';
 import moment from 'moment';
 import { Line } from 'react-chartjs-2';
 import {
-  CircularProgress,
-  Button,
   Box,
   Typography,
   Card,
+  CircularProgress,
+  Button,
   CardContent,
-  Grid
 } from '@mui/material';
 import PatientDetailedData from './patientDetailedData';
+import NightsStayIcon from '@mui/icons-material/NightsStay';
+import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
+
+// Import and register the required Chart.js components
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 class PatientReport extends Component {
   state = {
@@ -26,7 +49,15 @@ class PatientReport extends Component {
     ComplianceD: '0',
     patientName: '',
     dataBar: {
-      labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      labels: [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+      ],
       datasets: [
         {
           label: 'Total Episodes',
@@ -38,7 +69,15 @@ class PatientReport extends Component {
       ],
     },
     dataLine: {
-      labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      labels: [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+      ],
       datasets: [
         {
           label: 'Total Duration',
@@ -75,7 +114,10 @@ class PatientReport extends Component {
     const patientId = this.props.getPatientId.patientDataUser;
     const daysOfWeek = this.getDaysOfCurrentWeek();
     const promiseArray = daysOfWeek.map((day) =>
-      doctor.doctorRequests().getDailyReport(patientId, this.formatDate(day, 'YYYY/MM/DD'))
+      doctor.doctorRequests().getDailyReport(
+        patientId,
+        this.formatDate(day, 'YYYY/MM/DD')
+      )
     );
 
     const tempEp = [];
@@ -110,7 +152,9 @@ class PatientReport extends Component {
   getDaysOfCurrentWeek = () => {
     const currentDate = this.dateCheck();
     const weekStart = currentDate.clone().startOf('week');
-    return Array.from({ length: 7 }, (_, i) => moment(weekStart).add(i, 'days').format('MM/DD/YYYY'));
+    return Array.from({ length: 7 }, (_, i) =>
+      moment(weekStart).add(i, 'days').format('MM/DD/YYYY')
+    );
   };
 
   formatDate = (date, format) => {
@@ -145,11 +189,19 @@ class PatientReport extends Component {
   };
 
   render() {
-    const { loading, loading2, lineDataPresent, ComplianceN, patientName, dataBar, dataLine } = this.state;
+    const {
+      loading,
+      loading2,
+      lineDataPresent,
+      ComplianceN,
+      patientName,
+      dataBar,
+      dataLine,
+    } = this.state;
 
     return (
-      <Box className="homePageContent" id="PatientReport" sx={{ px: 4, py: 2 }}>
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+      <Box className="homePageContent" sx={{ px: 4, py: 2 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
           <Typography variant="h5" sx={{ color: '#5D82FA', fontWeight: 600 }}>
             Patient Report
           </Typography>
@@ -165,92 +217,109 @@ class PatientReport extends Component {
           </Box>
         ) : (
           <>
-            <Grid container spacing={3}>
-              {/* Top Row */}
-              <Grid item xs={12} md={6}>
-                <Card sx={{ p: 3, height: 150 }}>
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <span className="material-icons" style={{ fontSize: 50, color: '#333f48' }}>
-                      perm_contact_calendar
-                    </span>
-                    <Box>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        Patient Name
-                      </Typography>
-                      <Typography variant="h6" fontWeight={600}>
-                        {patientName}
-                      </Typography>
-                    </Box>
+            {/* Layout using CSS grid */}
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+                gridTemplateRows: { xs: 'repeat(4, auto)', md: '150px 400px' },
+                gap: 3,
+                height: '100%',
+              }}
+            >
+              {/* Top Left Card: Patient Name */}
+              <Card sx={{ height: '100%' }}>
+                <CardContent
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    height: '100%',
+                  }}
+                >
+                  <PermContactCalendarIcon sx={{ fontSize: 100, color: '#333f48', mr: 2 }} />
+                  <Box>
+                    <Typography variant="subtitle1">Patient Name</Typography>
+                    <Typography variant="h6" fontWeight={700}>
+                      {patientName}
+                    </Typography>
                   </Box>
-                </Card>
-              </Grid>
+                </CardContent>
+              </Card>
 
-              <Grid item xs={12} md={6}>
-                <Card sx={{ p: 3, height: 150 }}>
-                  <Box display="flex" alignItems="center" gap={2}>
-                    <span className="material-icons" style={{ fontSize: 50, color: '#333f48' }}>
-                      nights_stay
-                    </span>
-                    <Box>
-                      <Typography variant="subtitle2" color="textSecondary">
-                        Compliance
-                      </Typography>
-                      <Typography variant="h6" color="#5D82FA">{ComplianceN}</Typography>
-                      <Typography variant="body2">Nights</Typography>
-                    </Box>
+              {/* Top Right Card: Compliance */}
+              <Card sx={{ height: '100%' }}>
+                <CardContent
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    height: '100%',
+                  }}
+                >
+                  <NightsStayIcon sx={{ fontSize: 100, color: '#333f48', mr: 2 }} />
+                  <Box>
+                    <Typography variant="subtitle1">Compliance</Typography>
+                    <Typography variant="h6" fontWeight={700} sx={{ fontSize: 30, color: '#5D82FA' }}>
+                      {ComplianceN}
+                    </Typography>
+                    <Typography variant="body2">Nights</Typography>
                   </Box>
-                </Card>
-              </Grid>
+                </CardContent>
+              </Card>
 
-              {/* Bottom Row - Graphs */}
-              <Grid item xs={12} md={6}>
-                <Card sx={{ p: 3, height: 400 }}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Bruxism Total Episodes
-                  </Typography>
-                  {lineDataPresent && (
-                    <Line
-                      data={dataBar}
-                      options={{
-                        plugins: {
-                          legend: { display: true, position: 'bottom' },
+              {/* Bottom Left Card (Graph) */}
+              <Card sx={{ height: '100%', p: 2 }}>
+                {lineDataPresent && (
+                  <Line
+                    data={dataBar}
+                    options={{
+                      plugins: {
+                        legend: { display: true, position: 'bottom' },
+                        title: {
+                          display: true,
+                          text: 'Bruxism Total Episodes',
+                          color: '#333',
+                          font: { size: 18 },
                         },
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                          x: { title: { display: true, text: 'Night' } },
-                          y: { title: { display: true, text: 'Episodes' } },
-                        },
-                      }}
-                    />
-                  )}
-                </Card>
-              </Grid>
+                      },
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      scales: {
+                        x: { title: { display: true, text: 'Night' } },
+                        y: { title: { display: true, text: 'Episodes' } },
+                      },
+                    }}
+                  />
+                )}
+              </Card>
 
-              <Grid item xs={12} md={6}>
-                <Card sx={{ p: 3, height: 400 }}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Bruxism Total Duration
-                  </Typography>
-                  {lineDataPresent && (
-                    <Line
-                      data={dataLine}
-                      options={{
-                        plugins: {
-                          legend: { display: true, position: 'bottom' },
+              {/* Bottom Right Card (Graph) */}
+              <Card sx={{ height: '100%', p: 2 }}>
+                {lineDataPresent && (
+                  <Line
+                    data={dataLine}
+                    options={{
+                      plugins: {
+                        legend: { display: true, position: 'bottom' },
+                        title: {
+                          display: true,
+                          text: 'Bruxism Total Duration',
+                          color: '#333',
+                          font: { size: 18 },
                         },
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                          x: { title: { display: true, text: 'Night' } },
-                          y: { title: { display: true, text: 'Duration (seconds)' } },
-                        },
-                      }}
-                    />
-                  )}
-                </Card>
-              </Grid>
-            </Grid>
+                      },
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      scales: {
+                        x: { title: { display: true, text: 'Night' } },
+                        y: { title: { display: true, text: 'Duration (seconds)' } },
+                      },
+                    }}
+                  />
+                )}
+              </Card>
+            </Box>
 
             <Box mt={4}>
               <PatientDetailedData />
