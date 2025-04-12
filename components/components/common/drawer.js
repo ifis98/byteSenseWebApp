@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import {
   List,
   ListItem,
@@ -32,6 +31,14 @@ const navItems = [
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleNavigation = (href) => {
+    // Use router.push to force navigation.
+    // This ensures that if the target URL is the same path but with a different or missing hash,
+    // the navigation will trigger a re-render.
+    router.push(href);
+  };
 
   return (
     <Drawer
@@ -52,20 +59,23 @@ const Sidebar = () => {
       </Toolbar>
       <List>
         {navItems.map(({ href, icon, label }) => (
-          <Link key={href} href={href} passHref legacyBehavior>
-            <ListItem disablePadding>
-              <ListItemButton selected={pathname === href}>
-                <ListItemIcon sx={{ color: '#ef5350' }}>{icon}</ListItemIcon>
-                <ListItemText
-                  primary={label}
-                  primaryTypographyProps={{
-                    fontWeight: pathname === href ? 'bold' : 'normal',
-                    color: pathname === href ? '#ef5350' : 'inherit',
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </Link>
+          <ListItem
+            key={href}
+            disablePadding
+            onClick={() => handleNavigation(href)}
+            button
+          >
+            <ListItemButton selected={pathname === href}>
+              <ListItemIcon sx={{ color: '#ef5350' }}>{icon}</ListItemIcon>
+              <ListItemText
+                primary={label}
+                primaryTypographyProps={{
+                  fontWeight: pathname === href ? 'bold' : 'normal',
+                  color: pathname === href ? '#ef5350' : 'inherit',
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
         ))}
       </List>
     </Drawer>

@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import HomePageNav from './components/common/nav';
 import Sidebar from './components/common/drawer';
 import PatientRequest from './components/homepageContent/patientRequest';
@@ -11,44 +11,48 @@ import styles from '../styles/HomePage.module.scss';
 
 function HomePage() {
   const path = usePathname();
-  const [hash, setHash] = useState('');
+  // A state that we update just to force a re-render on hash changes.
+  const [updateCounter, setUpdateCounter] = useState(0);
 
   useEffect(() => {
-    // Set initial hash
-    setHash(window.location.hash);
-
-    // Listen for hash changes
     const handleHashChange = () => {
-      setHash(window.location.hash);
+      setUpdateCounter((prev) => prev + 1);
+      console.log('Hash changed, new window.location.href:', window.location.href);
     };
 
     window.addEventListener('hashchange', handleHashChange);
-    
-    // Cleanup listener on unmount
+    window.addEventListener('popstate', handleHashChange);
     return () => {
       window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('popstate', handleHashChange);
     };
   }, []);
 
-  const renderComponent = () => {
-    // For debugging
-    console.log('Current path:', path);
-    console.log('Current hash:', hash);
+  // Using window.location.href to determine the current hash.
+  const currentURL = typeof window !== 'undefined' ? window.location.href : '';
+  const currentHash = currentURL.split('#')[1] ? `#${currentURL.split('#')[1]}` : '';
 
+  console.log('Current path:', path, 'Current hash:', currentHash);
+
+  const renderComponent = () => {
     if (path === '/list') {
-      if (hash === '#report') {
-        return <PatientReport />;
+      // If the current URL hash exactly equals "#report", then render PatientReport.
+      // Otherwise, render PatientList.
+      if (currentHash === '#report') {
+        return <PatientReport key="report" />;
       } else {
-        return <PatientList />;
+        return <PatientList key="list" />;
       }
     }
-
     if (path === '/' || path === '/home') return <ComingSoon />;
     if (path.startsWith('/request')) return <PatientRequest />;
-    if (path.startsWith('/chat') || path.startsWith('/alerts') || path.startsWith('/help')) {
+    if (
+      path.startsWith('/chat') ||
+      path.startsWith('/alerts') ||
+      path.startsWith('/help')
+    ) {
       return <ComingSoon />;
     }
-    
     return <ComingSoon />;
   };
 
