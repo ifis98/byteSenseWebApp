@@ -55,12 +55,12 @@ const Sidebar = () => {
           <Link key={href} href={href} passHref legacyBehavior>
             <ListItem disablePadding>
               <ListItemButton selected={pathname === href}>
-                <ListItemIcon sx={{ color: '#5D82FA' }}>{icon}</ListItemIcon>
+                <ListItemIcon sx={{ color: '#ef5350' }}>{icon}</ListItemIcon>
                 <ListItemText
                   primary={label}
                   primaryTypographyProps={{
                     fontWeight: pathname === href ? 'bold' : 'normal',
-                    color: pathname === href ? '#5D82FA' : 'inherit',
+                    color: pathname === href ? '#ef5350' : 'inherit',
                   }}
                 />
               </ListItemButton>

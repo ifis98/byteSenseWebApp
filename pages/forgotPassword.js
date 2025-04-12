@@ -64,6 +64,7 @@ const ForgotPassword = () => {
             fullWidth
             type="submit"
             variant="contained"
+            color="error"  //  use red button theme
             size="large"
             sx={{ mt: 3 }}
           >

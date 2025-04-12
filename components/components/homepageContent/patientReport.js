@@ -61,10 +61,10 @@ class PatientReport extends Component {
       datasets: [
         {
           label: 'Total Episodes',
-          borderColor: '#5D82FB',
+          borderColor: '#f44336',
           data: [],
           fill: false,
-          pointBackgroundColor: '#5D82FA',
+          pointBackgroundColor: '#ef5350',
         },
       ],
     },
@@ -83,8 +83,8 @@ class PatientReport extends Component {
           label: 'Total Duration',
           data: [],
           fill: false,
-          borderColor: '#5D82FB',
-          pointBackgroundColor: '#5D82FA',
+          borderColor: '#f44336',
+          pointBackgroundColor: '#ef5350',
         },
       ],
     },
@@ -208,7 +208,7 @@ class PatientReport extends Component {
       <Box className="homePageContent" sx={{ px: 4, py: 2 }}>
         {/* Header: Title on the left and PatientDetailedData on the right */}
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h5" sx={{ color: '#5D82FA', fontWeight: 600 }}>
+          <Typography variant="h5" sx={{ color: '#ef5350', fontWeight: 600 }}>
             Patient Report
           </Typography>
           <PatientDetailedData />
@@ -262,7 +262,7 @@ class PatientReport extends Component {
                   <NightsStayIcon sx={{ fontSize: 100, color: '#333f48', mr: 2 }} />
                   <Box>
                     <Typography variant="subtitle1">Compliance</Typography>
-                    <Typography variant="h6" fontWeight={700} sx={{ fontSize: 30, color: '#5D82FA' }}>
+                    <Typography variant="h6" fontWeight={700} sx={{ fontSize: 30, color: '#ef5350' }}>
                       {ComplianceN}
                     </Typography>
                     <Typography variant="body2">Nights</Typography>

@@ -107,7 +107,7 @@ const PatientRequest = () => {
   return (
     <div className="homePageContent" id="PatientList">
       <Container fluid className="px-0">
-        <h2 className="mb-1" style={{ color: '#5D82FA', fontWeight: 600 }}>
+        <h2 className="mb-1" style={{ color: '#ef5350', fontWeight: 600 }}>
           Patient Request
         </h2>
 
@@ -132,8 +132,8 @@ const PatientRequest = () => {
               muiTablePaperProps={{ elevation: 0, style: { border: 'none' } }}
               muiTableHeadCellProps={{
                 style: {
-                  backgroundColor: '#f5f6fa',
-                  color: '#5D82FA',
+                  backgroundColor: '#fff1f0',
+                  color: '#ef5350',
                   fontWeight: 'bold',
                 },
               }}

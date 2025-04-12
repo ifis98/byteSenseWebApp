@@ -28,7 +28,7 @@ class ComingSoon extends Component {
               textAlign: "center",
               fontSize: "50px",
               fontWeight: "600",
-              color: "#5D82FA",
+              color: "#ef5350",
             }}
           >
             Coming Soon

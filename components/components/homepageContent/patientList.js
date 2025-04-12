@@ -154,7 +154,7 @@ const PatientList = ({ setIsLoading }) => {
       <Card className="mt-4 p-3 border-0">
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
           <div>
-            <h2 className="mb-1" style={{ color: '#5D82FA', fontWeight: 600 }}>
+            <h2 className="mb-1" style={{ color: '#ef5350', fontWeight: 600 }}>
               Patient List
             </h2>
           </div>
@@ -178,7 +178,7 @@ const PatientList = ({ setIsLoading }) => {
                 cursor: 'pointer',
                 backgroundColor:
                   currentPatientInfo?.id === row.original.id
-                    ? '#0032F3'
+                    ? '#e53935'
                     : 'white',
                 color:
                   currentPatientInfo?.id === row.original.id
@@ -192,8 +192,8 @@ const PatientList = ({ setIsLoading }) => {
             }}
             muiTableHeadCellProps={{
               style: {
-                backgroundColor: '#f5f6fa',
-                color: '#5D82FA',
+                backgroundColor: '#fff1f0',
+                color: '#ef5350',
                 fontWeight: 'bold',
               },
             }}

@@ -61,7 +61,7 @@ const Register = () => {
     <Container maxWidth="sm" sx={{ mt: 8 }}>
       <Box display="flex" flexDirection="column" alignItems="center">
         <img src="/image.png" alt="Logo" style={{ width: 160, marginBottom: 16 }} />
-        <Typography variant="h4" color="primary" fontWeight={600}>
+        <Typography variant="h4" color="error" fontWeight={600}>
           Sign Up
         </Typography>
         <Typography variant="subtitle1" sx={{ mt: 1, mb: 3 }}>
@@ -137,7 +137,7 @@ const Register = () => {
             fullWidth
             type="submit"
             variant="contained"
-            color="primary"
+            color="error"
             size="large"
             sx={{ mt: 3 }}
           >
@@ -145,7 +145,11 @@ const Register = () => {
           </Button>
 
           <Typography textAlign="center" mt={2}>
-            <MuiLink href="/login" underline="hover">
+            <MuiLink
+              href="/login"
+              underline="hover"
+              sx={{ color: 'error.main' }} // ensures red color
+            >
               Already have an account? Sign in
             </MuiLink>
           </Typography>

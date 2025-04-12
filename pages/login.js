@@ -92,7 +92,13 @@ class Login extends React.Component {
             )}
 
             <Box mt={3} display="flex" flexDirection="column" gap={2}>
-              <Button type="submit" variant="contained" fullWidth size="large">
+              <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                size="large"
+                color="error" // 🔴 red
+              >
                 Login
               </Button>
               <Button
@@ -100,13 +106,18 @@ class Login extends React.Component {
                 fullWidth
                 size="large"
                 href="/register"
+                color="error" // 🔴 red
               >
                 Sign Up
               </Button>
             </Box>
 
             <Box mt={2} textAlign="center">
-              <MuiLink href="/forgotPassword" underline="hover">
+              <MuiLink
+                href="/forgotPassword"
+                underline="hover"
+                sx={{ color: 'error.main' }} // 🔴 red link
+              >
                 Forgot Password / Username?
               </MuiLink>
             </Box>

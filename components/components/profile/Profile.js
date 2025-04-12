@@ -10,8 +10,8 @@ import {
   Card,
   Avatar,
   Alert,
+  CircularProgress,
 } from '@mui/material';
-import { CircularProgress } from '@mui/material';
 import moment from 'moment';
 import { backendLink } from '../../../exports/variable';
 import { user } from '../../../exports/apiCalls';
@@ -156,7 +156,7 @@ const Profile = () => {
 
   return (
     <Box sx={{ px: 4, py: 4 }}>
-      <Typography variant="h5" color="primary" fontWeight={600} mb={2}>
+      <Typography variant="h5" color="error" fontWeight={600} mb={2}>
         Edit Account Info
       </Typography>
 
@@ -165,7 +165,6 @@ const Profile = () => {
           <CircularProgress />
           <Typography mt={2}>Loading...</Typography>
         </Box>
-
       ) : (
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
@@ -187,17 +186,17 @@ const Profile = () => {
               />
               <Box mt={2}>
                 {!fileName ? (
-                  <Button variant="contained" onClick={handleUploadClick}>
+                  <Button variant="contained" color="error" onClick={handleUploadClick}>
                     Upload Image
                   </Button>
                 ) : (
                   <>
-                    <Button variant="contained" color="success" onClick={saveImage}>
+                    <Button variant="contained" color="error" onClick={saveImage}>
                       Save
                     </Button>
                     <Button
                       variant="outlined"
-                      color="warning"
+                      color="error"
                       sx={{ ml: 2 }}
                       onClick={fetchData}
                     >
@@ -223,7 +222,7 @@ const Profile = () => {
             <Card sx={{ p: 3 }}>
               <Box display="flex" justifyContent="flex-end">
                 {!editMode && (
-                  <Button variant="outlined" onClick={() => setEditMode(true)}>
+                  <Button variant="outlined" color="error" onClick={() => setEditMode(true)}>
                     Edit
                   </Button>
                 )}
@@ -345,10 +344,10 @@ const Profile = () => {
 
               {editMode && (
                 <Box mt={3} display="flex" gap={2}>
-                  <Button variant="contained" color="success" onClick={saveChanges}>
+                  <Button variant="contained" color="error" onClick={saveChanges}>
                     Save Changes
                   </Button>
-                  <Button variant="outlined" color="warning" onClick={fetchData}>
+                  <Button variant="outlined" color="error" onClick={fetchData}>
                     Cancel
                   </Button>
                 </Box>

@@ -172,7 +172,7 @@ class PatientDetailedData extends Component {
       <Box mt={4}>
         <Button
           variant="contained"
-          color="primary"
+          color="error"
           size="large"
           onClick={() => this.setState({ show: true })}
         >
@@ -185,7 +185,7 @@ class PatientDetailedData extends Component {
           fullWidth
           maxWidth="xl"
         >
-          <DialogTitle align="center" sx={{ color: '#023CF7', fontSize: 28 }}>
+          <DialogTitle align="center" sx={{ color: '#d32f2f', fontSize: 28 }}>
             byteSense Nightly Report
           </DialogTitle>
 
@@ -282,7 +282,7 @@ class PatientDetailedData extends Component {
                             textAlign: 'center',
                             minHeight: 100,
                             border: 2,
-                            borderColor: this.state.cardSelected === index ? '#5D82FA' : 'transparent',
+                            borderColor: this.state.cardSelected === index ? '#ef5350' : 'transparent',
                           }}
                           onClick={() => {
                             this.setState({ cardSelected: index });
@@ -309,7 +309,7 @@ class PatientDetailedData extends Component {
             <Button
               onClick={() => this.setState({ show: false })}
               variant="contained"
-              color="primary"
+              color="error"
             >
               Close
             </Button>

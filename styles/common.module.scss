@@ -15,7 +15,7 @@
   font-style: bold;
 }
 .homePageNav {
-  border-left: 5px solid #5D82FA;
+  border-left: 5px solid #ef5350;
   background-color: white !important;
 }
 .circular--square {
@@ -31,13 +31,13 @@
 
   .list-group-item.active {
     z-index: 2;
-    color: #5D82FA;
+    color: #ef5350;
     background-color: #e5e5e5 !important;
-    border-left: 2px solid #5D82FA;
+    border-left: 2px solid #ef5350;
   }
   .list-group-item-action {
     width: 100%;
-    color: #5D82FA;
+    color: #ef5350;
     text-align: inherit;
   }
 
@@ -54,7 +54,7 @@
   }
 
   .list-group-item.active .material-icons {
-    color: #5D82FA;
+    color: #ef5350;
   }
 
   #drawerLogo {

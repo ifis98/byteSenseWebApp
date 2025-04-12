@@ -71,10 +71,10 @@ const HomePageNav = ({ updateDoctorDetail }) => {
         {/* Right icons and menu */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <IconButton>
-            <MessageIcon sx={{ color: '#5D82FA' }} />
+            <MessageIcon sx={{ color: '#ef5350' }} />
           </IconButton>
           <IconButton>
-            <NotificationsIcon sx={{ color: '#5D82FA' }} />
+            <NotificationsIcon sx={{ color: '#ef5350' }} />
           </IconButton>
 
           <Tooltip title="Account settings">
