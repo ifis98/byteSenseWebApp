@@ -1,141 +1,158 @@
 'use client';
 
-import React from "react";
+import React, { useState } from 'react';
 import {
-  Form,
+  Box,
   Button,
   Container,
-  Row,
-} from "react-bootstrap";
-import styles from '../styles/Form.module.scss';
-import axios from "axios";
-import { backendLink } from "../exports/variable";
+  TextField,
+  Typography,
+  Alert,
+  Link as MuiLink,
+} from '@mui/material';
 import { useRouter } from 'next/router';
+import axios from 'axios';
+import { backendLink } from '../exports/variable';
 
-class Register extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      fName: "",
-      lName: "",
-      email: "",
-      userName: "",
-      password: "",
-      confirmPassword: "",
-      isDoctor: true,
-      errorMessage: "",
-    };
-  }
+const Register = () => {
+  const router = useRouter();
+  const [form, setForm] = useState({
+    fName: '',
+    lName: '',
+    email: '',
+    userName: '',
+    password: '',
+    confirmPassword: '',
+    isDoctor: true,
+  });
+  const [errorMessage, setErrorMessage] = useState('');
 
-  handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
+  const handleChange = (e) => {
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    this.setState({ errorMessage: "" });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage('');
 
-    const { password, confirmPassword } = this.state;
-    if (password !== confirmPassword) {
-      this.setState({
-        errorMessage: "Password and confirm password should be same.",
-      });
-      return;
+    if (form.password !== form.confirmPassword) {
+      return setErrorMessage('Password and confirm password must match.');
     }
 
-    const {
-      fName,
-      lName,
-      userName,
-      email,
-      isDoctor,
-    } = this.state;
-
-    axios
-      .post(backendLink + "user/signup", {
-        fName,
-        lName,
-        userName,
-        email,
-        password,
-        confirmPassword,
-        isDoctor,
-      })
-      .then(() => {
-        this.props.router.push("/login");
-      })
-      .catch((error) => {
-        if (error.response?.data?.message?.includes("userName")) {
-          this.setState({ errorMessage: "User already exists. Please try again!!" });
-        } else if (error.response?.data?.message?.includes("email")) {
-          this.setState({ errorMessage: "Email already exists. Please try again!!" });
-        } else {
-          this.setState({ errorMessage: "Server Error" });
-        }
-      });
+    try {
+      await axios.post(backendLink + 'user/signup', form);
+      router.push('/login');
+    } catch (error) {
+      const msg = error.response?.data?.message || '';
+      if (msg.includes('userName')) {
+        setErrorMessage('Username already exists. Please try again.');
+      } else if (msg.includes('email')) {
+        setErrorMessage('Email already exists. Please try again.');
+      } else {
+        setErrorMessage('Server error. Please try again later.');
+      }
+    }
   };
 
-  render() {
-    return (
-      <Container id="contForm" className={styles.contForm}>
-        <Row className="justify-content-md-center">
-          <img src="./image.png" className={styles.logoImg} alt="Logo" />
-          <Form onSubmit={this.handleSubmit}>
-            <Form.Text className="text-muted">
-              <h1 className={styles["logo-color"]}>byteSense</h1>
-              We'll never share your email with anyone else.
-            </Form.Text>
+  return (
+    <Container maxWidth="sm" sx={{ mt: 8 }}>
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <img src="/image.png" alt="Logo" style={{ width: 160, marginBottom: 16 }} />
+        <Typography variant="h4" color="primary" fontWeight={600}>
+          Sign Up
+        </Typography>
+        <Typography variant="subtitle1" sx={{ mt: 1, mb: 3 }}>
+          Create your byteSense account.
+        </Typography>
 
-            <Form.Group controlId="fName">
-              <Form.Label>First Name</Form.Label>
-              <Form.Control required type="text" name="fName" onChange={this.handleChange} />
-            </Form.Group>
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+          <TextField
+            fullWidth
+            label="First Name"
+            name="fName"
+            value={form.fName}
+            onChange={handleChange}
+            margin="normal"
+            required
+          />
+          <TextField
+            fullWidth
+            label="Last Name"
+            name="lName"
+            value={form.lName}
+            onChange={handleChange}
+            margin="normal"
+            required
+          />
+          <TextField
+            fullWidth
+            label="Username"
+            name="userName"
+            value={form.userName}
+            onChange={handleChange}
+            margin="normal"
+            required
+          />
+          <TextField
+            fullWidth
+            label="Email"
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            margin="normal"
+            required
+          />
+          <TextField
+            fullWidth
+            label="Password"
+            name="password"
+            type="password"
+            value={form.password}
+            onChange={handleChange}
+            margin="normal"
+            required
+          />
+          <TextField
+            fullWidth
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+            value={form.confirmPassword}
+            onChange={handleChange}
+            margin="normal"
+            required
+          />
 
-            <Form.Group controlId="lName">
-              <Form.Label>Last Name</Form.Label>
-              <Form.Control required type="text" name="lName" onChange={this.handleChange} />
-            </Form.Group>
+          {errorMessage && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {errorMessage}
+            </Alert>
+          )}
 
-            <Form.Group controlId="userName">
-              <Form.Label>Username</Form.Label>
-              <Form.Control required type="text" name="userName" onChange={this.handleChange} />
-            </Form.Group>
+          <Button
+            fullWidth
+            type="submit"
+            variant="contained"
+            color="primary"
+            size="large"
+            sx={{ mt: 3 }}
+          >
+            Sign Up
+          </Button>
 
-            <Form.Group controlId="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control required type="email" name="email" onChange={this.handleChange} />
-            </Form.Group>
+          <Typography textAlign="center" mt={2}>
+            <MuiLink href="/login" underline="hover">
+              Already have an account? Sign in
+            </MuiLink>
+          </Typography>
+        </Box>
+      </Box>
+    </Container>
+  );
+};
 
-            <Form.Group controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control required type="password" name="password" maxLength="99" onChange={this.handleChange} />
-            </Form.Group>
-
-            <Form.Group controlId="confirmPassword">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control required type="password" name="confirmPassword" maxLength="99" onChange={this.handleChange} />
-            </Form.Group>
-
-            {this.state.errorMessage && <p className={styles.error}>{this.state.errorMessage}</p>}
-
-            <Form.Group controlId="isDoctor" className={styles.hidden}>
-              <Form.Control type="text" name="isDoctor" onChange={this.handleChange} />
-            </Form.Group>
-
-            <Button variant="primary" type="submit" className={styles.loginButton}>Sign up</Button>
-            <Form.Text className="text-muted" style={{ marginBottom: "50px" }}>
-              <a href="/login">Already have an account? Sign in.</a>
-            </Form.Text>
-          </Form>
-        </Row>
-      </Container>
-    );
-  }
-}
-
-export default function RegisterWithRouter(props) {
-  const router = useRouter();
-  return <Register {...props} router={router} />;
-}
+export default Register;

@@ -1,112 +1,124 @@
-'use client'; // Needed for Next.js App Router
+'use client';
 
-import React from "react";
-import { Form, Button, Container, Row } from "react-bootstrap";
-import styles from '../styles/Form.module.scss';
-import axios from "axios";
-import { backendLink } from "../exports/variable";
-import { connect } from "react-redux";
-import { updateDoctorDetail } from "../actions/APIAction";
+import React from 'react';
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+  Link as MuiLink,
+  Alert
+} from '@mui/material';
+import axios from 'axios';
+import { backendLink } from '../exports/variable';
+import { connect } from 'react-redux';
+import { updateDoctorDetail } from '../actions/APIAction';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: "",
-      password: "",
+      userName: '',
+      password: '',
+      errorMessage: '',
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  }
+  handleChange = (event) => {
+    this.setState({ [event.target.name]: event.target.value });
+  };
 
-  handleSubmit(event) {
+  handleSubmit = (event) => {
     event.preventDefault();
     const { userName, password } = this.state;
+
     axios
-      .post(backendLink + "user/loginWeb", { userName, password })
+      .post(backendLink + 'user/loginWeb', { userName, password })
       .then(async (response) => {
-        await localStorage.setItem("token", response["data"]["token"]);
-        this.props.updateDoctorDetail().then(results => {
+        await localStorage.setItem('token', response.data.token);
+        this.props.updateDoctorDetail().then((results) => {
           if (results) {
-            window.location.href = "/list";
+            window.location.href = '/list';
           }
         });
       })
-      .catch((err) => {
+      .catch(() => {
         this.setState({
-          errorMessage: "Invalid Credentials. Please try again!!",
-          userName: "",
-          password: "",
+          errorMessage: 'Invalid credentials. Please try again.',
+          userName: '',
+          password: '',
         });
       });
-  }
+  };
 
   render() {
+    const { userName, password, errorMessage } = this.state;
+
     return (
-      <Container id="contForm" className={styles.contForm}>
-        <Row className="justify-content-md-center">
-          <img src="/image.png" className={styles.logoImg} alt="byteSense Logo" />
-          <div className="vertical"></div>
+      <Container maxWidth="sm" sx={{ mt: 8 }}>
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <img src="/image.png" alt="byteSense Logo" style={{ width: 160, marginBottom: 16 }} />
+          <Typography variant="subtitle1" gutterBottom>
+            Welcome back. Please login to your account.
+          </Typography>
 
-          <Form name="loginForm" onSubmit={this.handleSubmit}>
-            <Form.Text className="text-muted">
-              <h1 className={styles["logo-color"]}>byteSense</h1>
-              Welcome back. Please login to your account.
-            </Form.Text>
+          <Box component="form" onSubmit={this.handleSubmit} sx={{ mt: 3, width: '100%' }}>
+            <TextField
+              fullWidth
+              label="Username"
+              name="userName"
+              value={userName}
+              onChange={this.handleChange}
+              margin="normal"
+              required
+            />
+            <TextField
+              fullWidth
+              type="password"
+              label="Password"
+              name="password"
+              value={password}
+              onChange={this.handleChange}
+              margin="normal"
+              required
+            />
 
-            <Form.Group controlId="userName">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                name="userName"
-                value={this.state.userName}
-                type="text"
-                placeholder="Username"
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                value={this.state.password}
-                name="password"
-                placeholder="Password"
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-
-            {this.state.errorMessage && (
-              <p className={styles.error}> {this.state.errorMessage} </p>
+            {errorMessage && (
+              <Alert severity="error" sx={{ mt: 2 }}>
+                {errorMessage}
+              </Alert>
             )}
 
-            <Button variant="primary" type="submit" className={styles.loginButton}>
-              Login
-            </Button>
-            <Button variant="primary" type="button" href="/register" className={styles.loginButton}>
-              Signup
-            </Button>
+            <Box mt={3} display="flex" flexDirection="column" gap={2}>
+              <Button type="submit" variant="contained" fullWidth size="large">
+                Login
+              </Button>
+              <Button
+                variant="outlined"
+                fullWidth
+                size="large"
+                href="/register"
+              >
+                Sign Up
+              </Button>
+            </Box>
 
-            <Form.Text className="text-muted">
-              <a href="/forgotPassword">
-                Forgot Password/Username
-              </a>
-            </Form.Text>
-          </Form>
-        </Row>
+            <Box mt={2} textAlign="center">
+              <MuiLink href="/forgotPassword" underline="hover">
+                Forgot Password / Username?
+              </MuiLink>
+            </Box>
+          </Box>
+        </Box>
       </Container>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  updateDoctorDetail: () => dispatch(updateDoctorDetail())
+  updateDoctorDetail: () => dispatch(updateDoctorDetail()),
 });
 
 export default connect(null, mapDispatchToProps)(Login);

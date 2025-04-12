@@ -1,111 +1,104 @@
 'use client';
 
-import React from "react";
-import { useParams, useRouter } from "next/navigation";
+import React, { useState } from 'react';
 import {
-  Form,
+  Box,
   Button,
   Container,
-  Row,
-} from "react-bootstrap";
-import styles from '../../styles/Form.module.scss';
-import axios from "axios";
-import { backendLink } from "../../exports/variable";
+  TextField,
+  Typography,
+  Alert,
+} from '@mui/material';
+import { useRouter, useParams } from 'next/navigation';
+import axios from 'axios';
+import { backendLink } from '../../exports/variable';
 
-class ResetPassword extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      password: "",
-      confirmPassword: "",
-      errorMessage: ""
-    };
-  }
-
-  handleChange = (event) => {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  }
-
-  handleSubmit = (event) => {
-    event.preventDefault();
-
-    const { password, confirmPassword } = this.state;
-    if (password !== confirmPassword) {
-      this.setState({
-        errorMessage: "Password and confirm password should match."
-      });
-      return;
-    }
-
-    const { id, router } = this.props;
-
-    axios
-      .put(`${backendLink}user/reset/${id}`, {
-        password,
-        confirmPassword,
-      })
-      .then(() => {
-        router.push("/login");
-      })
-      .catch(() => {
-        this.setState({ errorMessage: "Please try again!!" });
-      });
-  }
-
-  render() {
-    return (
-      <Container id="contForm" className={styles.contForm}>
-        <Row className="justify-content-md-center">
-          <img src="/image.png" className={styles.logoImg} alt="Logo" />
-          <div className="vertical"></div>
-
-          <Form name="resetForm" onSubmit={this.handleSubmit}>
-            <Form.Text className="text-muted">
-              <h1 className={styles["logo-color"]}>byteSense</h1>
-              Please reset your password.
-            </Form.Text>
-
-            <Form.Group controlId="password">
-              <Form.Label>New Password</Form.Label>
-              <Form.Control
-                type="password"
-                name="password"
-                value={this.state.password}
-                placeholder="New Password"
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-
-            <Form.Group controlId="confirmPassword">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type="password"
-                name="confirmPassword"
-                value={this.state.confirmPassword}
-                placeholder="Confirm Password"
-                onChange={this.handleChange}
-              />
-            </Form.Group>
-
-            {this.state.errorMessage && (
-              <p className={styles.error}>{this.state.errorMessage}</p>
-            )}
-
-            <Button variant="primary" type="submit" className={styles.loginButton}>
-              Update Password
-            </Button>
-          </Form>
-        </Row>
-      </Container>
-    );
-  }
-}
-
-// Functional wrapper to pass router and id from URL params
-export default function ResetPasswordWrapper(props) {
+const ResetPassword = () => {
   const router = useRouter();
   const params = useParams();
-  return <ResetPassword {...props} router={router} id={params.id} />;
-}
+
+  const [form, setForm] = useState({
+    password: '',
+    confirmPassword: '',
+  });
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const handleChange = (e) => {
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setErrorMessage('');
+
+    if (form.password !== form.confirmPassword) {
+      return setErrorMessage('Password and confirm password must match.');
+    }
+
+    try {
+      await axios.put(`${backendLink}user/reset/${params.id}`, form);
+      router.push('/login');
+    } catch (err) {
+      setErrorMessage('Password reset failed. Please try again!');
+    }
+  };
+
+  return (
+    <Container maxWidth="sm" sx={{ mt: 8 }}>
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <img src="/image.png" alt="Logo" style={{ width: 160, marginBottom: 16 }} />
+        <Typography variant="h4" color="primary" fontWeight={600}>
+          Reset Password
+        </Typography>
+        <Typography variant="subtitle1" sx={{ mt: 1, mb: 3 }}>
+          Enter your new password below.
+        </Typography>
+
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+          <TextField
+            fullWidth
+            label="New Password"
+            name="password"
+            type="password"
+            value={form.password}
+            onChange={handleChange}
+            margin="normal"
+            required
+          />
+          <TextField
+            fullWidth
+            label="Confirm Password"
+            name="confirmPassword"
+            type="password"
+            value={form.confirmPassword}
+            onChange={handleChange}
+            margin="normal"
+            required
+          />
+
+          {errorMessage && (
+            <Alert severity="error" sx={{ mt: 2 }}>
+              {errorMessage}
+            </Alert>
+          )}
+
+          <Button
+            fullWidth
+            type="submit"
+            variant="contained"
+            color="primary"
+            size="large"
+            sx={{ mt: 3 }}
+          >
+            Update Password
+          </Button>
+        </Box>
+      </Box>
+    </Container>
+  );
+};
+
+export default ResetPassword;

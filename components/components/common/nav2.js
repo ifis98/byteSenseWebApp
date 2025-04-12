@@ -15,7 +15,7 @@ const Nav2 = () => {
           <IconButton edge="start" disableRipple sx={{ p: 0 }}>
             <Image
               id="drawerLogo"
-              src="/logo.png"
+              src="/image.png"
               alt="EPIC's Logo"
               width={120}
               height={40}

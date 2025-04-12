@@ -18,7 +18,7 @@ class ComingSoon extends Component {
           <div id="comingSoonLogo">
             <img
               style={{ width: "200px" }}
-              src="/logo.png"
+              src="/image.png"
               alt="Coming Soon Logo"
             />
           </div>

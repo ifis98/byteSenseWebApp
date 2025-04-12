@@ -153,8 +153,6 @@ class PatientReport extends Component {
       loading2: false,
     }));
   };
-  
-  
 
   getDaysOfCurrentWeek = () => {
     const currentDate = this.dateCheck();
@@ -223,17 +221,16 @@ class PatientReport extends Component {
           </Box>
         ) : (
           <>
-            {/* Layout using CSS grid without explicit height */}
+            {/* Grid container without explicit gridTemplateRows */}
             <Box
               sx={{
                 display: 'grid',
                 gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-                gridTemplateRows: { xs: 'repeat(4, auto)', md: '150px 400px' },
                 gap: 3,
               }}
             >
               {/* Top Left Card: Patient Name */}
-              <Card sx={{ height: '100%' }}>
+              <Card sx={{ height: { xs: 'auto', md: 150 } }}>
                 <CardContent
                   sx={{
                     display: 'flex',
@@ -253,7 +250,7 @@ class PatientReport extends Component {
               </Card>
 
               {/* Top Right Card: Compliance */}
-              <Card sx={{ height: '100%' }}>
+              <Card sx={{ height: { xs: 'auto', md: 150 } }}>
                 <CardContent
                   sx={{
                     display: 'flex',
@@ -274,13 +271,13 @@ class PatientReport extends Component {
               </Card>
 
               {/* Bottom Left Card (Graph) */}
-              <Card sx={{ height: '100%', p: 2 }}>
+              <Card sx={{ height: { xs: 'auto', md: 400 }, p: 2 }}>
                 {lineDataPresent && (
                   <Line
                     data={dataBar}
                     options={{
                       plugins: {
-                        legend: { display: true, position: 'bottom' },
+                        legend: { display: false },
                         title: {
                           display: true,
                           text: 'Bruxism Total Episodes',
@@ -300,13 +297,13 @@ class PatientReport extends Component {
               </Card>
 
               {/* Bottom Right Card (Graph) */}
-              <Card sx={{ height: '100%', p: 2 }}>
+              <Card sx={{ height: { xs: 'auto', md: 400 }, p: 2 }}>
                 {lineDataPresent && (
                   <Line
                     data={dataLine}
                     options={{
                       plugins: {
-                        legend: { display: true, position: 'bottom' },
+                        legend: { display: false },
                         title: {
                           display: true,
                           text: 'Bruxism Total Duration',
@@ -326,7 +323,7 @@ class PatientReport extends Component {
               </Card>
             </Box>
 
-            {/* Remove Patient button below the grid */}
+            {/* Remove Patient Button Below the Grid */}
             <Box mt={3} display="flex" justifyContent="center">
               <Button variant="contained" color="error" onClick={this.deletePatient}>
                 Remove Patient

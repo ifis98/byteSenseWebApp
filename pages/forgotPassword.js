@@ -1,87 +1,78 @@
-'use client'; // Needed for Next.js App Router
+'use client';
 
-import React from "react";
+import React, { useState } from 'react';
 import {
-  Form,
+  Container,
+  Box,
+  Typography,
+  TextField,
   Button,
-} from "react-bootstrap";
-import { Container, Row } from "react-bootstrap";
-import styles from '../styles/Form.module.scss';
+  Alert,
+} from '@mui/material';
+import axios from 'axios';
 import { backendLink } from '../exports/variable';
-import axios from "axios";
 
-class ForgotPassword extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: "",
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+const ForgotPassword = () => {
+  const [email, setEmail] = useState('');
+  const [feedbackMessage, setFeedbackMessage] = useState('');
+  const [success, setSuccess] = useState(false);
 
-  render() {
-    return (
-      <Container id="contForm" className={styles.contForm}>
-        <Row className="justify-content-md-center">
-          <img src="./image.png" className={styles.logoImg} alt="Logo" />
-          <div className="vertical"></div>
+  const handleChange = (e) => setEmail(e.target.value);
 
-          <Form name="ForgotForm" onSubmit={this.handleSubmit}>
-            <Form.Text className="text-muted">
-              <h1 className={styles["logo-color"]}>byteSense</h1>
-              Enter your email and we’ll send you a password reset link.
-            </Form.Text>
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setFeedbackMessage('');
 
-            <Form.Group controlId="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                placeholder="Email"
-                value={this.state.email}
-                onChange={this.handleChange}
-              />
-            </Form.Group>
+    try {
+      await axios.post(`${backendLink}user/forgotpassword`, { email });
+      setFeedbackMessage('Email sent successfully to the account.');
+      setSuccess(true);
+      setEmail('');
+    } catch {
+      setFeedbackMessage('Please try again!');
+      setSuccess(false);
+    }
+  };
 
-            {this.state.errorMessage && (
-              <p className={styles.success}>{this.state.errorMessage}</p>
-            )}
+  return (
+    <Container maxWidth="sm" sx={{ mt: 8 }}>
+      <Box display="flex" flexDirection="column" alignItems="center">
+        <img src="/image.png" alt="Logo" style={{ width: 160, marginBottom: 16 }} />
+        <Typography variant="subtitle1" sx={{ mt: 1, mb: 3 }}>
+          Enter your email and we’ll send you a password reset link.
+        </Typography>
 
-            <Button variant="primary" type="submit" className={styles.loginButton}>
-              Send Request
-            </Button>
-          </Form>
-        </Row>
-      </Container>
-    );
-  }
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+          <TextField
+            fullWidth
+            type="email"
+            label="Email"
+            name="email"
+            value={email}
+            onChange={handleChange}
+            required
+            margin="normal"
+          />
 
-  handleChange(event) {
-    this.setState({
-      [event.target.name]: event.target.value,
-    });
-  }
+          {feedbackMessage && (
+            <Alert severity={success ? 'success' : 'error'} sx={{ mt: 2 }}>
+              {feedbackMessage}
+            </Alert>
+          )}
 
-  handleSubmit(event) {
-    event.preventDefault();
-    const { email } = this.state;
-
-    axios
-      .post(backendLink + "user/forgotpassword", { email })
-      .then(() => {
-        this.setState({
-          errorMessage: "Email sent successfully to the account.",
-          email: "",
-        });
-      })
-      .catch(() => {
-        this.setState({
-          errorMessage: "Please try again!",
-          email: "",
-        });
-      });
-  }
-}
+          <Button
+            fullWidth
+            type="submit"
+            variant="contained"
+            size="large"
+            sx={{ mt: 3 }}
+          >
+            Send Request
+          </Button>
+        </Box>
+      </Box>
+    </Container>
+  );
+};
 
 export default ForgotPassword;
