@@ -31,44 +31,64 @@ export default function OrderForm() {
     setFormData(prev => ({ ...prev, [name]: files[0] }));
   };
 
+  const validateForm = () => {
+    if (!formData.caseName.trim()) {
+      alert("Case Name is required.");
+      return false;
+    }
+    if (!formData.maxUndercut.trim()) {
+      alert("Maximum Undercut is required.");
+      return false;
+    }
+    if (!formData.passiveSpacer.trim()) {
+      alert("Passive Spacer is required.");
+      return false;
+    }
+    if (!formData.upperScan || !formData.lowerScan) {
+      alert("Please upload both upper and lower STL scan files.");
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
+    if (!formData.caseName || !formData.maxUndercut || !formData.passiveSpacer || !formData.upperScan || !formData.lowerScan) {
+      alert("All fields and STL files are required.");
+      return;
+    }
+  
     const stripe = await stripePromise;
     if (!stripe) {
       alert("Stripe failed to initialize.");
       return;
     }
-
-    const payload = {
-      caseName: formData.caseName,
-      arch: formData.arch,
-      type: formData.type,
-      maxUndercut: formData.maxUndercut,
-      passiveSpacer: formData.passiveSpacer,
-      instructions: formData.instructions,
-      upperScanName: formData.upperScan?.name,
-      lowerScanName: formData.lowerScan?.name,
-    };
-
+  
+    const formPayload = new FormData();
+    formPayload.append('caseName', formData.caseName);
+    formPayload.append('arch', formData.arch);
+    formPayload.append('type', formData.type);
+    formPayload.append('maxUndercut', formData.maxUndercut);
+    formPayload.append('passiveSpacer', formData.passiveSpacer);
+    formPayload.append('instructions', formData.instructions);
+    formPayload.append('upperScan', formData.upperScan);
+    formPayload.append('lowerScan', formData.lowerScan);
+  
     try {
       const res = await fetch(`${backendLink}createCheckoutSession`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: formPayload,
       });
-
+  
       const data = await res.json();
-
       if (!data.sessionId) {
         alert("Unable to initiate Stripe Checkout.");
         return;
       }
-
+  
       const result = await stripe.redirectToCheckout({ sessionId: data.sessionId });
-      if (result.error) {
-        alert(result.error.message);
-      }
+      if (result.error) alert(result.error.message);
     } catch (err) {
       console.error("Stripe checkout error:", err);
       alert("Something went wrong. Please try again.");
@@ -94,28 +114,40 @@ export default function OrderForm() {
             <Grid container spacing={3}>
               <Grid size={{ xs: 12 }}>
                 <TextField
+                  required
                   label="Case Name"
                   name="caseName"
                   value={formData.caseName}
                   onChange={handleChange}
-                  required
                   fullWidth
                 />
               </Grid>
 
               <Grid size={{ xs: 6 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="arch-label">Arch</InputLabel>
-                  <Select labelId="arch-label" name="arch" value={formData.arch} onChange={handleChange}>
+                <FormControl fullWidth required>
+                  <InputLabel id="arch-label" shrink>Arch</InputLabel>
+                  <Select
+                    labelId="arch-label"
+                    name="arch"
+                    value={formData.arch}
+                    onChange={handleChange}
+                    label="Arch"
+                  >
                     <MenuItem value="Upper">Upper</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
 
               <Grid size={{ xs: 6 }}>
-                <FormControl fullWidth>
-                  <InputLabel id="type-label">Type</InputLabel>
-                  <Select labelId="type-label" name="type" value={formData.type} onChange={handleChange}>
+                <FormControl fullWidth required>
+                  <InputLabel id="type-label" shrink>Type</InputLabel>
+                  <Select
+                    labelId="type-label"
+                    name="type"
+                    value={formData.type}
+                    onChange={handleChange}
+                    label="Type"
+                  >
                     <MenuItem value="Flat Plane">Flat Plane</MenuItem>
                     <MenuItem value="Michigan Splint">Michigan Splint</MenuItem>
                   </Select>
@@ -124,6 +156,7 @@ export default function OrderForm() {
 
               <Grid size={{ xs: 6 }}>
                 <TextField
+                  required
                   label="Maximum Undercut (mm)"
                   name="maxUndercut"
                   type="number"
@@ -136,6 +169,7 @@ export default function OrderForm() {
 
               <Grid size={{ xs: 6 }}>
                 <TextField
+                  required
                   label="Passive Spacer (mm)"
                   name="passiveSpacer"
                   type="number"
@@ -163,8 +197,8 @@ export default function OrderForm() {
                   fullWidth
                   sx={{ height: 56, textTransform: 'none' }}
                 >
-                  Upload Upper Scan STL
-                  <input hidden type="file" accept=".stl" name="upperScan" onChange={handleFileChange} />
+                  Upload Upper Scan STL *
+                  <input hidden type="file" accept=".stl" name="upperScan" onChange={handleFileChange} required />
                 </Button>
                 {formData.upperScan && (
                   <Typography
@@ -184,8 +218,8 @@ export default function OrderForm() {
                   fullWidth
                   sx={{ height: 56, textTransform: 'none' }}
                 >
-                  Upload Lower Scan STL
-                  <input hidden type="file" accept=".stl" name="lowerScan" onChange={handleFileChange} />
+                  Upload Lower Scan STL *
+                  <input hidden type="file" accept=".stl" name="lowerScan" onChange={handleFileChange} required />
                 </Button>
                 {formData.lowerScan && (
                   <Typography
