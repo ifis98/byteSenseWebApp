@@ -27,6 +27,7 @@ const navItems = [
   { href: '/chat', icon: <ChatBubbleOutlineIcon />, label: 'Chat Room' },
   { href: '/alerts', icon: <MailOutlineIcon />, label: 'Alerts' },
   { href: '/help', icon: <HelpCenterIcon />, label: 'Help Center' },
+  { href: '/order', icon: <GroupAddIcon />, label: 'Order Nightguard' },
 ];
 
 const Sidebar = () => {
