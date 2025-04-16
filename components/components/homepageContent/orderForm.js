@@ -21,6 +21,8 @@ export default function OrderForm() {
     instructions: '',
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -31,40 +33,22 @@ export default function OrderForm() {
     setFormData(prev => ({ ...prev, [name]: files[0] }));
   };
 
-  const validateForm = () => {
-    if (!formData.caseName.trim()) {
-      alert("Case Name is required.");
-      return false;
-    }
-    if (!formData.maxUndercut.trim()) {
-      alert("Maximum Undercut is required.");
-      return false;
-    }
-    if (!formData.passiveSpacer.trim()) {
-      alert("Passive Spacer is required.");
-      return false;
-    }
-    if (!formData.upperScan || !formData.lowerScan) {
-      alert("Please upload both upper and lower STL scan files.");
-      return false;
-    }
-    return true;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     if (!formData.caseName || !formData.maxUndercut || !formData.passiveSpacer || !formData.upperScan || !formData.lowerScan) {
       alert("All fields and STL files are required.");
       return;
     }
-  
+
     const stripe = await stripePromise;
     if (!stripe) {
       alert("Stripe failed to initialize.");
       return;
     }
-  
+
+    setLoading(true);
+
     const formPayload = new FormData();
     formPayload.append('caseName', formData.caseName);
     formPayload.append('arch', formData.arch);
@@ -74,24 +58,29 @@ export default function OrderForm() {
     formPayload.append('instructions', formData.instructions);
     formPayload.append('upperScan', formData.upperScan);
     formPayload.append('lowerScan', formData.lowerScan);
-  
+
     try {
       const res = await fetch(`${backendLink}createCheckoutSession`, {
         method: 'POST',
         body: formPayload,
       });
-  
+
       const data = await res.json();
       if (!data.sessionId) {
         alert("Unable to initiate Stripe Checkout.");
+        setLoading(false);
         return;
       }
-  
+
       const result = await stripe.redirectToCheckout({ sessionId: data.sessionId });
-      if (result.error) alert(result.error.message);
+      if (result.error) {
+        alert(result.error.message);
+        setLoading(false);
+      }
     } catch (err) {
       console.error("Stripe checkout error:", err);
       alert("Something went wrong. Please try again.");
+      setLoading(false);
     }
   };
 
@@ -250,8 +239,9 @@ export default function OrderForm() {
                   color="error"
                   size="large"
                   sx={{ py: 1.5, px: 6, minWidth: '240px', textTransform: 'uppercase' }}
+                  disabled={loading}
                 >
-                  Proceed to Payment
+                  {loading ? "Processing..." : "Proceed to Payment"}
                 </Button>
               </Grid>
             </Grid>
