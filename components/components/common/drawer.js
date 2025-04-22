@@ -22,12 +22,12 @@ const drawerWidth = 240;
 
 const navItems = [
   { href: '/', icon: <HomeIcon />, label: 'Home' },
+  { href: '/order', icon: <GroupAddIcon />, label: 'Order' },
   { href: '/list', icon: <PersonIcon />, label: 'Patient List' },
   { href: '/request', icon: <GroupAddIcon />, label: 'Patient Request' },
   { href: '/chat', icon: <ChatBubbleOutlineIcon />, label: 'Chat Room' },
   { href: '/alerts', icon: <MailOutlineIcon />, label: 'Alerts' },
   { href: '/help', icon: <HelpCenterIcon />, label: 'Help Center' },
-  { href: '/order', icon: <GroupAddIcon />, label: 'Order Nightguard' },
 ];
 
 const Sidebar = () => {

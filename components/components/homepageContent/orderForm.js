@@ -2,12 +2,13 @@
 import * as React from 'react';
 import { stripePromise } from '../../../lib/stripe';
 import { backendLink } from '../../../exports/variable';
+import { user } from '../../../exports/apiCalls';
 import {
   Box, Button, Container, TextField, Typography,
   FormControl, InputLabel, Select, MenuItem,
   Card, CardContent, CardHeader, Divider, Grid
 } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function OrderForm() {
   const [formData, setFormData] = useState({
@@ -22,6 +23,23 @@ export default function OrderForm() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [doctorName, setDoctorName] = useState('');
+
+  useEffect(() => {
+    const fetchDoctorName = async () => {
+      try {
+        const res = await user.userRequests().getProfile();
+        if (res?.data?.profile) {
+          const { fName = '', lName = '' } = res.data.profile;
+          setDoctorName(`${fName} ${lName}`.trim());
+        }
+      } catch (err) {
+        console.error('Failed to fetch doctor name:', err);
+      }
+    };
+
+    fetchDoctorName();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -58,6 +76,7 @@ export default function OrderForm() {
     formPayload.append('instructions', formData.instructions);
     formPayload.append('upperScan', formData.upperScan);
     formPayload.append('lowerScan', formData.lowerScan);
+    formPayload.append('clientName', doctorName); // send full name
 
     try {
       const res = await fetch(`${backendLink}createCheckoutSession`, {
@@ -138,7 +157,6 @@ export default function OrderForm() {
                     label="Type"
                   >
                     <MenuItem value="Flat Plane">Flat Plane</MenuItem>
-                    <MenuItem value="Michigan Splint">Michigan Splint</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
