@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export', // ✅ add this
+  output: 'export',
   images: {
-    unoptimized: true, // ✅ needed for `next export`
-    domains: ['*']
+    unoptimized: true,
+    domains: ['*'],
   },
   sassOptions: {
     includePaths: ['./src'],
@@ -11,8 +11,8 @@ const nextConfig = {
   transpilePackages: [
     'react-bootstrap-table-next',
     'react-bootstrap-table2-toolkit',
-    'react-bootstrap-table2-paginator'
-  ],
+    'react-bootstrap-table2-paginator',
+  ]
 }
 
 export default nextConfig
