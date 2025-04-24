@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import HomePageNav from './components/common/nav';
 import Sidebar from './components/common/drawer';
 import PatientRequest from './components/homepageContent/patientRequest';
@@ -12,8 +12,23 @@ import OrderSuccess from './components/homepageContent/orderSuccess';
 import styles from '../styles/HomePage.module.scss';
 
 function HomePage() {
-  const path = usePathname(); // Declare only once
+  const path = usePathname();
+  const router = useRouter();
   const [updateCounter, setUpdateCounter] = useState(0);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  // ✅ REDIRECTION: check if not logged in and redirect to /login
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      router.push('/login');
+    } else {
+      setAuthChecked(true); // Continue rendering only after auth check
+    }
+  }, []);
+
+  // Do not render anything until auth is checked
+  if (!authChecked) return null;
 
   useEffect(() => {
     const handleHashChange = () => {
