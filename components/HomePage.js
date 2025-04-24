@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation'; // ✅ for client components
 import HomePageNav from './components/common/nav';
 import Sidebar from './components/common/drawer';
 import PatientRequest from './components/homepageContent/patientRequest';
@@ -14,26 +14,25 @@ import styles from '../styles/HomePage.module.scss';
 function HomePage() {
   const path = usePathname();
   const router = useRouter();
-  const [updateCounter, setUpdateCounter] = useState(0);
   const [authChecked, setAuthChecked] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [updateCounter, setUpdateCounter] = useState(0);
 
-  // ✅ REDIRECTION: check if not logged in and redirect to /login
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      router.push('/login');
-    } else {
-      setAuthChecked(true); // Continue rendering only after auth check
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        router.push('/login');
+      } else {
+        setIsAuthenticated(true);
+        setAuthChecked(true);
+      }
     }
   }, []);
-
-  // Do not render anything until auth is checked
-  if (!authChecked) return null;
 
   useEffect(() => {
     const handleHashChange = () => {
       setUpdateCounter((prev) => prev + 1);
-      console.log('Hash changed, new window.location.href:', window.location.href);
     };
 
     window.addEventListener('hashchange', handleHashChange);
@@ -43,6 +42,8 @@ function HomePage() {
       window.removeEventListener('popstate', handleHashChange);
     };
   }, []);
+
+  if (!authChecked) return null; // Wait for token check before rendering
 
   const currentURL = typeof window !== 'undefined' ? window.location.href : '';
   const currentHash = currentURL.split('#')[1] ? `#${currentURL.split('#')[1]}` : '';
