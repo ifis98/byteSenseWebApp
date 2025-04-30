@@ -9,6 +9,8 @@ import PatientReport from './components/homepageContent/patientReport';
 import ComingSoon from './components/homepageContent/comingSoon';
 import OrderForm from './components/homepageContent/orderForm';
 import OrderSuccess from './components/homepageContent/orderSuccess';
+import PreOrderForm from './components/homepageContent/preorder';
+
 import styles from '../styles/HomePage.module.scss';
 
 function HomePage() {
@@ -52,7 +54,7 @@ function HomePage() {
     if (path === '/list') {
       return currentHash === '#report' ? <PatientReport key="report" /> : <PatientList key="list" />;
     }
-    if (path === '/' || path === '/home') return <ComingSoon />;
+    if (path === '/' || path === '/home') return <PreOrderForm />;
     if (path.startsWith('/request')) return <PatientRequest />;
     if (path === '/order') return <OrderForm />;
     if (path === '/order-success') return <OrderSuccess />;
