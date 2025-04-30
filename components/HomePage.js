@@ -10,6 +10,7 @@ import ComingSoon from './components/homepageContent/comingSoon';
 import OrderForm from './components/homepageContent/orderForm';
 import OrderSuccess from './components/homepageContent/orderSuccess';
 import PreOrderForm from './components/homepageContent/preorder';
+import PreorderSuccess from './components/homepageContent/preorderSuccess';
 
 import styles from '../styles/HomePage.module.scss';
 
@@ -58,6 +59,7 @@ function HomePage() {
     if (path.startsWith('/request')) return <PatientRequest />;
     if (path === '/order') return <OrderForm />;
     if (path === '/order-success') return <OrderSuccess />;
+    if (path === '/preorder-success') return <PreorderSuccess />;
     if (
       path.startsWith('/chat') ||
       path.startsWith('/alerts') ||
