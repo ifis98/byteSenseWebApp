@@ -5,18 +5,38 @@ import {
   Button,
   Container,
   TextField,
-  Typography,
   Card,
   CardContent,
   CardHeader,
   Divider,
   Grid
 } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { stripePromise } from '../../../lib/stripe';
+import { backendLink } from '../../../exports/variable';
+import { user } from '../../../exports/apiCalls';
 
 export default function PreOrderForm() {
   const [quantity, setQuantity] = useState('');
   const [isValid, setIsValid] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [doctorName, setDoctorName] = useState('');
+
+  useEffect(() => {
+    const fetchDoctorName = async () => {
+      try {
+        const res = await user.userRequests().getProfile();
+        if (res?.data?.profile) {
+          const { fName = '', lName = '' } = res.data.profile;
+          setDoctorName(`${fName} ${lName}`.trim());
+        }
+      } catch (err) {
+        console.error('Failed to fetch doctor name:', err);
+      }
+    };
+
+    fetchDoctorName();
+  }, []);
 
   const handleQuantityChange = (e) => {
     const value = e.target.value;
@@ -26,12 +46,45 @@ export default function PreOrderForm() {
     setIsValid(isPositiveInteger);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isValid) return;
 
-    alert(`Pre-order submitted for ${quantity} unit(s)!`);
-    // You can replace the above with your actual submission logic
+    const stripe = await stripePromise;
+    if (!stripe) {
+      alert("Stripe failed to initialize.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${backendLink}createPreorderSession`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          quantity: Number(quantity),
+          clientName: doctorName,
+        }),
+      });
+
+      const data = await res.json();
+      if (!data.sessionId) {
+        alert("Unable to initiate Stripe Checkout.");
+        setLoading(false);
+        return;
+      }
+
+      const result = await stripe.redirectToCheckout({ sessionId: data.sessionId });
+      if (result.error) {
+        alert(result.error.message);
+        setLoading(false);
+      }
+    } catch (err) {
+      console.error("Stripe checkout error:", err);
+      alert("Something went wrong. Please try again.");
+      setLoading(false);
+    }
   };
 
   return (
@@ -64,10 +117,10 @@ export default function PreOrderForm() {
                   variant="contained"
                   color="error"
                   size="large"
-                  disabled={!isValid}
+                  disabled={!isValid || loading}
                   sx={{ py: 1.5, px: 6, minWidth: '240px', textTransform: 'uppercase' }}
                 >
-                  Submit Preorder
+                  {loading ? "Processing..." : "Submit Preorder"}
                 </Button>
               </Grid>
             </Grid>
