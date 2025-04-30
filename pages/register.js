@@ -28,13 +28,14 @@ const Register = () => {
     city: '',
     state: '',
     zipCode: '',
+    unitNo: ''
   });
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     setForm((prev) => ({
       ...prev,
-      [e.target.name]: e.target.name === 'zipCode' ? e.target.value.replace(/\D/g, '') : e.target.value,
+      [e.target.name]: ['unitNo','zipCode'].includes(e.target.name) ? e.target.value.replace(/\D/g, '') : e.target.value,
     }));
   };
 
@@ -129,6 +130,14 @@ const Register = () => {
             onChange={handleChange}
             margin="normal"
             required
+          />
+          <TextField
+              fullWidth
+              label="Unit Number"
+              name="unitNo"
+              value={form.unitNo}
+              onChange={handleChange}
+              margin="normal"
           />
           <TextField
               fullWidth
