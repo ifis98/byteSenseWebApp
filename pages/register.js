@@ -24,13 +24,17 @@ const Register = () => {
     password: '',
     confirmPassword: '',
     isDoctor: true,
+    streetAddress: '',
+    city: '',
+    state: '',
+    zipCode: '',
   });
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     setForm((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.name === 'zipCode' ? e.target.value.replace(/\D/g, '') : e.target.value,
     }));
   };
 
@@ -125,6 +129,44 @@ const Register = () => {
             onChange={handleChange}
             margin="normal"
             required
+          />
+          <TextField
+              fullWidth
+              label="Street Address"
+              name="streetAddress"
+              value={form.streetAddress}
+              onChange={handleChange}
+              margin="normal"
+              required
+              multiline={true}
+              rows={2}
+          />
+          <TextField
+              fullWidth
+              label="City"
+              name="city"
+              value={form.city}
+              onChange={handleChange}
+              margin="normal"
+              required
+          />
+          <TextField
+              fullWidth
+              label="State"
+              name="state"
+              value={form.state}
+              onChange={handleChange}
+              margin="normal"
+              required
+          />
+          <TextField
+              fullWidth
+              label="Zip Code"
+              name="zipCode"
+              value={form.zipCode}
+              onChange={handleChange}
+              margin="normal"
+              required
           />
 
           {errorMessage && (
