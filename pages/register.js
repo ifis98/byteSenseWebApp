@@ -131,6 +131,7 @@ const Register = () => {
             margin="normal"
             required
           />
+          <Typography mt={2}>Practice address <br />(This is where your orders will be shipped, this information can be changed in your profile settings)</Typography>
           <TextField
               fullWidth
               label="Unit Number"
