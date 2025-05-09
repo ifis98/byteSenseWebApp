@@ -131,7 +131,7 @@ const Register = () => {
             margin="normal"
             required
           />
-          <Typography mt={2} variant="h6" style={{ textAlign: 'center' }}>Practice address</Typography>
+          <Typography mt={2} variant="h6" color="error" style={{ textAlign: 'center', fontWeight: '800' }}>Practice address</Typography>
           <Typography variant="subtitle1" style={{ textAlign: 'center' }}>(This is where your orders will be shipped, this information can be changed in your profile settings)</Typography>
           <TextField
               fullWidth
