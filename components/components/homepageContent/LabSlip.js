@@ -1,0 +1,42 @@
+import * as React from "react";
+import { Button } from "@mui/material";
+
+const pdfs = [
+  {
+    id: 1,
+    title: "Dummy 1",
+    url: "/pdfs/dummy.pdf",
+  },
+];
+
+const LabSlip = () => {
+  return (
+    <div style={{ padding: "20px" }}>
+      <h2 className="mb-1" style={{ color: "#ef5350", fontWeight: 600 }}>
+        Lab Slip
+      </h2>
+      <div style={{ width: "100%", display: "flex", gap: "10px" }}>
+        {pdfs.map((item) => (
+          <a href={item.url} download={`${item.title}.pdf`}>
+            {" "}
+            <Button
+              variant="contained"
+              color="error"
+              size="large"
+              sx={{
+                py: 1.5,
+                px: 6,
+                minWidth: "240px",
+                textTransform: "uppercase",
+              }}
+            >
+              Download {item.title}
+            </Button>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default LabSlip;

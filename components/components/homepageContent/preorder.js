@@ -1,5 +1,5 @@
-'use client';
-import * as React from 'react';
+"use client";
+import * as React from "react";
 import {
   Box,
   Button,
@@ -9,29 +9,29 @@ import {
   CardContent,
   CardHeader,
   Divider,
-  Grid
-} from '@mui/material';
-import { useState, useEffect } from 'react';
-import { stripePromise } from '../../../lib/stripe';
-import { backendLink } from '../../../exports/variable';
-import { user } from '../../../exports/apiCalls';
+  Grid,
+} from "@mui/material";
+import { useState, useEffect } from "react";
+import { stripePromise } from "../../../lib/stripe";
+import { backendLink } from "../../../exports/variable";
+import { user } from "../../../exports/apiCalls";
 
 export default function PreOrderForm() {
-  const [quantity, setQuantity] = useState('');
+  const [quantity, setQuantity] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [doctorName, setDoctorName] = useState('');
+  const [doctorName, setDoctorName] = useState("");
 
   useEffect(() => {
     const fetchDoctorName = async () => {
       try {
         const res = await user.userRequests().getProfile();
         if (res?.data?.profile) {
-          const { fName = '', lName = '' } = res.data.profile;
+          const { fName = "", lName = "" } = res.data.profile;
           setDoctorName(`${fName} ${lName}`.trim());
         }
       } catch (err) {
-        console.error('Failed to fetch doctor name:', err);
+        console.error("Failed to fetch doctor name:", err);
       }
     };
 
@@ -60,8 +60,8 @@ export default function PreOrderForm() {
 
     try {
       const res = await fetch(`${backendLink}createPreorderSession`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           quantity: Number(quantity),
           clientName: doctorName,
@@ -75,7 +75,9 @@ export default function PreOrderForm() {
         return;
       }
 
-      const result = await stripe.redirectToCheckout({ sessionId: data.sessionId });
+      const result = await stripe.redirectToCheckout({
+        sessionId: data.sessionId,
+      });
       if (result.error) {
         alert(result.error.message);
         setLoading(false);
@@ -88,45 +90,81 @@ export default function PreOrderForm() {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 5, mb: 5 }}>
-      <Card elevation={3} sx={{ borderRadius: 3 }}>
-        <CardHeader
-          title="Pre-Order Now!"
-          titleTypographyProps={{ variant: 'h5', color: 'error' }}
-        />
-        <Divider />
-        <CardContent>
-          <Box component="form" onSubmit={handleSubmit} noValidate>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  label="Preorder Quantity"
-                  name="quantity"
-                  type="number"
-                  value={quantity}
-                  onChange={handleQuantityChange}
-                  inputProps={{ min: 1, step: 1 }}
-                  fullWidth
-                />
-              </Grid>
+    <Box
+      sx={{
+        display: "flex",
+        width: "100%",
+        flexDirection: "row",
+        gap: "16px",
+        m: 0,
+      }}
+    >
+      <Box sx={{ width: "100%" }}>
+        <div style={{ width: "100%", height: "100vh" }}>
+          <iframe
+            src={"https://en.wikipedia.org/wiki/JavaScript"}
+            width="100%"
+            height="100%"
+          />
+        </div>
+      </Box>
+      <Box sx={{ p: "16px" }}>
+        <Card
+          elevation={3}
+          sx={{
+            borderRadius: 3,
+            background: "#515151",
+            border: "1px solid #515151",
+          }}
+        >
+          <CardHeader
+            title="Pre-Order Now!"
+            titleTypographyProps={{ variant: "h5", color: "error" }}
+          />
+          <Divider />
+          <CardContent>
+            <Box component="form" onSubmit={handleSubmit} noValidate>
+              <Grid container spacing={2} className={"w-full"}>
+                <Grid item xs={6}>
+                  <TextField
+                    required
+                    label="Preorder Quantity"
+                    name="quantity"
+                    type="number"
+                    value={quantity}
+                    onChange={handleQuantityChange}
+                    inputProps={{ min: 1, step: 1 }}
+                    fullWidth
+                    sx={{ color: "#fff" }}
+                  />
+                </Grid>
 
-              <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="error"
-                  size="large"
-                  disabled={!isValid || loading}
-                  sx={{ py: 1.5, px: 6, minWidth: '240px', textTransform: 'uppercase' }}
+                <Grid
+                  item
+                  xs={6}
+                  sx={{ display: "flex", justifyContent: "center" }}
                 >
-                  {loading ? "Processing..." : "Submit Preorder"}
-                </Button>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="error"
+                    size="large"
+                    disabled={!isValid || loading}
+                    sx={{
+                      py: 1.5,
+                      px: 6,
+                      minWidth: "240px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    {loading ? "Processing..." : "Submit Preorder"}
+                  </Button>
+                </Grid>
               </Grid>
-            </Grid>
-          </Box>
-        </CardContent>
-      </Card>
-    </Container>
+            </Box>
+          </CardContent>
+        </Card>
+      </Box>
+    </Box>
   );
 }
