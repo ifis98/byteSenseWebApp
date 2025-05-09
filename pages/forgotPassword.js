@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { backendLink } from '../exports/variable';
+import CustomTextField from "../components/components/CustomTextField";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -38,12 +39,12 @@ const ForgotPassword = () => {
     <Container maxWidth="sm" sx={{ mt: 8 }}>
       <Box display="flex" flexDirection="column" alignItems="center">
         <img src="/image.png" alt="Logo" style={{ width: 160, marginBottom: 16 }} />
-        <Typography variant="subtitle1" sx={{ mt: 1, mb: 3 }}>
+        <Typography variant="subtitle1" sx={{ mt: 1, mb: 3, color: 'white' }}>
           Enter your email and we’ll send you a password reset link.
         </Typography>
 
         <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
-          <TextField
+          <CustomTextField
             fullWidth
             type="email"
             label="Email"

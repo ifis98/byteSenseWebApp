@@ -102,6 +102,8 @@ const HomePageNav = ({ updateDoctorDetail }) => {
                 minWidth: 180,
                 overflow: "visible",
                 filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.1))",
+                background: '#242424',
+                color: 'white'
               },
             }}
           >

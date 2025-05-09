@@ -9,6 +9,8 @@ import {
   Card, CardContent, CardHeader, Divider, Grid
 } from '@mui/material';
 import { useState, useEffect } from 'react';
+import CustomTextField from "../CustomTextField";
+import {CustomInputLabel, CustomSelect} from "../CustomSelect";
 
 export default function OrderForm() {
   const [formData, setFormData] = useState({
@@ -114,14 +116,14 @@ export default function OrderForm() {
 
   return (
     <Container maxWidth="md" sx={{ mt: 5, mb: 5 }}>
-      <Card elevation={3} sx={{ borderRadius: 3 }}>
+      <Card elevation={3} sx={{ borderRadius: 3, background:'#242424' }}>
         <CardHeader title="Order Form" titleTypographyProps={{ variant: 'h5', color: 'error' }} />
         <Divider />
         <CardContent>
           <Box component="form" onSubmit={handleSubmit} noValidate>
             <Grid container spacing={3}>
               <Grid size={{ xs: 12 }}>
-                <TextField
+                <CustomTextField
                   required
                   label="Case Name"
                   name="caseName"
@@ -133,8 +135,8 @@ export default function OrderForm() {
 
               <Grid size={{ xs: 6 }}>
                 <FormControl fullWidth required>
-                  <InputLabel id="arch-label" shrink>Arch</InputLabel>
-                  <Select
+                  <CustomInputLabel id="arch-label" shrink>Arch</CustomInputLabel>
+                  <CustomSelect
                     labelId="arch-label"
                     name="arch"
                     value={formData.arch}
@@ -142,14 +144,14 @@ export default function OrderForm() {
                     label="Arch"
                   >
                     <MenuItem value="Upper">Upper</MenuItem>
-                  </Select>
+                  </CustomSelect>
                 </FormControl>
               </Grid>
 
               <Grid size={{ xs: 6 }}>
                 <FormControl fullWidth required>
-                  <InputLabel id="type-label" shrink>Type</InputLabel>
-                  <Select
+                  <CustomInputLabel id="type-label" shrink>Type</CustomInputLabel>
+                  <CustomSelect
                     labelId="type-label"
                     name="type"
                     value={formData.type}
@@ -157,12 +159,12 @@ export default function OrderForm() {
                     label="Type"
                   >
                     <MenuItem value="Flat Plane">Flat Plane</MenuItem>
-                  </Select>
+                  </CustomSelect>
                 </FormControl>
               </Grid>
 
               <Grid size={{ xs: 6 }}>
-                <TextField
+                <CustomTextField
                   required
                   label="Maximum Undercut (mm)"
                   name="maxUndercut"
@@ -175,7 +177,7 @@ export default function OrderForm() {
               </Grid>
 
               <Grid size={{ xs: 6 }}>
-                <TextField
+                <CustomTextField
                   required
                   label="Passive Spacer (mm)"
                   name="passiveSpacer"
@@ -188,10 +190,10 @@ export default function OrderForm() {
               </Grid>
 
               <Grid size={{ xs: 12 }}>
-                <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 500, color: 'white' }}>
                   Upload Scans
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" color="text.secondary" sx={{ color: 'white' }}>
                   Please upload your scan STLs oriented at the bite opening where the nightguard should be created.
                 </Typography>
               </Grid>
@@ -239,7 +241,7 @@ export default function OrderForm() {
               </Grid>
 
               <Grid size={{ xs: 12 }}>
-                <TextField
+                <CustomTextField
                   label="Additional Instructions"
                   name="instructions"
                   multiline

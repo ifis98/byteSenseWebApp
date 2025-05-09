@@ -2,8 +2,10 @@ html, body, #__next {
     margin: 0;
     padding: 0;
     height: 100%;
+    background: #242424;
+    color: white;
   }
-  
+
 /* styles/globals.scss */
 
 /* Custom styles for react-datepicker day cells */
@@ -14,7 +16,7 @@ html, body, #__next {
   .red-date.react-datepicker__day--selected {
     background-color: darkred;
   }
-  
+
   .white-date {
     background-color: white;
     color: black;
@@ -22,7 +24,7 @@ html, body, #__next {
   .white-date.react-datepicker__day--selected {
     background-color: #cccccc;
   }
-  
+
   .green-date {
     background-color: green;
     color: white;
@@ -30,7 +32,7 @@ html, body, #__next {
   .green-date.react-datepicker__day--selected {
     background-color: darkgreen;
   }
-  
+
   .yellow-date {
     background-color: yellow;
     color: black;
@@ -38,6 +40,5 @@ html, body, #__next {
   .yellow-date.react-datepicker__day--selected {
     background-color: goldenrod;
   }
-  
+
   /* (You can add other global styles here as needed) */
-  

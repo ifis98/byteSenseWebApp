@@ -9,7 +9,7 @@ import Image from 'next/image';
 
 const Nav2 = () => {
   return (
-    <AppBar position="static" elevation={0} sx={{ backgroundColor: '#f8f8f8', height: 60, justifyContent: 'center' }}>
+    <AppBar position="static" elevation={0} sx={{ backgroundColor: '#242424', height: 60, justifyContent: 'center' }}>
       <Toolbar sx={{ minHeight: '60px !important', paddingLeft: '16px' }}>
         <Link href="/list" passHref>
           <IconButton edge="start" disableRipple sx={{ p: 0 }}>

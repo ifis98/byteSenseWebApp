@@ -13,6 +13,7 @@ import {
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { backendLink } from '../exports/variable';
+import CustomTextField from "../components/components/CustomTextField";
 
 const Register = () => {
   const router = useRouter();
@@ -69,12 +70,12 @@ const Register = () => {
         <Typography variant="h4" color="error" fontWeight={600}>
           Sign Up
         </Typography>
-        <Typography variant="subtitle1" sx={{ mt: 1, mb: 3 }}>
+        <Typography variant="subtitle1" sx={{ mt: 1, mb: 3, color: 'white' }}>
           Create your byteSense account.
         </Typography>
 
         <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
-          <TextField
+          <CustomTextField
             fullWidth
             label="First Name"
             name="fName"
@@ -83,7 +84,7 @@ const Register = () => {
             margin="normal"
             required
           />
-          <TextField
+          <CustomTextField
             fullWidth
             label="Last Name"
             name="lName"
@@ -92,7 +93,7 @@ const Register = () => {
             margin="normal"
             required
           />
-          <TextField
+          <CustomTextField
             fullWidth
             label="Username"
             name="userName"
@@ -101,7 +102,7 @@ const Register = () => {
             margin="normal"
             required
           />
-          <TextField
+          <CustomTextField
             fullWidth
             label="Email"
             name="email"
@@ -111,7 +112,7 @@ const Register = () => {
             margin="normal"
             required
           />
-          <TextField
+          <CustomTextField
             fullWidth
             label="Password"
             name="password"
@@ -121,7 +122,7 @@ const Register = () => {
             margin="normal"
             required
           />
-          <TextField
+          <CustomTextField
             fullWidth
             label="Confirm Password"
             name="confirmPassword"
@@ -132,8 +133,8 @@ const Register = () => {
             required
           />
           <Typography mt={2} variant="h6" color="error" style={{ textAlign: 'center', fontWeight: '800' }}>Practice address</Typography>
-          <Typography variant="subtitle1" style={{ textAlign: 'center' }}>(This is where your orders will be shipped, this information can be changed in your profile settings)</Typography>
-          <TextField
+          <Typography variant="subtitle1" style={{ textAlign: 'center', color: 'white' }}>(This is where your orders will be shipped, this information can be changed in your profile settings)</Typography>
+          <CustomTextField
               fullWidth
               label="Unit Number"
               name="unitNo"
@@ -141,7 +142,7 @@ const Register = () => {
               onChange={handleChange}
               margin="normal"
           />
-          <TextField
+          <CustomTextField
               fullWidth
               label="Street Address"
               name="streetAddress"
@@ -152,7 +153,7 @@ const Register = () => {
               multiline={true}
               rows={2}
           />
-          <TextField
+          <CustomTextField
               fullWidth
               label="City"
               name="city"
@@ -161,7 +162,7 @@ const Register = () => {
               margin="normal"
               required
           />
-          <TextField
+          <CustomTextField
               fullWidth
               label="State"
               name="state"
@@ -170,7 +171,7 @@ const Register = () => {
               margin="normal"
               required
           />
-          <TextField
+          <CustomTextField
               fullWidth
               label="Zip Code"
               name="zipCode"

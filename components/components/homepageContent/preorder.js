@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import { stripePromise } from "../../../lib/stripe";
 import { backendLink } from "../../../exports/variable";
 import { user } from "../../../exports/apiCalls";
+import CustomTextField from "../CustomTextField";
 
 export default function PreOrderForm() {
   const [quantity, setQuantity] = useState("");
@@ -113,8 +114,8 @@ export default function PreOrderForm() {
           elevation={3}
           sx={{
             borderRadius: 3,
-            background: "#515151",
-            border: "1px solid #515151",
+            background: "#242424",
+            border: "1px solid white",
           }}
         >
           <CardHeader
@@ -126,7 +127,7 @@ export default function PreOrderForm() {
             <Box component="form" onSubmit={handleSubmit} noValidate>
               <Grid container spacing={2} className={"w-full"}>
                 <Grid item xs={6}>
-                  <TextField
+                  <CustomTextField
                     required
                     label="Preorder Quantity"
                     name="quantity"

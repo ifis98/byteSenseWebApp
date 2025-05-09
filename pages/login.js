@@ -15,6 +15,7 @@ import axios from 'axios';
 import { backendLink } from '../exports/variable';
 import { connect } from 'react-redux';
 import { updateDoctorDetail } from '../actions/APIAction';
+import CustomTextField from "../components/components/CustomTextField";
 
 class Login extends React.Component {
   constructor(props) {
@@ -60,12 +61,12 @@ class Login extends React.Component {
       <Container maxWidth="sm" sx={{ mt: 8 }}>
         <Box display="flex" flexDirection="column" alignItems="center">
           <img src="/image.png" alt="byteSense Logo" style={{ width: 160, marginBottom: 16 }} />
-          <Typography variant="subtitle1" gutterBottom>
+          <Typography variant="subtitle1" gutterBottom sx={{ color: 'white' }}>
             Welcome back. Please login to your account.
           </Typography>
 
           <Box component="form" onSubmit={this.handleSubmit} sx={{ mt: 3, width: '100%' }}>
-            <TextField
+            <CustomTextField
               fullWidth
               label="Username"
               name="userName"
@@ -74,7 +75,7 @@ class Login extends React.Component {
               margin="normal"
               required
             />
-            <TextField
+            <CustomTextField
               fullWidth
               type="password"
               label="Password"

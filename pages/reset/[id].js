@@ -12,6 +12,7 @@ import {
 import { useRouter, useParams } from 'next/navigation';
 import axios from 'axios';
 import { backendLink } from '../../exports/variable';
+import CustomTextField from "../../components/components/CustomTextField";
 
 const ResetPassword = () => {
   const router = useRouter();
@@ -58,7 +59,7 @@ const ResetPassword = () => {
         </Typography>
 
         <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
-          <TextField
+          <CustomTextField
             fullWidth
             label="New Password"
             name="password"
@@ -68,7 +69,7 @@ const ResetPassword = () => {
             margin="normal"
             required
           />
-          <TextField
+          <CustomTextField
             fullWidth
             label="Confirm Password"
             name="confirmPassword"

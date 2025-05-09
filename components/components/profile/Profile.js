@@ -15,6 +15,7 @@ import {
 import moment from 'moment';
 import { backendLink } from '../../../exports/variable';
 import { user } from '../../../exports/apiCalls';
+import CustomTextField from "../CustomTextField";
 
 const Profile = () => {
   const [loading, setLoading] = useState(true);
@@ -168,8 +169,8 @@ const Profile = () => {
       ) : (
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
-            <Card sx={{ p: 3 }}>
-              <Typography variant="subtitle1" fontWeight={500}>
+            <Card sx={{ p: 3, background: '#242424' }}>
+              <Typography variant="subtitle1" fontWeight={500} sx={{ color: 'white' }}>
                 Profile Photo
               </Typography>
               <Avatar
@@ -206,7 +207,7 @@ const Profile = () => {
                 )}
               </Box>
               {fileName && (
-                <Typography mt={2} variant="body2">
+                <Typography mt={2} variant="body2" sx={{ color: 'white' }}>
                   {fileName}
                 </Typography>
               )}
@@ -219,7 +220,7 @@ const Profile = () => {
           </Grid>
 
           <Grid item xs={12} md={8}>
-            <Card sx={{ p: 3 }}>
+            <Card sx={{ p: 3, background: '#242424' }}>
               <Box display="flex" justifyContent="flex-end">
                 {!editMode && (
                   <Button variant="outlined" color="error" onClick={() => setEditMode(true)}>
@@ -230,7 +231,7 @@ const Profile = () => {
 
               <Grid container spacing={2} mt={1}>
                 <Grid item xs={12}>
-                  <TextField
+                  <CustomTextField
                     label="Observer ID"
                     name="userInfo"
                     value={form.userInfo}
@@ -239,7 +240,7 @@ const Profile = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
+                  <CustomTextField
                     label="First Name"
                     name="firstName"
                     value={form.firstName}
@@ -249,7 +250,7 @@ const Profile = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
+                  <CustomTextField
                     label="Last Name"
                     name="lastName"
                     value={form.lastName}
@@ -259,7 +260,7 @@ const Profile = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
+                  <CustomTextField
                     label="DOB (MM/DD/YYYY)"
                     name="DOB"
                     value={form.DOB}
@@ -269,7 +270,7 @@ const Profile = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
+                  <CustomTextField
                     label="Gender"
                     name="gender"
                     value={form.gender}
@@ -279,7 +280,7 @@ const Profile = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
+                  <CustomTextField
                     label="Bio"
                     name="bio"
                     value={form.bio}
@@ -291,7 +292,7 @@ const Profile = () => {
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField
+                  <CustomTextField
                     label="Street"
                     name="street"
                     value={form.street}
@@ -301,7 +302,7 @@ const Profile = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField
+                  <CustomTextField
                     label="City"
                     name="city"
                     value={form.city}
@@ -311,7 +312,7 @@ const Profile = () => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={3}>
-                  <TextField
+                  <CustomTextField
                     label="State"
                     name="state"
                     value={form.state}
@@ -321,7 +322,7 @@ const Profile = () => {
                   />
                 </Grid>
                 <Grid item xs={6} sm={1.5}>
-                  <TextField
+                  <CustomTextField
                     label="Zip"
                     name="zipCode"
                     value={form.zipCode}
@@ -331,7 +332,7 @@ const Profile = () => {
                   />
                 </Grid>
                 <Grid item xs={6} sm={1.5}>
-                  <TextField
+                  <CustomTextField
                     label="Unit"
                     name="unitNo"
                     value={form.unitNo}
