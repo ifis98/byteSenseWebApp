@@ -40,7 +40,7 @@ class Login extends React.Component {
         await localStorage.setItem('token', response.data.token);
         this.props.updateDoctorDetail().then((results) => {
           if (results) {
-            window.location.href = '/list';
+            window.location.href = '/';
           }
         });
       })
