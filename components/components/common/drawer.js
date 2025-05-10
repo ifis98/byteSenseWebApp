@@ -42,7 +42,7 @@ const bottomNavItems = [
 const Sidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   React.useEffect(() => {
     setOpen(localStorage.getItem("open"));
@@ -116,7 +116,7 @@ const Sidebar = () => {
             border: "1px solid #181818",
             padding: 10,
             margin: "0 10px",
-            background: open ? 'radial-gradient(at bottom right,#2c1413,#0f0f0f)' : 'transparent'
+            background: open ? 'radial-gradient(at bottom right,#441a19,#101010)' : 'transparent'
           }}
         >
           <ListItem
