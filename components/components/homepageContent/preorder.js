@@ -103,7 +103,7 @@ export default function PreOrderForm() {
       <Box sx={{ width: "100%" }}>
         <div style={{ width: "100%", height: "100vh" }}>
           <iframe
-            src={"https://en.wikipedia.org/wiki/JavaScript"}
+            src={"https://www.shopbitely.com"}
             width="100%"
             height="100%"
           />
