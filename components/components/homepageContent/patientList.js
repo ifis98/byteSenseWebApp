@@ -100,10 +100,10 @@ const PatientList = ({ setIsLoading }) => {
   const handleRowClick = (row) => {
     // Set loading state through props
     if (setIsLoading) setIsLoading(true);
-    
+
     // Store patient ID
     dispatch(updatePatientID({ patientDataUser: row.original.id }));
-    
+
     // Load patient data then navigate
     dispatch(updatePatientDetail(row.original.id))
       .then((results) => {
@@ -131,7 +131,7 @@ const PatientList = ({ setIsLoading }) => {
   };
 
   return (
-    <div className="homePageContent" id="PatientList">
+    <div className="homePageContent" id="PatientList" style={{ padding: "16px", borderRadius: "10px" }}>
       <Modal centered show={show} onHide={() => setShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Are you sure?</Modal.Title>
@@ -188,18 +188,58 @@ const PatientList = ({ setIsLoading }) => {
             })}
             muiTablePaperProps={{
               elevation: 0,
-              style: { border: 'none' },
+              sx:{
+                  border: 'none' ,
+                  backgroundColor: "#1d1d1d",
+                  color: '#fff',
+                  boxShadow: '0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)',
+                  '& .MuiTypography-root': {
+                    color: '#fff',
+                  },
+              }
             }}
             muiTableHeadCellProps={{
               style: {
-                backgroundColor: '#fff1f0',
-                color: '#ef5350',
+                backgroundColor: '#1d1d1d',
+                color: '#fff',
                 fontWeight: 'bold',
+              },
+              sx: {
+                "& .MuiSvgIcon-root, .MuiTableSortLabel-root, .MuiButtonBase-root, .MuiInputBase-root": {
+                  color: "white !important",
+                },
+              },
+            }}
+            muiTopToolbarProps={{
+              sx: {
+                backgroundColor: '#1d1d1d',
+                color: '#fff',
+                '& .MuiButtonBase-root': {
+                  color: 'white',
+                },
+              },
+            }}
+            muiBottomToolbarProps={{
+               sx: {
+                backgroundColor: '#1d1d1d',
+                 color: '#fff',
+                "& .MuiFormLabel-root, .MuiSelect-root, .MuiButtonBase-root, .MuiSvgIcon-root": {
+                  color: "white !important",
+                }
               },
             }}
             enablePagination
             initialState={{
               pagination: { pageIndex: 0, pageSize },
+            }}
+            muiSearchTextFieldProps={{
+              sx: {
+                backgroundColor: '#1d1d1d',
+                color: '#fff',
+                "& .MuiInputBase-root": {
+                  color: "white !important",
+                },
+              },
             }}
           />
         </Card>
