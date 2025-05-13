@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Spinner,
   Container,
@@ -8,41 +8,50 @@ import {
   Button,
   InputGroup,
   Form,
-} from 'react-bootstrap';
-import { MaterialReactTable } from 'material-react-table';
-import { doctor } from '../../../exports/apiCalls';
+} from "react-bootstrap";
+import { MaterialReactTable } from "material-react-table";
+import { doctor } from "../../../exports/apiCalls";
+import { createTheme, ThemeProvider } from "@mui/material";
 
 const PatientRequest = () => {
   const [requests, setRequests] = useState([]);
   const [filteredRequests, setFilteredRequests] = useState([]);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [loading, setLoading] = useState(true);
 
   const handleAccept = (userId) => {
-    doctor.doctorRequests().addPatient(userId).then(refreshList).catch(console.error);
+    doctor
+      .doctorRequests()
+      .addPatient(userId)
+      .then(refreshList)
+      .catch(console.error);
   };
 
   const handleDecline = (userId) => {
-    doctor.doctorRequests().declinePatient(userId).then(refreshList).catch(console.error);
+    doctor
+      .doctorRequests()
+      .declinePatient(userId)
+      .then(refreshList)
+      .catch(console.error);
   };
 
   const columns = useMemo(
     () => [
       {
-        accessorKey: 'fName',
-        header: 'First Name',
+        accessorKey: "fName",
+        header: "First Name",
         enableHiding: false,
         enableSorting: false,
       },
       {
-        accessorKey: 'lName',
-        header: 'Last Name',
+        accessorKey: "lName",
+        header: "Last Name",
         enableHiding: false,
         enableSorting: false,
       },
       {
-        accessorKey: 'accept',
-        header: '',
+        accessorKey: "accept",
+        header: "",
         enableColumnFilter: false,
         enableSorting: false,
         enableHiding: false,
@@ -57,8 +66,8 @@ const PatientRequest = () => {
         ),
       },
       {
-        accessorKey: 'decline',
-        header: '',
+        accessorKey: "decline",
+        header: "",
         enableColumnFilter: false,
         enableSorting: false,
         enableHiding: false,
@@ -73,23 +82,33 @@ const PatientRequest = () => {
         ),
       },
     ],
-    []
+    [],
   );
 
   useEffect(() => {
-    doctor.doctorRequests().getpatientRequest().then((res) => {
-      const data = res.data.length ? res.data : [];
-      setRequests(data);
-      setFilteredRequests(data);
-    }).catch(console.error).finally(() => setLoading(false));
+    doctor
+      .doctorRequests()
+      .getpatientRequest()
+      .then((res) => {
+        const data = res.data.length ? res.data : [];
+        setRequests(data);
+        setFilteredRequests(data);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
   }, []);
 
   const refreshList = () => {
     setLoading(true);
-    doctor.doctorRequests().getpatientRequest().then((res) => {
-      setRequests(res.data);
-      setFilteredRequests(res.data);
-    }).catch(console.error).finally(() => setLoading(false));
+    doctor
+      .doctorRequests()
+      .getpatientRequest()
+      .then((res) => {
+        setRequests(res.data);
+        setFilteredRequests(res.data);
+      })
+      .catch(console.error)
+      .finally(() => setLoading(false));
   };
 
   const handleSearchChange = (e) => {
@@ -99,25 +118,36 @@ const PatientRequest = () => {
       requests.filter(
         (r) =>
           r.fName.toLowerCase().includes(query) ||
-          r.lName.toLowerCase().includes(query)
-      )
+          r.lName.toLowerCase().includes(query),
+      ),
     );
   };
+  const theme = createTheme({
+    palette: {
+      mode: "dark",
+      primary: {
+        main: "#ef5350",
+      },
+    },
+  });
 
   return (
-    <div className="homePageContent" id="PatientList" style={{ padding: "16px", borderRadius: "10px" }}>
+    <div
+      className="homePageContent"
+      id="PatientList"
+      style={{ padding: "16px", borderRadius: "10px" }}
+    >
       <Container fluid className="px-0">
-        <h2 className="mb-1" style={{ color: '#ef5350', fontWeight: 600 }}>
+        <h2 className="mb-1" style={{ color: "#ef5350", fontWeight: 600 }}>
           Patient Request
         </h2>
 
         <p className="mt-3 mb-3">
-          Please provide your patient(s) with your{' '}
+          Please provide your patient(s) with your{" "}
           <mark className="markText">Observer ID</mark>, which can be found on
           your <mark className="markText">Profile</mark> page so they can enter
           it in their <mark className="markText">Observers</mark> Page.
         </p>
-
 
         {loading ? (
           <div className="loadingContainer">
@@ -126,56 +156,23 @@ const PatientRequest = () => {
           </div>
         ) : (
           <Card className="grid-child-one">
-            <MaterialReactTable
-              columns={columns}
-              data={filteredRequests}
-              muiTablePaperProps={{
-                elevation: 0,
-                sx:{
-                  border: 'none' ,
-                  backgroundColor: "#1d1d1d",
-                  color: '#fff',
-                  boxShadow: '0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)',
-                  '& .MuiTypography-root': {
-                    color: '#fff',
+            <ThemeProvider theme={theme}>
+              <MaterialReactTable
+                columns={columns}
+                data={filteredRequests}
+                muiTableHeadCellProps={{
+                  style: {
+                    backgroundColor: "#1d1d1d",
+                    color: "#fff",
+                    fontWeight: "bold",
                   },
-                }
-              }}
-              muiTableHeadCellProps={{
-                style: {
-                  backgroundColor: '#1d1d1d',
-                  color: '#fff',
-                  fontWeight: 'bold',
-                },
-                sx: {
-                  "& .MuiSvgIcon-root, .MuiTableSortLabel-root, .MuiButtonBase-root, .MuiInputBase-root": {
-                    color: "white !important",
-                  },
-                },
-              }}
-              muiTopToolbarProps={{
-                sx: {
-                  backgroundColor: '#1d1d1d',
-                  color: '#fff',
-                  '& .MuiButtonBase-root': {
-                    color: 'white',
-                  },
-                },
-              }}
-              muiBottomToolbarProps={{
-                sx: {
-                  backgroundColor: '#1d1d1d',
-                  color: '#fff',
-                  "& .MuiFormLabel-root, .MuiSelect-root, .MuiButtonBase-root, .MuiSvgIcon-root": {
-                    color: "white !important",
-                  }
-                },
-              }}
-              enablePagination
-              initialState={{
-                pagination: { pageIndex: 0, pageSize: 10 },
-              }}
-            />
+                }}
+                enablePagination
+                initialState={{
+                  pagination: { pageIndex: 0, pageSize: 10 },
+                }}
+              />
+            </ThemeProvider>
           </Card>
         )}
       </Container>

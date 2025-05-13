@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
-import { useDispatch } from 'react-redux';
+import { useState, useEffect, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
 import {
   Spinner,
   Row,
@@ -12,37 +12,38 @@ import {
   Modal,
   Form,
   InputGroup,
-} from 'react-bootstrap';
-import { MaterialReactTable } from 'material-react-table';
-import { doctor } from '../../../exports/apiCalls';
-import { backendLink } from '../../../exports/variable';
-import { updatePatientID } from '../../../actions/PageActions';
-import { updatePatientDetail } from '../../../actions/APIAction';
+} from "react-bootstrap";
+import { MaterialReactTable } from "material-react-table";
+import { doctor } from "../../../exports/apiCalls";
+import { backendLink } from "../../../exports/variable";
+import { updatePatientID } from "../../../actions/PageActions";
+import { updatePatientDetail } from "../../../actions/APIAction";
+import { createTheme, ThemeProvider } from "@mui/material";
 
 const PatientList = ({ setIsLoading }) => {
   const pageSize = 10;
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const NA = 'N/A';
+  const NA = "N/A";
 
   const [patients, setPatients] = useState([]);
   const [filteredPatients, setFilteredPatients] = useState([]);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [currentPatientInfo, setCurrentPatientInfo] = useState(null);
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const columns = useMemo(
     () => [
-      { accessorKey: 'Patient', header: 'Patient', enableHiding: false },
-      { accessorKey: 'DOB', header: 'DOB' },
-      { accessorKey: 'Place_of_Residence', header: 'Place of Residence' },
-      { accessorKey: 'Last_Visited', header: 'Last Visited' },
-      { accessorKey: 'Next_Appointment', header: 'Next Appointment' },
-      { accessorKey: 'Bruxism_Level', header: 'Bruxism Level' },
+      { accessorKey: "Patient", header: "Patient", enableHiding: false },
+      { accessorKey: "DOB", header: "DOB" },
+      { accessorKey: "Place_of_Residence", header: "Place of Residence" },
+      { accessorKey: "Last_Visited", header: "Last Visited" },
+      { accessorKey: "Next_Appointment", header: "Next Appointment" },
+      { accessorKey: "Bruxism_Level", header: "Bruxism Level" },
     ],
-    []
+    [],
   );
 
   useEffect(() => {
@@ -54,7 +55,7 @@ const PatientList = ({ setIsLoading }) => {
           const doc = value.new_patient._doc;
           return {
             id: doc.user || NA,
-            Patient: `${doc.fName || ''} ${doc.lName || ''}`.trim() || NA,
+            Patient: `${doc.fName || ""} ${doc.lName || ""}`.trim() || NA,
             DOB: doc.dob || NA,
             Place_of_Residence: doc.address?.state || NA,
             Country: doc.address?.country || NA,
@@ -93,7 +94,7 @@ const PatientList = ({ setIsLoading }) => {
           p.Patient.toLowerCase().includes(query) ||
           p.Place_of_Residence.toLowerCase().includes(query)
         );
-      })
+      }),
     );
   };
 
@@ -109,10 +110,10 @@ const PatientList = ({ setIsLoading }) => {
       .then((results) => {
         if (results) {
           // Use window.location to ensure full page reload with hash
-          window.location.href = '/list#report';
+          window.location.href = "/list#report";
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error loading patient details:", error);
         if (setIsLoading) setIsLoading(false);
       });
@@ -130,15 +131,28 @@ const PatientList = ({ setIsLoading }) => {
       .catch(console.error);
   };
 
+  const theme = createTheme({
+    palette: {
+      mode: "dark",
+      primary: {
+        main: "#ef5350",
+      },
+    },
+  });
+
   return (
-    <div className="homePageContent" id="PatientList" style={{ padding: "16px", borderRadius: "10px" }}>
+    <div
+      className="homePageContent"
+      id="PatientList"
+      style={{ padding: "16px", borderRadius: "10px" }}
+    >
       <Modal centered show={show} onHide={() => setShow(false)}>
         <Modal.Header closeButton>
           <Modal.Title>Are you sure?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Are you sure you want to remove{' '}
-          {currentPatientInfo?.Patient || 'this patient'}? This process cannot
+          Are you sure you want to remove{" "}
+          {currentPatientInfo?.Patient || "this patient"}? This process cannot
           be undone.
         </Modal.Body>
         <Modal.Footer>
@@ -154,7 +168,7 @@ const PatientList = ({ setIsLoading }) => {
       <Card className="mt-4 p-3 border-0">
         <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3">
           <div>
-            <h2 className="mb-1" style={{ color: '#ef5350', fontWeight: 600 }}>
+            <h2 className="mb-1" style={{ color: "#ef5350", fontWeight: 600 }}>
               Patient List
             </h2>
           </div>
@@ -168,80 +182,27 @@ const PatientList = ({ setIsLoading }) => {
         </div>
       ) : (
         <Card className="grid-child-one mt-4">
-          <MaterialReactTable
-            columns={columns}
-            data={filteredPatients}
-            muiTableBodyRowProps={({ row }) => ({
-              onClick: () => handleRowClick(row),
-              onMouseEnter: () => handleRowHover(row),
-              style: {
-                cursor: 'pointer',
-                backgroundColor:
-                  currentPatientInfo?.id === row.original.id
-                    ? '#e53935'
-                    : 'white',
-                color:
-                  currentPatientInfo?.id === row.original.id
-                    ? 'white'
-                    : 'inherit',
-              },
-            })}
-            muiTablePaperProps={{
-              elevation: 0,
-              sx:{
-                  border: 'none' ,
+          <ThemeProvider theme={theme}>
+            <MaterialReactTable
+              columns={columns}
+              data={filteredPatients}
+              muiTableBodyRowProps={({ row }) => ({
+                onClick: () => handleRowClick(row),
+                onMouseEnter: () => handleRowHover(row),
+              })}
+              muiTableHeadCellProps={{
+                style: {
                   backgroundColor: "#1d1d1d",
-                  color: '#fff',
-                  boxShadow: '0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)',
-                  '& .MuiTypography-root': {
-                    color: '#fff',
-                  },
-              }
-            }}
-            muiTableHeadCellProps={{
-              style: {
-                backgroundColor: '#1d1d1d',
-                color: '#fff',
-                fontWeight: 'bold',
-              },
-              sx: {
-                "& .MuiSvgIcon-root, .MuiTableSortLabel-root, .MuiButtonBase-root, .MuiInputBase-root": {
-                  color: "white !important",
+                  color: "#fff",
+                  fontWeight: "bold",
                 },
-              },
-            }}
-            muiTopToolbarProps={{
-              sx: {
-                backgroundColor: '#1d1d1d',
-                color: '#fff',
-                '& .MuiButtonBase-root': {
-                  color: 'white',
-                },
-              },
-            }}
-            muiBottomToolbarProps={{
-               sx: {
-                backgroundColor: '#1d1d1d',
-                 color: '#fff',
-                "& .MuiFormLabel-root, .MuiSelect-root, .MuiButtonBase-root, .MuiSvgIcon-root": {
-                  color: "white !important",
-                }
-              },
-            }}
-            enablePagination
-            initialState={{
-              pagination: { pageIndex: 0, pageSize },
-            }}
-            muiSearchTextFieldProps={{
-              sx: {
-                backgroundColor: '#1d1d1d',
-                color: '#fff',
-                "& .MuiInputBase-root": {
-                  color: "white !important",
-                },
-              },
-            }}
-          />
+              }}
+              enablePagination
+              initialState={{
+                pagination: { pageIndex: 0, pageSize },
+              }}
+            />
+          </ThemeProvider>
         </Card>
       )}
     </div>
