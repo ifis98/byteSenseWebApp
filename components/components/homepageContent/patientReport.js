@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { getPatient, getPatientId } from '../../../store/reducers';
-import { doctor } from '../../../exports/apiCalls';
-import moment from 'moment';
-import { Line } from 'react-chartjs-2';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { getPatient, getPatientId } from "../../../store/reducers";
+import { doctor } from "../../../exports/apiCalls";
+import moment from "moment";
+import { Line } from "react-chartjs-2";
 import {
   Box,
   Typography,
@@ -13,10 +13,10 @@ import {
   CircularProgress,
   Button,
   CardContent,
-} from '@mui/material';
-import PatientDetailedData from './patientDetailedData';
-import NightsStayIcon from '@mui/icons-material/NightsStay';
-import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
+} from "@mui/material";
+import PatientDetailedData from "./patientDetailedData";
+import NightsStayIcon from "@mui/icons-material/NightsStay";
+import PermContactCalendarIcon from "@mui/icons-material/PermContactCalendar";
 
 // Import and register the required Chart.js components
 import {
@@ -28,7 +28,7 @@ import {
   Title,
   Tooltip,
   Legend,
-} from 'chart.js';
+} from "chart.js";
 
 ChartJS.register(
   CategoryScale,
@@ -37,7 +37,7 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 class PatientReport extends Component {
@@ -45,46 +45,46 @@ class PatientReport extends Component {
     loading: true,
     loading2: true,
     lineDataPresent: false,
-    ComplianceN: '0',
-    ComplianceD: '0',
-    patientName: '',
+    ComplianceN: "0",
+    ComplianceD: "0",
+    patientName: "",
     dataBar: {
       labels: [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
       ],
       datasets: [
         {
-          label: 'Total Episodes',
-          borderColor: '#f44336',
+          label: "Total Episodes",
+          borderColor: "#f44336",
           data: [],
           fill: false,
-          pointBackgroundColor: '#ef5350',
+          pointBackgroundColor: "#ef5350",
         },
       ],
     },
     dataLine: {
       labels: [
-        'Sunday',
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
       ],
       datasets: [
         {
-          label: 'Total Duration',
+          label: "Total Duration",
           data: [],
           fill: false,
-          borderColor: '#f44336',
-          pointBackgroundColor: '#ef5350',
+          borderColor: "#f44336",
+          pointBackgroundColor: "#ef5350",
         },
       ],
     },
@@ -106,24 +106,24 @@ class PatientReport extends Component {
         ComplianceN: this.props.patient.compliance.CompDays,
       });
     } catch (err) {
-      window.location.href = '/list';
+      window.location.href = "/list";
     }
   };
 
   getReportOfCurrentWeek = async () => {
     const patientId = this.props.getPatientId.patientDataUser;
     const daysOfWeek = this.getDaysOfCurrentWeek();
-  
+
     const fetchReports = daysOfWeek.map(async (day) => {
       try {
         const response = await doctor
           .doctorRequests()
-          .getDailyReport(patientId, this.formatDate(day, 'YYYY/MM/DD'));
-  
+          .getDailyReport(patientId, this.formatDate(day, "YYYY/MM/DD"));
+
         if (!response.data || !response.data.length) {
           return { episodes: null, duration: null };
         }
-  
+
         const data = response.data[0];
         return {
           episodes: data.total_episodes ? Number(data.total_episodes) : null,
@@ -134,12 +134,12 @@ class PatientReport extends Component {
         return { episodes: null, duration: null };
       }
     });
-  
+
     const results = await Promise.all(fetchReports);
-  
+
     const tempEp = results.map((r) => r.episodes);
     const tempDur = results.map((r) => r.duration);
-  
+
     this.setState((prev) => ({
       dataBar: {
         ...prev.dataBar,
@@ -156,38 +156,38 @@ class PatientReport extends Component {
 
   getDaysOfCurrentWeek = () => {
     const currentDate = this.dateCheck();
-    const weekStart = currentDate.clone().startOf('week');
+    const weekStart = currentDate.clone().startOf("week");
     return Array.from({ length: 7 }, (_, i) =>
-      moment(weekStart).add(i, 'days').format('MM/DD/YYYY')
+      moment(weekStart).add(i, "days").format("MM/DD/YYYY"),
     );
   };
 
   formatDate = (date, format) => {
     const d = new Date(date);
     const year = d.getFullYear();
-    const month = (`0${d.getMonth() + 1}`).slice(-2);
-    const day = (`0${d.getDate()}`).slice(-2);
+    const month = `0${d.getMonth() + 1}`.slice(-2);
+    const day = `0${d.getDate()}`.slice(-2);
     switch (format) {
-      case 'YYYY/MM/DD':
+      case "YYYY/MM/DD":
         return `${year}/${month}/${day}`;
-      case 'MM/DD/YYYY':
+      case "MM/DD/YYYY":
         return `${month}/${day}/${year}`;
-      case 'YYYY-MM-DD':
+      case "YYYY-MM-DD":
         return `${year}-${month}-${day}`;
       default:
-        return '';
+        return "";
     }
   };
 
   dateCheck = () => {
     const hour = new Date().getHours();
-    return hour >= 19 ? moment() : moment().subtract(1, 'days');
+    return hour >= 19 ? moment() : moment().subtract(1, "days");
   };
 
   deletePatient = async () => {
     try {
       await doctor.doctorRequests().deletePatient(this.patientId);
-      window.location.href = '/list';
+      window.location.href = "/list";
     } catch (err) {
       console.log(err);
     }
@@ -207,14 +207,19 @@ class PatientReport extends Component {
     return (
       <Box className="homePageContent" sx={{ px: 4, py: 2 }}>
         {/* Header: Title on the left and PatientDetailedData on the right */}
-        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h5" sx={{ color: '#ef5350', fontWeight: 600 }}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          mb={3}
+        >
+          <Typography variant="h5" sx={{ color: "#ef5350", fontWeight: 600 }}>
             Patient Report
           </Typography>
           <PatientDetailedData />
         </Box>
 
-        {(loading || loading2) ? (
+        {loading || loading2 ? (
           <Box display="flex" flexDirection="column" alignItems="center" mt={8}>
             <CircularProgress />
             <Typography mt={2}>Loading...</Typography>
@@ -224,22 +229,32 @@ class PatientReport extends Component {
             {/* Grid container without explicit gridTemplateRows */}
             <Box
               sx={{
-                display: 'grid',
-                gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+                display: "grid",
+                gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
                 gap: 3,
               }}
             >
               {/* Top Left Card: Patient Name */}
-              <Card sx={{ height: { xs: 'auto', md: 150 } }}>
+              <Card
+                sx={{
+                  height: { xs: "auto", md: 150 },
+                  background: "#1d1d1d",
+                  color: "white",
+                  boxShadow:
+                    "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
+                }}
+              >
                 <CardContent
                   sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    height: '100%',
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    height: "100%",
                   }}
                 >
-                  <PermContactCalendarIcon sx={{ fontSize: 100, color: '#333f48', mr: 2 }} />
+                  <PermContactCalendarIcon
+                    sx={{ fontSize: 100, color: "#fff", mr: 2 }}
+                  />
                   <Box>
                     <Typography variant="subtitle1">Patient Name</Typography>
                     <Typography variant="h6" fontWeight={700}>
@@ -250,19 +265,33 @@ class PatientReport extends Component {
               </Card>
 
               {/* Top Right Card: Compliance */}
-              <Card sx={{ height: { xs: 'auto', md: 150 } }}>
+              <Card
+                sx={{
+                  height: { xs: "auto", md: 150 },
+                  background: "#1d1d1d",
+                  color: "white",
+                  boxShadow:
+                    "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
+                }}
+              >
                 <CardContent
                   sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    height: '100%',
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    height: "100%",
                   }}
                 >
-                  <NightsStayIcon sx={{ fontSize: 100, color: '#333f48', mr: 2 }} />
+                  <NightsStayIcon
+                    sx={{ fontSize: 100, color: "#fff", mr: 2 }}
+                  />
                   <Box>
                     <Typography variant="subtitle1">Compliance</Typography>
-                    <Typography variant="h6" fontWeight={700} sx={{ fontSize: 30, color: '#ef5350' }}>
+                    <Typography
+                      variant="h6"
+                      fontWeight={700}
+                      sx={{ fontSize: 30, color: "#ef5350" }}
+                    >
                       {ComplianceN}
                     </Typography>
                     <Typography variant="body2">Nights</Typography>
@@ -271,25 +300,65 @@ class PatientReport extends Component {
               </Card>
 
               {/* Bottom Left Card (Graph) */}
-              <Card sx={{ height: { xs: 'auto', md: 400 }, p: 2 }}>
+              <Card
+                sx={{
+                  height: { xs: "auto", md: 400 },
+                  p: 2,
+                  background: "#1d1d1d",
+                  color: "white",
+                  boxShadow:
+                    "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
+                }}
+              >
                 {lineDataPresent && (
                   <Line
                     data={dataBar}
                     options={{
                       plugins: {
-                        legend: { display: false },
+                        legend: {
+                          display: false,
+                          labels: {
+                            color: "white",
+                          },
+                        },
                         title: {
                           display: true,
-                          text: 'Bruxism Total Episodes',
-                          color: '#333',
+                          text: "Bruxism Total Episodes",
+                          color: "#fff",
                           font: { size: 18 },
                         },
                       },
                       responsive: true,
                       maintainAspectRatio: false,
                       scales: {
-                        x: { title: { display: true, text: 'Night' } },
-                        y: { title: { display: true, text: 'Episodes' } },
+                        x: {
+                          title: {
+                            display: true,
+                            text: "Night",
+                            color: "#fff",
+                            font: { size: 14 },
+                          },
+                          grid: {
+                            color: "rgba(255, 255, 255, 0.2)",
+                          },
+                          ticks: {
+                            color: "white",
+                          },
+                        },
+                        y: {
+                          title: {
+                            display: true,
+                            text: "Episodes",
+                            color: "#fff",
+                            font: { size: 14 },
+                          },
+                          ticks: {
+                            color: "white",
+                          },
+                          grid: {
+                            color: "rgba(255, 255, 255, 0.2)",
+                          },
+                        },
                       },
                     }}
                   />
@@ -297,25 +366,65 @@ class PatientReport extends Component {
               </Card>
 
               {/* Bottom Right Card (Graph) */}
-              <Card sx={{ height: { xs: 'auto', md: 400 }, p: 2 }}>
+              <Card
+                sx={{
+                  height: { xs: "auto", md: 400 },
+                  p: 2,
+                  background: "#1d1d1d",
+                  color: "white",
+                  boxShadow:
+                    "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
+                }}
+              >
                 {lineDataPresent && (
                   <Line
                     data={dataLine}
                     options={{
                       plugins: {
-                        legend: { display: false },
+                        legend: {
+                          display: false,
+                          labels: {
+                            color: "white",
+                          },
+                        },
                         title: {
                           display: true,
-                          text: 'Bruxism Total Duration',
-                          color: '#333',
+                          text: "Bruxism Total Duration",
+                          color: "#fff",
                           font: { size: 18 },
                         },
                       },
                       responsive: true,
                       maintainAspectRatio: false,
                       scales: {
-                        x: { title: { display: true, text: 'Night' } },
-                        y: { title: { display: true, text: 'Duration (seconds)' } },
+                        x: {
+                          title: {
+                            display: true,
+                            text: "Night",
+                            color: "#fff",
+                            font: { size: 14 },
+                          },
+                          grid: {
+                            color: "rgba(255, 255, 255, 0.2)",
+                          },
+                          ticks: {
+                            color: "white",
+                          },
+                        },
+                        y: {
+                          title: {
+                            display: true,
+                            text: "Duration (seconds)",
+                            color: "#fff",
+                            font: { size: 14 },
+                          },
+                          grid: {
+                            color: "rgba(255, 255, 255, 0.2)",
+                          },
+                          ticks: {
+                            color: "white",
+                          },
+                        },
                       },
                     }}
                   />
@@ -325,7 +434,11 @@ class PatientReport extends Component {
 
             {/* Remove Patient Button Below the Grid */}
             <Box mt={3} display="flex" justifyContent="center">
-              <Button variant="contained" color="error" onClick={this.deletePatient}>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={this.deletePatient}
+              >
                 Remove Patient
               </Button>
             </Box>

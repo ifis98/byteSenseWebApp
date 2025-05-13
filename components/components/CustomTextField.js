@@ -34,6 +34,9 @@ const CustomTextField = styled(TextField)({
     input: {
         color: 'white',
     },
+    textarea:{
+        color: 'white',
+    }
 });
 
 export default CustomTextField;

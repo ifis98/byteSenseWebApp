@@ -169,7 +169,7 @@ const Profile = () => {
       ) : (
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
-            <Card sx={{ p: 3, background: '#242424' }}>
+            <Card sx={{ p: 3, background: '#1d1d1d' }}>
               <Typography variant="subtitle1" fontWeight={500} sx={{ color: 'white' }}>
                 Profile Photo
               </Typography>
@@ -220,7 +220,7 @@ const Profile = () => {
           </Grid>
 
           <Grid item xs={12} md={8}>
-            <Card sx={{ p: 3, background: '#242424' }}>
+            <Card sx={{ p: 3, background: '#1d1d1d' }}>
               <Box display="flex" justifyContent="flex-end">
                 {!editMode && (
                   <Button variant="outlined" color="error" onClick={() => setEditMode(true)}>
