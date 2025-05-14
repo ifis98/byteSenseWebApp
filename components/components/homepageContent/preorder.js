@@ -114,15 +114,17 @@ export default function PreOrderForm() {
           elevation={3}
           sx={{
             borderRadius: 3,
-            background: "#242424",
-            border: "1px solid white",
+            background: "#1d1d1d",
+            border: "1px solid #ffffff4d",
+            boxShadow:
+                "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
           }}
         >
           <CardHeader
             title="Pre-Order Now!"
             titleTypographyProps={{ variant: "h5", color: "error" }}
           />
-          <Divider />
+          <Divider sx={{ background: "#ffffff4d" }} />
           <CardContent>
             <Box component="form" onSubmit={handleSubmit} noValidate>
               <Grid container spacing={2} className={"w-full"}>
@@ -156,6 +158,11 @@ export default function PreOrderForm() {
                       px: 6,
                       minWidth: "240px",
                       textTransform: "uppercase",
+                      '&.Mui-disabled': {
+                        color: 'gray',
+                        cursor: 'not-allowed !important',
+                        pointerEvents: 'auto !important',
+                      },
                     }}
                   >
                     {loading ? "Processing..." : "Submit Preorder"}

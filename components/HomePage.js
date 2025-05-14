@@ -18,6 +18,7 @@ import StaffTraining from "./components/homepageContent/StaffTraining";
 import ProductInformation from "./components/homepageContent/ProductInformation";
 import SalesMaterial from "./components/homepageContent/SalesMaterial";
 import LabSlip from "./components/homepageContent/LabSlip";
+import FAQ1 from "./components/homepageContent/FAQ1";
 
 function HomePage() {
   const path = usePathname();
@@ -79,6 +80,7 @@ function HomePage() {
       return <ComingSoon />;
     }
     if (path === "/faq") return <FAQ />;
+    if (path === "/faq1") return <FAQ1 />;
     if (path === "/staff_training") return <StaffTraining />;
     if (path === "/product_information") return <ProductInformation />;
     if (path === "/sales_material") return <SalesMaterial />;
