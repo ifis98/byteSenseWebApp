@@ -1,0 +1,16 @@
+{
+  "routes": [
+    {
+      "src": "/faq",
+      "headers": {
+        "Content-Security-Policy": "frame-ancestors 'self' https://app.bytesense.ai;"
+      }
+    },
+    {
+      "src": "/faq1",
+      "headers": {
+        "Content-Security-Policy": "frame-ancestors 'self' https://app.bytesense.ai;"
+      }
+    }
+  ]
+}
