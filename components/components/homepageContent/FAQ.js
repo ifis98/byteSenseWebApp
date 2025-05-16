@@ -7,7 +7,12 @@ const FAQ = () => {
         FAQ
       </h2>
       <div style={{ width: "100%", height: "80vh" }}>
-        <iframe src={"/faq/Faq_byteSense.html"} width="100%" height="100%" />
+        <iframe
+          src="/api/proxy?url=https://www.bytesense.ai/faq"
+          width="100%"
+          height="100%"
+          style={{ border: "none" }}
+        />
       </div>
     </div>
   );
