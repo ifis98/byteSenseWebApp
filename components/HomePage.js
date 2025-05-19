@@ -25,6 +25,7 @@ function HomePage() {
   const [authChecked, setAuthChecked] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [updateCounter, setUpdateCounter] = useState(0);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -85,12 +86,19 @@ function HomePage() {
     if (path === "/lab_slip") return <LabSlip />;
     return <ComingSoon />;
   };
-
+  const closeDrawer = () => {
+    setDrawerOpen(false);
+  };
   return (
     <div className={styles.pageWrapper}>
-      <Sidebar />
+      <div className={"!hidden md:!flex"}>
+        <Sidebar />
+      </div>
+      <div className={"!flex md:!hidden"}>
+        <Sidebar variant={""} drawerOpen={drawerOpen} onClick={closeDrawer} />
+      </div>
       <div className={styles.mainContent}>
-        <HomePageNav />
+        <HomePageNav setDrawerOpen={setDrawerOpen} />
         {renderComponent()}
       </div>
     </div>

@@ -20,8 +20,9 @@ import { getDentistDetail } from "../../../store/reducers";
 import { backendLink } from "../../../exports/variable";
 import { user } from "../../../exports/apiCalls";
 import { updateDoctorDetail } from "../../../actions/APIAction";
+import MenuIcon from "@mui/icons-material/Menu";
 
-const HomePageNav = ({ updateDoctorDetail }) => {
+const HomePageNav = ({ updateDoctorDetail, setDrawerOpen }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [img, setImg] = useState("");
   const [imgPresent, setImgPresent] = useState(false);
@@ -70,7 +71,13 @@ const HomePageNav = ({ updateDoctorDetail }) => {
     >
       <Toolbar sx={{ display: "flex", justifyContent: "space-between", px: 3 }}>
         {/* Left section (logo or placeholder) */}
-        <Box />
+        <Box>
+          <MenuIcon
+            className="!flex md:!hidden !cursor-pointer"
+            sx={{ color: "#fff" }}
+            onClick={() => setDrawerOpen(true)}
+          />
+        </Box>
 
         {/* Right icons and menu */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
@@ -102,8 +109,8 @@ const HomePageNav = ({ updateDoctorDetail }) => {
                 minWidth: 180,
                 overflow: "visible",
                 filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.1))",
-                background: '#242424',
-                color: 'white'
+                background: "#242424",
+                color: "white",
               },
             }}
           >
@@ -114,7 +121,7 @@ const HomePageNav = ({ updateDoctorDetail }) => {
             >
               {doctorName}
             </Typography>
-            <Divider />
+            <Divider sx={{ background: "#ffffff4d" }} />
             <MenuItem onClick={() => (window.location.href = "/profile")}>
               Profile
             </MenuItem>

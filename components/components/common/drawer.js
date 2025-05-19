@@ -39,7 +39,7 @@ const bottomNavItems = [
   { href: "/staff_training", label: "Staff Training" },
 ];
 
-const Sidebar = () => {
+const Sidebar = ({ variant = "permanent", drawerOpen, onClick }) => {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
@@ -57,7 +57,8 @@ const Sidebar = () => {
 
   return (
     <Drawer
-      variant="permanent"
+      variant={variant}
+      open={drawerOpen}
       sx={{
         width: drawerWidth,
         flexShrink: 0,
@@ -69,6 +70,7 @@ const Sidebar = () => {
           color: "#ffffff",
         },
       }}
+      onClick={onClick}
     >
       <div
         style={{
@@ -116,7 +118,9 @@ const Sidebar = () => {
             border: "1px solid #181818",
             padding: 10,
             margin: "0 10px",
-            background: open ? 'radial-gradient(at bottom right,#441a19,#101010)' : 'transparent'
+            background: open
+              ? "radial-gradient(at bottom right,#441a19,#101010)"
+              : "transparent",
           }}
         >
           <ListItem

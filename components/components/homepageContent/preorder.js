@@ -99,6 +99,7 @@ export default function PreOrderForm() {
         gap: "16px",
         m: 0,
       }}
+      className={"md:!flex-row !flex-col-reverse"}
     >
       <Box sx={{ width: "100%" }}>
         <div style={{ width: "100%", height: "100vh" }}>
@@ -118,6 +119,7 @@ export default function PreOrderForm() {
             border: "1px solid #ffffff4d",
             boxShadow:
                 "0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)",
+            minHeight: "200px",
           }}
         >
           <CardHeader
