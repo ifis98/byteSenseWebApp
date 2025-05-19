@@ -15,19 +15,6 @@ module.exports = {
           },
         ],
       },
-      {
-        source: "/faq1",
-        headers: [
-          {
-            key: "Content-Security-Policy",
-            value: "frame-ancestors 'self' https://app.bytesense.ai",
-          },
-          {
-            key: "X-Frame-Options",
-            value: "",
-          },
-        ],
-      },
     ];
   },
 };

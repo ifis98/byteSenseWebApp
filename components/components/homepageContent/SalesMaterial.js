@@ -27,7 +27,7 @@ const SalesMaterial = () => {
       </h2>
       <div style={{ width: "100%", display: "flex", gap: "10px" }}>
         {pdfs.map((item) => (
-          <a href={item.url} download={`${item.title}.pdf`}>
+          <a href={item.url} download={`${item.title}.pdf`} key={item.id}>
             {" "}
             <Button
               variant="contained"
