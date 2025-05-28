@@ -1,29 +1,20 @@
-'use client';
+"use client";
 
-import React from 'react';
-import {
-  Box,
-  Button,
-  Container,
-  Grid,
-  TextField,
-  Typography,
-  Link as MuiLink,
-  Alert
-} from '@mui/material';
-import axios from 'axios';
-import { backendLink } from '../exports/variable';
-import { connect } from 'react-redux';
-import { updateDoctorDetail } from '../actions/APIAction';
-import CustomTextField from "../components/components/CustomTextField";
+import React from "react";
+import { Box, Button, Typography, Link as MuiLink, Alert } from "@mui/material";
+import axios from "axios";
+import { backendLink } from "../exports/variable";
+import { connect } from "react-redux";
+import { updateDoctorDetail } from "../actions/APIAction";
+import CustomLabelTextField from "../components/components/CustomLabelTextField";
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: '',
-      password: '',
-      errorMessage: '',
+      userName: "",
+      password: "",
+      errorMessage: "",
     };
   }
 
@@ -36,21 +27,21 @@ class Login extends React.Component {
     const { userName, password } = this.state;
 
     axios
-      .post(backendLink + 'user/loginWeb', { userName, password })
+      .post(backendLink + "user/loginWeb", { userName, password })
       .then(async (response) => {
-        await localStorage.setItem('token', response.data.token);
+        await localStorage.setItem("token", response.data.token);
         this.props.updateDoctorDetail().then((results) => {
           if (results) {
             localStorage.setItem("open", true);
-            window.location.href = '/';
+            window.location.href = "/";
           }
         });
       })
       .catch(() => {
         this.setState({
-          errorMessage: 'Invalid credentials. Please try again.',
-          userName: '',
-          password: '',
+          errorMessage: "Invalid credentials. Please try again.",
+          userName: "",
+          password: "",
         });
       });
   };
@@ -59,73 +50,110 @@ class Login extends React.Component {
     const { userName, password, errorMessage } = this.state;
 
     return (
-      <Container maxWidth="sm" sx={{ mt: 8 }}>
-        <Box display="flex" flexDirection="column" alignItems="center">
-          <img src="/image.png" alt="byteSense Logo" style={{ width: 160, marginBottom: 16 }} />
-          <Typography variant="subtitle1" gutterBottom sx={{ color: 'white' }}>
-            Welcome back. Please login to your account.
-          </Typography>
-
-          <Box component="form" onSubmit={this.handleSubmit} sx={{ mt: 3, width: '100%' }}>
-            <CustomTextField
-              fullWidth
-              label="Username"
-              name="userName"
-              value={userName}
-              onChange={this.handleChange}
-              margin="normal"
-              required
+      <Box
+        className={"flex flex-row justify-center items-center w-full gap-4"}
+        sx={{ height: "100vh", width: "100%" }}
+        style={{ backgroundColor: "#1d1d1d" }}
+      >
+        <Box className={"w-4/5 h-full hidden md:block"}>
+          <img
+            src="/login.png"
+            alt="login Logo"
+            className={"w-full h-full object-cover object-center"}
+          />
+        </Box>
+        <Box className={"w-full p-4 flex justify-center items-center h-full "}>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            className={"w-full"}
+            maxWidth={600}
+            mx="auto"
+          >
+            <img
+              src="/image.png"
+              alt="byteSense Logo"
+              style={{ width: 160, marginBottom: 16 }}
             />
-            <CustomTextField
-              fullWidth
-              type="password"
-              label="Password"
-              name="password"
-              value={password}
-              onChange={this.handleChange}
-              margin="normal"
-              required
-            />
+            <Typography variant="h4" gutterBottom sx={{ color: "white" }}>
+              Welcome back
+            </Typography>
+            <Typography
+              variant="subtitle1"
+              gutterBottom
+              sx={{ color: "white" }}
+            >
+              Please login to your account.
+            </Typography>
 
-            {errorMessage && (
-              <Alert severity="error" sx={{ mt: 2 }}>
-                {errorMessage}
-              </Alert>
-            )}
-
-            <Box mt={3} display="flex" flexDirection="column" gap={2}>
-              <Button
-                type="submit"
-                variant="contained"
+            <Box
+              component="form"
+              onSubmit={this.handleSubmit}
+              sx={{ mt: 3, width: "100%" }}
+            >
+              <CustomLabelTextField
                 fullWidth
-                size="large"
-                color="error" // 🔴 red
-              >
-                Login
-              </Button>
-              <Button
-                variant="outlined"
+                label="Username"
+                name="userName"
+                value={userName}
+                onChange={this.handleChange}
+                margin="normal"
+                required
+                placeholder={"Enter your username"}
+              />
+              <CustomLabelTextField
                 fullWidth
-                size="large"
-                href="/register"
-                color="error" // 🔴 red
-              >
-                Sign Up
-              </Button>
-            </Box>
+                type="password"
+                label="Password"
+                name="password"
+                value={password}
+                onChange={this.handleChange}
+                margin="normal"
+                required
+                placeholder={"Enter Password"}
+              />
 
-            <Box mt={2} textAlign="center">
-              <MuiLink
-                href="/forgotPassword"
-                underline="hover"
-                sx={{ color: 'error.main' }} // 🔴 red link
-              >
-                Forgot Password / Username?
-              </MuiLink>
+              {errorMessage && (
+                <Alert severity="error" sx={{ mt: 2 }}>
+                  {errorMessage}
+                </Alert>
+              )}
+
+              <Box mt={3} display="flex" flexDirection="column" gap={2}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  fullWidth
+                  size="large"
+                  color="error" // 🔴 red
+                >
+                  Login
+                </Button>
+                <Box mt={2} textAlign="center">
+                  <MuiLink
+                    underline="hover"
+                    sx={{ color: "error.main" }} // 🔴 red link
+                    href="/register"
+                  >
+                    Sign Up
+                  </MuiLink>
+                </Box>
+              </Box>
+
+              <Box mt={2} textAlign="center">
+                <MuiLink
+                  href="/forgotPassword"
+                  underline="hover"
+                  sx={{ color: "error.main" }} // 🔴 red link
+                >
+                  Forgot Password / Username?
+                </MuiLink>
+              </Box>
             </Box>
           </Box>
         </Box>
-      </Container>
+      </Box>
     );
   }
 }
