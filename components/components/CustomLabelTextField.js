@@ -34,6 +34,14 @@ const CustomTextField = styled(TextField)({
   "& .MuiOutlinedInput-root.Mui-disabled .MuiOutlinedInput-notchedOutline": {
     borderColor: "#aaaaaa",
   },
+  "& .Mui-error": {
+    "& .Mui-focused fieldset": {
+      borderColor: "red !important",
+    },
+    "&:hover fieldset": {
+      borderColor: "red !important",
+    },
+  },
   input: {
     color: "white",
   },

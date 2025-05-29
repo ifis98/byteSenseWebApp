@@ -70,19 +70,50 @@ const Register = () => {
 
   const handleNext = () => setStep(step + 1);
   const handleBack = () => setStep(step - 1);
+  const handleContinueDisabled = () => {
+    if (
+      form.fName &&
+      form.lName &&
+      form.userName &&
+      form.email &&
+      form.password &&
+      form.confirmPassword
+    ) {
+      const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      if (form.password !== form.confirmPassword) {
+        return true;
+      } else return !regex.test(form.email);
+    } else {
+      return true;
+    }
+  };
+  const handlerSignupDisabled = () => {
+    return !(form.streetAddress && form.city && form.state && form.zipCode);
+  };
 
   return (
     <Box
-      className={"flex flex-row justify-center items-center w-full gap-4"}
+      className={"flex flex-row justify-center items-center w-full"}
       sx={{ height: "100vh", width: "100%" }}
       style={{ backgroundColor: "#1d1d1d" }}
     >
-      <Box className={"w-4/5 h-full hidden md:block"}>
-        <img
-          src="/login.png"
-          alt="login Logo"
-          className={"w-full h-full object-cover object-center"}
-        />
+      <Box
+        className={
+          "w-4/5 h-full flex items-center justify-center hidden md:block"
+        }
+        sx={{
+          background: "#000000",
+          backgroundImage:
+            "linear-gradient(180deg, rgba(0, 0, 0, 0.95) 20%, rgb(255 32 3 / 60%) 100%)",
+        }}
+      >
+        <Box className={"w-full h-full flex items-center justify-center"}>
+          <img
+            src="/signup.png"
+            alt="Sign Up Logo"
+            className={"h-4/5 object-contain object-center p-4"}
+          />
+        </Box>
       </Box>
       <Box className={"w-full flex justify-center items-center h-full"}>
         <Grid
@@ -142,6 +173,12 @@ const Register = () => {
                   margin="normal"
                   required
                   placeholder={"Enter your first name"}
+                  error={form.fName.length > 0 && form.fName.length < 2}
+                  helperText={
+                    form.fName.length > 0 &&
+                    form.fName.length < 2 &&
+                    "First Name must be at least 2 characters."
+                  }
                 />
                 <CustomLabelTextField
                   fullWidth
@@ -152,6 +189,12 @@ const Register = () => {
                   margin="normal"
                   required
                   placeholder={"Enter your last name"}
+                  error={form.lName.length > 0 && form.lName.length < 2}
+                  helperText={
+                    form.lName.length > 0 &&
+                    form.lName.length < 2 &&
+                    "Last Name must be at least 2 characters."
+                  }
                 />
                 <CustomLabelTextField
                   fullWidth
@@ -163,6 +206,12 @@ const Register = () => {
                   required
                   placeholder={"Enter your username"}
                   wrapClassName={"col-span-2"}
+                  error={form.userName.length > 0 && form.userName.length < 2}
+                  helperText={
+                    form.userName.length > 0 &&
+                    form.userName.length < 2 &&
+                    "Username must be at least 2 characters."
+                  }
                 />
                 <CustomLabelTextField
                   fullWidth
@@ -175,6 +224,19 @@ const Register = () => {
                   required
                   placeholder={"Enter your email"}
                   wrapClassName={"col-span-2"}
+                  error={
+                    form.email.length > 0 &&
+                    !form.email.match(
+                      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    )
+                  }
+                  helperText={
+                    form.email.length > 0 &&
+                    !form.email.match(
+                      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                    ) &&
+                    "Email is invalid. Please enter a valid email address."
+                  }
                 />
                 <CustomLabelTextField
                   fullWidth
@@ -185,7 +247,16 @@ const Register = () => {
                   onChange={handleChange}
                   margin="normal"
                   required
-                  placholder={"Enter your password"}
+                  placeholder={"Enter your password"}
+                  error={
+                    form.password.length > 0 &&
+                    form.password !== form.confirmPassword
+                  }
+                  helperText={
+                    form.password.length > 0 &&
+                    form.password !== form.confirmPassword &&
+                    "Password and confirm password must match."
+                  }
                 />
                 <CustomLabelTextField
                   fullWidth
@@ -197,6 +268,15 @@ const Register = () => {
                   margin="normal"
                   required
                   placeholder={"Confirm your password"}
+                  error={
+                    form.password.length > 0 &&
+                    form.password !== form.confirmPassword
+                  }
+                  helperText={
+                    form.password.length > 0 &&
+                    form.password !== form.confirmPassword &&
+                    "Password and confirm password must match."
+                  }
                 />
                 <Button
                   // type="submit"
@@ -206,6 +286,14 @@ const Register = () => {
                   color="error"
                   className={"col-span-2"}
                   onClick={handleNext}
+                  disabled={handleContinueDisabled()}
+                  sx={{
+                    "&.Mui-disabled": {
+                      color: "gray",
+                      cursor: "not-allowed !important",
+                      pointerEvents: "auto !important",
+                    },
+                  }}
                 >
                   Continue →
                 </Button>
@@ -236,6 +324,15 @@ const Register = () => {
                   rows={2}
                   placeholder={"Enter your street address"}
                   wrapClassName={"col-span-2"}
+                  error={
+                    form.streetAddress.length > 0 &&
+                    form.streetAddress.length < 2
+                  }
+                  helperText={
+                    form.streetAddress.length > 0 &&
+                    form.streetAddress.length < 2 &&
+                    "Street Address must be at least 2 characters."
+                  }
                 />
                 <CustomLabelTextField
                   fullWidth
@@ -246,6 +343,12 @@ const Register = () => {
                   margin="normal"
                   required
                   placeholder={"Enter your city"}
+                  error={form.city.length > 0 && form.city.length < 2}
+                  helperText={
+                    form.city.length > 0 &&
+                    form.city.length < 2 &&
+                    "City must be at least 2 characters."
+                  }
                 />
                 <CustomLabelTextField
                   fullWidth
@@ -256,6 +359,12 @@ const Register = () => {
                   margin="normal"
                   required
                   placeholder={"Enter your state"}
+                  error={form.state.length > 0 && form.state.length < 2}
+                  helperText={
+                    form.state.length > 0 &&
+                    form.state.length < 2 &&
+                    "State must be at least 2 characters."
+                  }
                 />
                 <CustomLabelTextField
                   fullWidth
@@ -267,6 +376,12 @@ const Register = () => {
                   required
                   placeholder={"Enter your zip code"}
                   wrapClassName={"col-span-2"}
+                  error={form.zipCode.length > 0 && form.zipCode.length < 5}
+                  helperText={
+                    form.zipCode.length > 0 &&
+                    form.zipCode.length < 5 &&
+                    "Zip Code must be at least 5 characters."
+                  }
                 />
 
                 <FormControlLabel
@@ -299,6 +414,7 @@ const Register = () => {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
+                        height: "100%",
                       }}
                     >
                       Already have an account? Sign in
@@ -309,6 +425,14 @@ const Register = () => {
                     variant="contained"
                     size="large"
                     color="error"
+                    disabled={handlerSignupDisabled()}
+                    sx={{
+                      "&.Mui-disabled": {
+                        color: "gray",
+                        cursor: "not-allowed !important",
+                        pointerEvents: "auto !important",
+                      },
+                    }}
                   >
                     Sign Up
                   </Button>
@@ -325,8 +449,12 @@ const Register = () => {
             {steps?.map((item, index) => (
               <span
                 key={index}
-                className={`${index === step ? "w-[30px] bg-red-500" : "w-[10px] bg-white"} h-[10px] rounded-full cursor-pointer`}
-                onClick={() => setStep(index)}
+                className={`${index === step ? "w-[30px] bg-red-500" : "w-[10px] bg-white"} h-[10px] rounded-full ${handleContinueDisabled() ? "cursor-not-allowed" : "cursor-pointer"} `}
+                onClick={() => {
+                  if (!handleContinueDisabled()) {
+                    setStep(index);
+                  }
+                }}
               />
             ))}
           </Box>

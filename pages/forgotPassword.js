@@ -30,16 +30,27 @@ const ForgotPassword = () => {
 
   return (
     <Box
-      className={"flex flex-row justify-center items-center w-full gap-4"}
+      className={"flex flex-row justify-center items-center w-full"}
       sx={{ height: "100vh", width: "100%" }}
       style={{ backgroundColor: "#1d1d1d" }}
     >
-      <Box className={"w-4/5 h-full hidden md:block"}>
-        <img
-          src="/login.png"
-          alt="login Logo"
-          className={"w-full h-full object-cover object-center"}
-        />
+      <Box
+        className={
+          "w-4/5 h-full flex items-center justify-center hidden md:block"
+        }
+        sx={{
+          background: "#000000",
+          backgroundImage:
+            "linear-gradient(180deg, rgba(0, 0, 0, 0.95) 20%, rgb(255 32 3 / 60%) 100%)",
+        }}
+      >
+        <Box className={"w-full h-full flex items-center justify-center"}>
+          <img
+            src="/signin.png"
+            alt="login Logo"
+            className={"h-3/4 object-contain object-center p-4"}
+          />
+        </Box>
       </Box>
       <Box className={"w-full p-4 flex justify-center items-center h-full "}>
         <Box
