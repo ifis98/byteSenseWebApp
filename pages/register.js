@@ -107,11 +107,11 @@ const Register = () => {
             "linear-gradient(180deg, rgba(0, 0, 0, 0.95) 20%, rgb(255 32 3 / 60%) 100%)",
         }}
       >
-        <Box className={"w-full h-full flex items-center justify-center"}>
+        <Box className={"w-full h-full flex items-end justify-center"}>
           <img
             src="/signup.png"
             alt="Sign Up Logo"
-            className={"h-4/5 object-contain object-center p-4"}
+            className={"h-4/5 object-contain object-center"}
           />
         </Box>
       </Box>
