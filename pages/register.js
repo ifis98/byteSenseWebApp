@@ -123,7 +123,7 @@ const Register = () => {
           p={4}
           display="flex"
           flexDirection="column"
-          justifyContent="center"
+          justifyContent="start"
           className={"w-full h-full gap-2 overflow-y-auto"}
           alignItems="center"
         >
@@ -278,6 +278,21 @@ const Register = () => {
                     "Password and confirm password must match."
                   }
                 />
+                <Typography textAlign="left">
+                  <MuiLink
+                      href="/login"
+                      underline="hover"
+                      sx={{
+                        color: "error.main",
+                        // display: "flex",
+                        // justifyContent: "center",
+                        // alignItems: "center",
+                        height: "100%",
+                      }}
+                  >
+                    Already have an account? Sign in
+                  </MuiLink>
+                </Typography>
                 <Button
                   // type="submit"
                   variant="contained"
@@ -386,7 +401,7 @@ const Register = () => {
 
                 <FormControlLabel
                   control={<Checkbox color={"error"} sx={{ color: "white" }} />}
-                  label="Read Private Policy"
+                  label="Read Privacy Policy"
                   className={"col-span-2"}
                 />
                 <Box

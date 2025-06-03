@@ -69,7 +69,7 @@ class Login extends React.Component {
             <img
               src="/signin.png"
               alt="login Logo"
-              className={"h-4/5 object-contain object-center p-4"}
+              className={"h-4/5 object-contain object-center rotate-50"}
             />
           </Box>
         </Box>
