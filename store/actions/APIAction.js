@@ -14,7 +14,7 @@ export const updateDoctorDetail = () => {
     dispatch({ type: UPDATE_DENTIST_DETAIL, payload: response.data });
     return true;
   }).catch(error =>{
-    console.log(error.response.data);
+    console.log(error.response?.data);
   })
 }
 }

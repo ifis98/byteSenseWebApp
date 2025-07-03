@@ -11,6 +11,7 @@ import {
 import { useState, useEffect } from 'react';
 import CustomTextField from "../CustomTextField";
 import {CustomInputLabel, CustomSelect} from "../CustomSelect";
+import { useSelector } from "react-redux";
 
 export default function OrderForm() {
   const [formData, setFormData] = useState({
@@ -26,6 +27,8 @@ export default function OrderForm() {
 
   const [loading, setLoading] = useState(false);
   const [doctorName, setDoctorName] = useState('');
+
+  const state = useSelector((state) => state.page);
 
   useEffect(() => {
     const fetchDoctorName = async () => {
@@ -79,6 +82,7 @@ export default function OrderForm() {
     formPayload.append('upperScan', formData.upperScan);
     formPayload.append('lowerScan', formData.lowerScan);
     formPayload.append('clientName', doctorName); // send full name
+    formPayload.append("doctor", state?.dentistDetail?.profile?.user || "");
 
     try {
       const res = await fetch(`${backendLink}createCheckoutSession`, {
