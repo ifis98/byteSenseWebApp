@@ -18,6 +18,7 @@ import StaffTraining from "./components/homepageContent/StaffTraining";
 import ProductInformation from "./components/homepageContent/ProductInformation";
 import SalesMaterial from "./components/homepageContent/SalesMaterial";
 import LabSlip from "./components/homepageContent/LabSlip";
+import Dashboard from "./components/homepageContent/Dashboard";
 
 function HomePage() {
   const path = usePathname();
@@ -67,7 +68,8 @@ function HomePage() {
         <PatientList key="list" />
       );
     }
-    if (path === "/" || path === "/home") return <PreOrderForm />;
+    if (path === "/" || path === "/home") return <Dashboard />;
+    if (path === "/pre-order") return <PreOrderForm />;
     if (path.startsWith("/request")) return <PatientRequest />;
     if (path === "/order") return <OrderForm />;
     if (path === "/order-success") return <OrderSuccess />;

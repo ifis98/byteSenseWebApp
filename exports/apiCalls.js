@@ -97,7 +97,10 @@ export let doctor = {
             date: singeDate,
           },
           updateToken()
-        )
+        ),
+
+      getOrderList: (doctorId) =>
+          axios.get(backendLink + `orders/byDoctor/${doctorId}`, updateToken()),
     };
   },
 };
