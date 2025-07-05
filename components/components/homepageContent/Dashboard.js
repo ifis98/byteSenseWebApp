@@ -94,7 +94,10 @@ const Dashboard = ({ setIsLoading }) => {
         setFilteredOrders(patientsData);
         setLoading(false);
       })
-      .catch(console.error);
+      .catch(console.error)
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   const handleRowClick = (row) => {

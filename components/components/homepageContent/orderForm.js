@@ -216,7 +216,7 @@ export default function OrderForm() {
                 {formData.upperScan && (
                   <Typography
                     variant="caption"
-                    sx={{ mt: 1, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                    sx={{ mt: 1, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'white' }}
                   >
                     Selected: {getFileName(formData.upperScan, 30)}
                   </Typography>
@@ -237,7 +237,7 @@ export default function OrderForm() {
                 {formData.lowerScan && (
                   <Typography
                     variant="caption"
-                    sx={{ mt: 1, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+                    sx={{ mt: 1, display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'white' }}
                   >
                     Selected: {getFileName(formData.lowerScan, 30)}
                   </Typography>
