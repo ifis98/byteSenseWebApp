@@ -8,7 +8,7 @@ const ProductInformation = () => {
       </h2>
       <div style={{ width: "100%", height: "80vh" }}>
         <iframe
-          src={"https://en.wikipedia.org/wiki/JavaScript"}
+          src={"https://www.shopbitely.com/shop"}
           width="100%"
           height="100%"
         />
