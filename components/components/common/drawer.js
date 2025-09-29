@@ -25,17 +25,18 @@ const navItems = [
   { href: "/", icon: <HomeIcon />, label: "Dashboard" },
   { href: '/order', icon: <GroupAddIcon />, label: 'Order' },
   { href: "/list", icon: <PersonIcon />, label: "Patient List" },
-  { href: "/request", icon: <GroupAddIcon />, label: "Patient Request" },
+  { href: "/request", icon: <GroupAddIcon />, label: "Consumer Request" },
   // { href: '/chat', icon: <ChatBubbleOutlineIcon />, label: 'Chat Room' },
   //{ href: '/alerts', icon: <MailOutlineIcon />, label: 'Alerts' },
   //{ href: '/help', icon: <HelpCenterIcon />, label: 'Help Center' },
 ];
 
 const bottomNavItems = [
-  { href: "/product_information", label: "Product Information" },
-  { href: "/sales_material", label: "Sales Materials" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/lab_slip", label: "Lab Slip" },
+    { href: "/lab_slip", label: "Quick Start" },
+    { href: "/product_information", label: "Product Information" },
+    { href: "/sales_material", label: "Sales Materials" },
+    { href: "/policies", label: "Policies" },
+    { href: "/faq", label: "FAQ" },
   { href: "/staff_training", label: "Staff Training" },
 ];
 

@@ -17,6 +17,7 @@ import FAQ from "./components/homepageContent/FAQ";
 import StaffTraining from "./components/homepageContent/StaffTraining";
 import ProductInformation from "./components/homepageContent/ProductInformation";
 import SalesMaterial from "./components/homepageContent/SalesMaterial";
+import Policies from "./components/homepageContent/Policies";
 import LabSlip from "./components/homepageContent/LabSlip";
 import Dashboard from "./components/homepageContent/Dashboard";
 
@@ -85,6 +86,7 @@ function HomePage() {
     if (path === "/staff_training") return <StaffTraining />;
     if (path === "/product_information") return <ProductInformation />;
     if (path === "/sales_material") return <SalesMaterial />;
+    if (path === "/policies") return <Policies />;
     if (path === "/lab_slip") return <LabSlip />;
     return <ComingSoon />;
   };

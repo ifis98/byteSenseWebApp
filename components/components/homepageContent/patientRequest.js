@@ -139,7 +139,7 @@ const PatientRequest = () => {
     >
       <Container fluid className="px-0">
         <h2 className="mb-1" style={{ color: "#ef5350", fontWeight: 600 }}>
-          Patient Request
+          Consumer Request
         </h2>
 
         <p className="mt-3 mb-3">

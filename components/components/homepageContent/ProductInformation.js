@@ -8,7 +8,9 @@ const ProductInformation = () => {
       </h2>
       <div style={{ width: "100%", height: "80vh" }}>
         <iframe
-          src={"https://www.shopbitely.com/shop"}
+          src={
+            "/api/proxy?url=https://bytesense-site.webflow.io/bitely---shop-copy"
+          }
           width="100%"
           height="100%"
         />
