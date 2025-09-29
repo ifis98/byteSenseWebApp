@@ -8,10 +8,11 @@ import {
   FormControl, InputLabel, Select, MenuItem,
   Card, CardContent, CardHeader, Divider, Grid
 } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import CustomTextField from "../CustomTextField";
 import {CustomInputLabel, CustomSelect} from "../CustomSelect";
 import { useSelector } from "react-redux";
+import SignatureCanvas from 'react-signature-canvas'
 
 export default function OrderForm() {
   const [formData, setFormData] = useState({
@@ -27,6 +28,12 @@ export default function OrderForm() {
 
   const [loading, setLoading] = useState(false);
   const [doctorName, setDoctorName] = useState('');
+  const sigCanvas = useRef(null);
+  const sigContainerRef = useRef(null);
+
+  // E-signature state
+  const [savedSignatures, setSavedSignatures] = useState([]); // [{ id, name, dataUrl }]
+  const [selectedSignatureId, setSelectedSignatureId] = useState('');
 
   const state = useSelector((state) => state.page);
 
@@ -44,6 +51,31 @@ export default function OrderForm() {
     };
 
     fetchDoctorName();
+    // Load saved signatures from localStorage
+    try {
+      const raw = typeof window !== 'undefined' ? window.localStorage.getItem('bs_saved_signatures') : null;
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) setSavedSignatures(parsed);
+      }
+    } catch (e) {
+      console.warn('Unable to load saved signatures');
+    }
+    // Resize signature canvas to container width
+    const resizeCanvasToContainer = () => {
+      if (!sigCanvas.current || !sigContainerRef.current) return;
+      const containerWidth = sigContainerRef.current.clientWidth || 600;
+      const targetHeight = 200;
+      const canvas = sigCanvas.current.getCanvas();
+      if (!canvas) return;
+      canvas.width = containerWidth;
+      canvas.height = targetHeight;
+      canvas.style.width = '100%';
+      canvas.style.height = `${targetHeight}px`;
+    };
+    resizeCanvasToContainer();
+    window.addEventListener('resize', resizeCanvasToContainer);
+    return () => window.removeEventListener('resize', resizeCanvasToContainer);
   }, []);
 
   const handleChange = (e) => {
@@ -61,6 +93,14 @@ export default function OrderForm() {
 
     if (!formData.caseName || !formData.maxUndercut || !formData.passiveSpacer || !formData.upperScan || !formData.lowerScan) {
       alert("All fields and STL files are required.");
+      return;
+    }
+
+    // Ensure a signature is provided (selected or drawn)
+    const isCanvasEmpty = !sigCanvas.current || sigCanvas.current.isEmpty();
+    const selectedSignature = savedSignatures.find(s => s.id === selectedSignatureId);
+    if (!selectedSignature && isCanvasEmpty) {
+      alert('Please select an existing e-signature or draw a new one.');
       return;
     }
 
@@ -83,6 +123,18 @@ export default function OrderForm() {
     formPayload.append('lowerScan', formData.lowerScan);
     formPayload.append('clientName', doctorName); // send full name
     formPayload.append("doctor", state?.dentistDetail?.profile?.user || "");
+
+    // Attach signature as image/png
+    try {
+      const dataUrl = selectedSignature ? selectedSignature.dataUrl : sigCanvas.current.getTrimmedCanvas().toDataURL('image/png');
+      const blob = await (await fetch(dataUrl)).blob();
+      formPayload.append('signature', blob, 'signature.png');
+    } catch (err) {
+      console.error('Failed to attach signature:', err);
+      alert('Unable to process signature. Please try again.');
+      setLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch(`${backendLink}createCheckoutSession`, {
@@ -254,6 +306,92 @@ export default function OrderForm() {
                   onChange={handleChange}
                   fullWidth
                 />
+              </Grid>
+              {/* E-signature Section */}
+              <Grid size={{ xs: 12 }}>
+                <Typography variant="subtitle1" sx={{ fontWeight: 500, color: 'white', mb: 1 }}>
+                  E-signature
+                </Typography>
+                <Grid container spacing={2}>
+                  <Grid size={{ xs: 12 }}>
+                    <FormControl fullWidth>
+                      <CustomInputLabel id="signature-select-label" shrink>Select Saved Signature</CustomInputLabel>
+                      <CustomSelect
+                        labelId="signature-select-label"
+                        name="signatureSelect"
+                        value={selectedSignatureId}
+                        onChange={(e) => setSelectedSignatureId(e.target.value)}
+                        label="Select Saved Signature"
+                      >
+                        <MenuItem value="">Draw new signature</MenuItem>
+                        {savedSignatures.map(sig => (
+                          <MenuItem key={sig.id} value={sig.id}>{sig.name}</MenuItem>
+                        ))}
+                      </CustomSelect>
+                    </FormControl>
+                    {selectedSignatureId && (
+                      <Box sx={{ mt: 2, p: 2, border: '1px solid #444', borderRadius: 1 }}>
+                        <Typography variant="caption" sx={{ color: 'white', display: 'block', mb: 1 }}>
+                          Preview
+                        </Typography>
+                        <Box component="img" src={savedSignatures.find(s => s.id === selectedSignatureId)?.dataUrl} alt="Selected signature" sx={{ maxWidth: '100%', background: '#1e1e1e' }} />
+                        <Box sx={{ mt: 1 }}>
+                          <Button variant="text" color="error" onClick={() => setSelectedSignatureId('')}>Choose a different signature</Button>
+                        </Box>
+                      </Box>
+                    )}
+                  </Grid>
+                  {selectedSignatureId === '' && (
+                    <Grid size={{ xs: 6, md: 6 }}>
+                      <Box ref={sigContainerRef} sx={{ p: 2, border: '1px solid #444', borderRadius: 1, background: '#1e1e1e' }}>
+                        <SignatureCanvas
+                          penColor="white"
+                          ref={sigCanvas}
+                          backgroundColor="rgba(0,0,0,0)"
+                          canvasProps={{ style: { width: '100%', height: 200 } }}
+                        />
+                        <Box sx={{ display: 'flex', gap: 1, mt: 1, flexWrap: 'wrap' }}>
+                          <Button variant="outlined" color="error" onClick={() => sigCanvas.current && sigCanvas.current.clear()}>
+                            Clear
+                          </Button>
+                          <Button
+                            variant="contained"
+                            color="error"
+                            onClick={async () => {
+                              if (!sigCanvas.current || sigCanvas.current.isEmpty()) {
+                                alert('Please draw a signature first.');
+                                return;
+                              }
+                              const name = `Signature ${savedSignatures.length + 1}`;
+                              try {
+                                let dataUrl = '';
+                                try {
+                                  dataUrl = sigCanvas.current.getTrimmedCanvas().toDataURL('image/png');
+                                } catch (innerErr) {
+                                  // Fallback to full canvas if trimmed fails
+                                  dataUrl = sigCanvas.current.getCanvas().toDataURL('image/png');
+                                }
+                                const newSig = { id: `${Date.now()}`, name, dataUrl };
+                                const updated = [newSig, ...savedSignatures].slice(0, 10);
+                                setSavedSignatures(updated);
+                                setSelectedSignatureId(newSig.id);
+                                if (typeof window !== 'undefined') {
+                                  window.localStorage.setItem('bs_saved_signatures', JSON.stringify(updated));
+                                }
+                              } catch (e) {
+                                console.error('Failed to save signature:', e);
+                                const message = (e && e.name === 'QuotaExceededError') ? 'Storage is full. Please remove older signatures.' : 'Failed to save signature.';
+                                alert(message);
+                              }
+                            }}
+                          >
+                            Save to dropdown
+                          </Button>
+                        </Box>
+                      </Box>
+                    </Grid>
+                  )}
+                </Grid>
               </Grid>
 
               <Grid size={{ xs: 12 }} sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
