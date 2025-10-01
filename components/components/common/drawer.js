@@ -24,8 +24,12 @@ const drawerWidth = 240;
 const navItems = [
   { href: "/", icon: <HomeIcon />, label: "Dashboard" },
   { href: '/order', icon: <GroupAddIcon />, label: 'Order' },
-  { href: "/list", icon: <PersonIcon />, label: "Patient List" },
-  { href: "/request", icon: <GroupAddIcon />, label: "Consumer Request" },
+  // NOTE: Patient List and Consumer Request pages are intentionally hidden from the
+  // sidebar for now. Please keep these entries commented out so the pages can be
+  // quickly reactivated later and so automated cleanup tools or AI coders do not
+  // delete them as unused code.
+  // { href: "/list", icon: <PersonIcon />, label: "Patient List" },
+  // { href: "/request", icon: <GroupAddIcon />, label: "Consumer Request" },
   // { href: '/chat', icon: <ChatBubbleOutlineIcon />, label: 'Chat Room' },
   //{ href: '/alerts', icon: <MailOutlineIcon />, label: 'Alerts' },
   //{ href: '/help', icon: <HelpCenterIcon />, label: 'Help Center' },
