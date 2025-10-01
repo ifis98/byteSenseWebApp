@@ -142,13 +142,14 @@ export default function OrderForm() {
         return;
       }
 
-      window.location.href = 'https://buy.stripe.com/28EdRag8H4jl2du0tW53O07';
+      window.location.href = 'https://buy.stripe.com/28EdRag8H4jl2du0tW53O07'; // Redirect to Stripe payment link
     } catch (err) {
       console.error("Order submission error:", err);
       alert("Something went wrong. Please try again.");
       setLoading(false);
     }
   };
+
 
   const getFileName = (file, maxLength = 20) => {
     if (!file) return '';
