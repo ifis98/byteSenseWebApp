@@ -40,17 +40,23 @@ const bottomNavItems = [
     { href: "/product_information", label: "Product Information" },
     { href: "/sales_material", label: "Sales Materials" },
     { href: "/policies", label: "Policies" },
-    { href: "/faq", label: "FAQ" },
+    // { href: "/faq", label: "FAQ" },
   { href: "/staff_training", label: "Staff Training" },
 ];
+const faqNavItems = [
+    { href: "/consumer", label: "Consumer FAQ" },
+    { href: "/office", label: "Office FAQ" },
+]
 
 const Sidebar = ({ variant = "permanent", drawerOpen, onClick }) => {
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = React.useState(true);
+  const [faqOpen, setFaqOpen] = React.useState(true);
 
   React.useEffect(() => {
     setOpen(localStorage.getItem("open"));
+    setFaqOpen(localStorage.getItem("faqOpen"));
   }, []);
 
   const handleNavigation = (href) => {
@@ -159,6 +165,56 @@ const Sidebar = ({ variant = "permanent", drawerOpen, onClick }) => {
           {open && (
             <List>
               {bottomNavItems.map(({ href, icon, label }) => (
+                <ListItem
+                  key={href}
+                  disablePadding
+                  onClick={() => handleNavigation(href)}
+                  button
+                >
+                  <ListItemButton selected={pathname === href}>
+                    <ListItemText
+                      primary={label}
+                      primaryTypographyProps={{
+                        fontWeight: pathname === href ? "bold" : "normal",
+                        color: pathname === href ? "#ef5350" : "inherit",
+                      }}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+          )}
+        <ListItem
+            disablePadding
+            button
+            onClick={() => {
+              localStorage.setItem("faqOpen", !faqOpen);
+              setFaqOpen((prev) => !prev);
+            }}
+            style={{
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            <ListItemText
+              primary={"FAQ"}
+              primaryTypographyProps={{
+                fontWeight: "normal",
+                color: "inherit",
+              }}
+              style={{
+                padding: "8px 16px",
+                borderBottom: "2px solid #18181847",
+              }}
+            />
+            <KeyboardArrowDownIcon
+              style={{ transform: !faqOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+            />
+          </ListItem>
+          {faqOpen && (
+            <List>
+              {faqNavItems.map(({ href, icon, label }) => (
                 <ListItem
                   key={href}
                   disablePadding

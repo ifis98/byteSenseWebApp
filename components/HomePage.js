@@ -14,6 +14,8 @@ import PreorderSuccess from "./components/homepageContent/preorderSuccess";
 
 import styles from "../styles/HomePage.module.scss";
 import FAQ from "./components/homepageContent/FAQ";
+import ConsumerFAQ from "./components/homepageContent/ConsumerFAQ";
+import OfficeFAQ from "./components/homepageContent/OfficeFAQ";
 import StaffTraining from "./components/homepageContent/StaffTraining";
 import ProductInformation from "./components/homepageContent/ProductInformation";
 import SalesMaterial from "./components/homepageContent/SalesMaterial";
@@ -83,6 +85,8 @@ function HomePage() {
       return <ComingSoon />;
     }
     if (path === "/faq") return <FAQ />;
+    if (path === "/consumer") return <ConsumerFAQ />;
+    if (path === "/office") return <OfficeFAQ />;
     if (path === "/staff_training") return <StaffTraining />;
     if (path === "/product_information") return <ProductInformation />;
     if (path === "/sales_material") return <SalesMaterial />;
