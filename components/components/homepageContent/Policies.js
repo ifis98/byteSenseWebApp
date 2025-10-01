@@ -1,23 +1,4 @@
-import * as React from "react";
-import { Button } from "@mui/material";
-
-const pdfs = [
-  {
-    id: 1,
-    title: "Dummy 1",
-    url: "/pdfs/dummy.pdf",
-  },
-  {
-    id: 2,
-    title: "Dummy 2",
-    url: "/pdfs/dummy.pdf",
-  },
-  {
-    id: 2,
-    title: "Dummy 3",
-    url: "/pdfs/dummy.pdf",
-  },
-];
+import Script from "next/script";
 
 const Policies = () => {
   return (
@@ -25,26 +6,16 @@ const Policies = () => {
       <h2 className="mb-1" style={{ color: "#ef5350", fontWeight: 600 }}>
         Policies
       </h2>
-      <div style={{ width: "100%", display: "flex", gap: "10px" }}>
-        {pdfs.map((item) => (
-          <a href={item.url} download={`${item.title}.pdf`} key={item.id}>
-            {" "}
-            <Button
-              variant="contained"
-              color="error"
-              size="large"
-              sx={{
-                py: 1.5,
-                px: 6,
-                minWidth: "240px",
-                textTransform: "uppercase",
-              }}
-            >
-              Download {item.title}
-            </Button>
-          </a>
-        ))}
+      <div style={{ width: "100%", height: "80vh" }}>
+        <iframe
+          className="clickup-embed clickup-dynamic-height"
+          src="https://doc.clickup.com/8469349/d/h/82ev5-21051/92ef4f301194498"
+          width="100%"
+          height="100%"
+          style={{ background: "transparent", border: "1px solid #ccc" }}
+        />
       </div>
+      <Script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js" />
     </div>
   );
 };
