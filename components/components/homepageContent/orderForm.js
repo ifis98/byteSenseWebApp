@@ -1,6 +1,5 @@
 'use client';
 import * as React from 'react';
-import { stripePromise } from '../../../lib/stripe';
 import { backendLink } from '../../../exports/variable';
 import { user } from '../../../exports/apiCalls';
 import {
@@ -104,12 +103,6 @@ export default function OrderForm() {
       return;
     }
 
-    const stripe = await stripePromise;
-    if (!stripe) {
-      alert("Stripe failed to initialize.");
-      return;
-    }
-
     setLoading(true);
 
     const formPayload = new FormData();
@@ -137,25 +130,21 @@ export default function OrderForm() {
     }
 
     try {
-      const res = await fetch(`${backendLink}createCheckoutSession`, {
+      const res = await fetch(`${backendLink}createOrder`, {
         method: 'POST',
         body: formPayload,
       });
 
       const data = await res.json();
-      if (!data.sessionId) {
-        alert("Unable to initiate Stripe Checkout.");
+      if (!data?.success) {
+        alert("Unable to create order. Please try again.");
         setLoading(false);
         return;
       }
 
-      const result = await stripe.redirectToCheckout({ sessionId: data.sessionId });
-      if (result.error) {
-        alert(result.error.message);
-        setLoading(false);
-      }
+      window.location.href = 'https://buy.stripe.com/28EdRag8H4jl2du0tW53O07';
     } catch (err) {
-      console.error("Stripe checkout error:", err);
+      console.error("Order creation error:", err);
       alert("Something went wrong. Please try again.");
       setLoading(false);
     }
