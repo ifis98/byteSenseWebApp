@@ -9,7 +9,7 @@ const ProductInformation = () => {
       <div style={{ width: "100%", height: "80vh" }}>
         <iframe
           src={
-            "/api/proxy?url=https://www.shopbitely.com/shop"
+            "/api/proxy?url=https://www.bytesense.ai/consumers"
           }
           width="100%"
           height="100%"
