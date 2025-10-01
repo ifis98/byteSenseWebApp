@@ -31,6 +31,8 @@ const Register = () => {
     state: "",
     zipCode: "",
     unitNo: "",
+    privacyAccepted: false,
+    termsAccepted: false,
   });
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -41,6 +43,11 @@ const Register = () => {
         ? e.target.value.replace(/\D/g, "")
         : e.target.value,
     }));
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setForm((prev) => ({ ...prev, [name]: checked }));
   };
 
   const handleSubmit = async (e) => {
@@ -88,7 +95,14 @@ const Register = () => {
     }
   };
   const handlerSignupDisabled = () => {
-    return !(form.streetAddress && form.city && form.state && form.zipCode);
+    return !(
+      form.streetAddress &&
+      form.city &&
+      form.state &&
+      form.zipCode &&
+      form.privacyAccepted &&
+      form.termsAccepted
+    );
   };
 
   return (
@@ -115,7 +129,7 @@ const Register = () => {
           />
         </Box>
       </Box>
-      <Box className={"w-full flex justify-center items-center h-full"}>
+      <Box className={"w-full flex flex-col justify-between items-center h-full overflow-y-auto"}>
         <Grid
           item
           xs={12}
@@ -124,7 +138,7 @@ const Register = () => {
           display="flex"
           flexDirection="column"
           justifyContent="start"
-          className={"w-full h-full gap-2 overflow-y-auto"}
+          className={"w-full"}
           alignItems="center"
         >
           <Box
@@ -400,8 +414,13 @@ const Register = () => {
                 />
 
                 <FormControlLabel
-                  control={<Checkbox color={"error"} sx={{ color: "white" }} />}
+                  control={<Checkbox name={"privacyAccepted"} checked={form.privacyAccepted} onChange={handleCheckboxChange} color={"error"} sx={{ color: "white" }} />}
                   label="Read Privacy Policy"
+                  className={"col-span-2"}
+                />
+                  <FormControlLabel
+                  control={<Checkbox name={"termsAccepted"} checked={form.termsAccepted} onChange={handleCheckboxChange} color={"error"} sx={{ color: "white" }} />}
+                  label="Read Terms of Use"
                   className={"col-span-2"}
                 />
                 <Box
@@ -454,26 +473,32 @@ const Register = () => {
                 </Box>
               </Box>
             )}
+              <Box
+                  className={"w-full flex justify-center items-center flex-row gap-2 py-4"}
+              >
+                  {steps?.map((item, index) => (
+                      <span
+                          key={index}
+                          className={`${index === step ? "w-[30px] bg-red-500" : "w-[10px] bg-white"} h-[10px] rounded-full ${handleContinueDisabled() ? "cursor-not-allowed" : "cursor-pointer"} `}
+                          onClick={() => {
+                              if (!handleContinueDisabled()) {
+                                  setStep(index);
+                              }
+                          }}
+                      />
+                  ))}
+              </Box>
           </Box>
           {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-          <Box
-            className={"flex justify-center items-center flex-row gap-2"}
-            mt={4}
-            mb={4}
-          >
-            {steps?.map((item, index) => (
-              <span
-                key={index}
-                className={`${index === step ? "w-[30px] bg-red-500" : "w-[10px] bg-white"} h-[10px] rounded-full ${handleContinueDisabled() ? "cursor-not-allowed" : "cursor-pointer"} `}
-                onClick={() => {
-                  if (!handleContinueDisabled()) {
-                    setStep(index);
-                  }
-                }}
-              />
-            ))}
-          </Box>
+
         </Grid>
+          <Box className={"w-full flex justify-between items-center gap-2 border-t border-[#808080] p-4"}>
+              <div className={"text-xs"}>Copyright &copy; 2025 byteSense. All rights reserved.</div>
+              <div className={"flex items-center gap-4 text-xs"}>
+                  <a href="https://www.bytesense.ai/privacy-policy" target={"_blank"} >Privacy Policy</a>
+                  <a href={"https://www.bytesense.ai/terms-of-use"} target={"_blank"}>Terms & Condition</a>
+              </div>
+          </Box>
       </Box>
     </Box>
   );
