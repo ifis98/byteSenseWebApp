@@ -138,7 +138,7 @@ const Sidebar = ({ variant = "permanent", drawerOpen, onClick }) => {
             }}
           >
             <ListItemText
-              primary={"Office Playbook"}
+              primary={"Playbook"}
               primaryTypographyProps={{
                 fontWeight: "normal",
                 color: "inherit",
