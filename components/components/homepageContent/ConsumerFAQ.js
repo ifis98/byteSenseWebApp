@@ -8,7 +8,7 @@ const ConsumerFAQ = () => {
       </h2>
       <div style={{ width: "100%", height: "80vh" }}>
         <iframe
-          src="/api/proxy?url=https://www.bytesense.ai/faq"
+          src="/api/proxy?url=https://www.bytesense.ai/consumer-faq"
           width="100%"
           height="100%"
           style={{ border: "none" }}
