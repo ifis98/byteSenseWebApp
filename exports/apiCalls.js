@@ -55,6 +55,20 @@ export let doctor = {
           updateToken()
         ),
 
+      // addOrder:(data) => axios.post(backendLink + "createOrder", {...data},  updateToken()),
+      addOrder:(data) => {
+        const tokenHeader = updateToken();
+        if (typeof FormData !== "undefined" && data instanceof FormData) {
+          return axios.post(backendLink + "createOrder", data, {
+            ...tokenHeader,
+            headers: {
+              ...tokenHeader.headers,
+            },
+          });
+        }
+        return axios.post(backendLink + "createOrder", { ...data }, tokenHeader);
+      },
+
       getpatientRequest: () =>
         axios.get(backendLink + "patientRequest", updateToken()),
 

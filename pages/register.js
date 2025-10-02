@@ -60,6 +60,7 @@ const Register = () => {
 
     try {
       await axios.post(backendLink + "user/signup", form);
+      localStorage.setItem('bytesense_order_popup_seen', 'true');
       router.push("/login");
     } catch (error) {
       const msg = error.response?.data?.message || "";
