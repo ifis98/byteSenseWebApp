@@ -23,7 +23,8 @@ const drawerWidth = 240;
 
 const navItems = [
   { href: "/", icon: <HomeIcon />, label: "Dashboard" },
-  { href: '/order', icon: <GroupAddIcon />, label: 'Order' },
+  // { href: '/order', icon: <GroupAddIcon />, label: 'Order' },
+  { href: "/order-list", icon: <GroupAddIcon />, label: "Order List" },
   // NOTE: Patient List and Consumer Request pages are intentionally hidden from the
   // sidebar for now. Please keep these entries commented out so the pages can be
   // quickly reactivated later and so automated cleanup tools or AI coders do not
@@ -36,17 +37,17 @@ const navItems = [
 ];
 
 const bottomNavItems = [
-    { href: "/lab_slip", label: "Quick Start" },
-    { href: "/product_information", label: "Product Information" },
-    { href: "/sales_material", label: "Sales Materials" },
-    { href: "/policies", label: "Policies" },
-    // { href: "/faq", label: "FAQ" },
+  { href: "/lab_slip", label: "Quick Start" },
+  { href: "/product_information", label: "Product Information" },
+  { href: "/sales_material", label: "Sales Materials" },
+  { href: "/policies", label: "Policies" },
+  // { href: "/faq", label: "FAQ" },
   { href: "/staff_training", label: "Staff Training" },
 ];
 const faqNavItems = [
-    { href: "/consumer", label: "Consumer FAQ" },
-    { href: "/office", label: "Office FAQ" },
-]
+  { href: "/consumer", label: "Consumer FAQ" },
+  { href: "/office", label: "Office FAQ" },
+];
 
 const Sidebar = ({ variant = "permanent", drawerOpen, onClick }) => {
   const pathname = usePathname();
@@ -184,7 +185,7 @@ const Sidebar = ({ variant = "permanent", drawerOpen, onClick }) => {
               ))}
             </List>
           )}
-        <ListItem
+          <ListItem
             disablePadding
             button
             onClick={() => {
@@ -209,7 +210,9 @@ const Sidebar = ({ variant = "permanent", drawerOpen, onClick }) => {
               }}
             />
             <KeyboardArrowDownIcon
-              style={{ transform: !faqOpen ? "rotate(180deg)" : "rotate(0deg)" }}
+              style={{
+                transform: !faqOpen ? "rotate(180deg)" : "rotate(0deg)",
+              }}
             />
           </ListItem>
           {faqOpen && (

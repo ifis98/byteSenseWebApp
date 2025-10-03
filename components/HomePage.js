@@ -22,6 +22,7 @@ import SalesMaterial from "./components/homepageContent/SalesMaterial";
 import Policies from "./components/homepageContent/Policies";
 import LabSlip from "./components/homepageContent/LabSlip";
 import Dashboard from "./components/homepageContent/Dashboard";
+import OrderList from "./components/homepageContent/orderList";
 
 function HomePage() {
   const path = usePathname();
@@ -75,6 +76,7 @@ function HomePage() {
     if (path === "/pre-order") return <PreOrderForm />;
     if (path.startsWith("/request")) return <PatientRequest />;
     if (path === "/order") return <OrderForm />;
+    if (path === "/order-list") return <OrderList />;
     if (path === "/order-success") return <OrderSuccess />;
     if (path === "/preorder-success") return <PreorderSuccess />;
     if (

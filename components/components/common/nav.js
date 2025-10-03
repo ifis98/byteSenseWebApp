@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   AppBar,
   Toolbar,
@@ -12,6 +13,7 @@ import {
   Divider,
   Box,
   Tooltip,
+  Button,
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MessageIcon from "@mui/icons-material/Message";
@@ -23,6 +25,7 @@ import { updateDoctorDetail } from "../../../actions/APIAction";
 import MenuIcon from "@mui/icons-material/Menu";
 
 const HomePageNav = ({ updateDoctorDetail, setDrawerOpen }) => {
+  const router = useRouter();
   const [anchorEl, setAnchorEl] = useState(null);
   const [img, setImg] = useState("");
   const [imgPresent, setImgPresent] = useState(false);
@@ -63,6 +66,10 @@ const HomePageNav = ({ updateDoctorDetail, setDrawerOpen }) => {
     window.location.href = "/login";
   };
 
+  const handleNavigation = (href) => {
+    router.push(href);
+  };
+
   return (
     <AppBar
       position="static"
@@ -84,6 +91,19 @@ const HomePageNav = ({ updateDoctorDetail, setDrawerOpen }) => {
           <IconButton>
             <MessageIcon sx={{ color: "#fff" }} />
           </IconButton>
+          <Button
+            variant="contained"
+            color="error"
+            sx={{
+              fontWeight: "bold",
+              textTransform: "uppercase",
+            }}
+            onClick={() => {
+              handleNavigation("/order");
+            }}
+          >
+            Order
+          </Button>
           <IconButton>
             <NotificationsIcon sx={{ color: "#fff" }} />
           </IconButton>
