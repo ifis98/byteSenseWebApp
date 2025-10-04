@@ -118,15 +118,8 @@ export default function OrderForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (
-      !formData.caseName ||
-      !formData.maxUndercut ||
-      !formData.passiveSpacer ||
-      !formData.upperScan ||
-      !formData.lowerScan ||
-      !formData.biteScans
-    ) {
-      alert("All fields and STL files are required.");
+    if (!formData.caseName || !formData.maxUndercut || !formData.passiveSpacer) {
+      alert("Please complete all required fields.");
       return;
     }
 
@@ -202,9 +195,27 @@ export default function OrderForm() {
     formPayload.append("doctor", String(payload.doctor));
     if (payload.instructions) formPayload.append("instructions", String(payload.instructions));
     // Files
-    formPayload.append("upperScan", payload.upperScan, payload.upperScan?.name || "upper.stl");
-    formPayload.append("lowerScan", payload.lowerScan, payload.lowerScan?.name || "lower.stl");
-    formPayload.append("biteScans", payload.biteScans, payload.biteScans?.name || "bite.stl");
+    if (payload.upperScan) {
+      formPayload.append(
+        "upperScan",
+        payload.upperScan,
+        payload.upperScan?.name || "upper.stl",
+      );
+    }
+    if (payload.lowerScan) {
+      formPayload.append(
+        "lowerScan",
+        payload.lowerScan,
+        payload.lowerScan?.name || "lower.stl",
+      );
+    }
+    if (payload.biteScans) {
+      formPayload.append(
+        "biteScans",
+        payload.biteScans,
+        payload.biteScans?.name || "bite.stl",
+      );
+    }
     // Signature
     formPayload.append("signature", payload.signature, payload.signature?.name || "signature.png");
 
