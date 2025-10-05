@@ -62,7 +62,7 @@ const Dashboard = () => {
           boxSizing: "border-box",
         }}
       >
-        {"New Offer -> Welcome to byteSense!"}
+        {"Welcome to byteSense!"}
       </div>
       <div style={{ width: "100%", height: "80vh" }}>
         <iframe
