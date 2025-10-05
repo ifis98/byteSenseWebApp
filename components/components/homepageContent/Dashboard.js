@@ -16,14 +16,15 @@ const Dashboard = () => {
         justifyContent: "center",
       }}
     >
-      <div style={{ width: "80%", height: "60vh", padding: "16px" }}>
-        <iframe
-          className="clickup-embed clickup-dynamic-height"
+      <div style={{ width: "100%", height: "60vh", padding: "16px" }}>
+        <video
           src="/dashboard.mp4"
-          width="100%"
-          height="100%"
-          style={{ background: "transparent", border: "1px solid #000" }}
-        />
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{ width: "100%", height: "100%", border: "1px solid #000" }}
+        ></video>
       </div>
       <div
         style={{
@@ -37,16 +38,18 @@ const Dashboard = () => {
           padding: "16px",
         }}
       >
-        New Offer
+        {"New Offer -> Welcome to byteSense!"}
       </div>
-      <div style={{ width: "60%", height: "60vh" }}>
+      <div style={{ width: "100%", height: "60vh" }}>
         <iframe
           className="clickup-embed clickup-dynamic-height"
-          src="https://doc.clickup.com/8469349/d/h/82ev5-21111/34c3e96a27da043"
+          src=""
+          onWheel=""
           width="100%"
           height="100%"
           style={{ background: "transparent", border: "1px solid #ccc" }}
         />
+        <script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js"></script>
       </div>
     </div>
   );
