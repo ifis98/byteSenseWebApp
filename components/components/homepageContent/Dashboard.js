@@ -64,7 +64,7 @@ const Dashboard = () => {
       >
         {"New Offer -> Welcome to byteSense!"}
       </div>
-      <div style={{ width: "100%", minHeight: "60vh" }}>
+      <div style={{ width: "100%", height: "80vh" }}>
         <iframe
           className="clickup-embed clickup-dynamic-height"
           src="https://doc.clickup.com/8469349/d/h/82ev5-21151/1bface5cf24acb3"
