@@ -41,14 +41,12 @@ const Dashboard = () => {
         {"New Offer -> Welcome to byteSense!"}
       </div>
       <div style={{ width: "100%", height: "60vh" }}>
-        <iframe
-          className="clickup-embed clickup-dynamic-height"
-          src=""
-          onWheel=""
-          width="100%"
-          height="100%"
-          style={{ background: "transparent", border: "1px solid #ccc" }}
-        />
+      <iframe class="clickup-embed clickup-dynamic-height" 
+        src="https://doc.clickup.com/8469349/d/h/82ev5-21151/1bface5cf24acb3" 
+        onwheel="" 
+        width="100%" 
+        height="100%" 
+        style="background: transparent; border: 1px solid #ccc;"></iframe>
         <script async src="https://app-cdn.clickup.com/assets/js/forms-embed/v1.js"></script>
       </div>
     </div>
