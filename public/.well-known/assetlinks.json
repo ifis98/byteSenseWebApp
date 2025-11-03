@@ -1,0 +1,10 @@
+[
+  {
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : {
+    "namespace": "android_app",
+    "package_name": "com.bitely",
+    "sha256_cert_fingerprints": ["92:26:91:8E:41:CD:7D:C7:D0:34:06:AE:2A:DB:46:B5:7F:D0:F5:68:35:D9:8A:4A:1F:6B:11:3A:4F:E1:7D:E6"]
+    }
+  }
+]
