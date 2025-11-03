@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -9,7 +9,7 @@ import {
   Typography,
   Alert,
 } from '@mui/material';
-import { useRouter, useParams } from 'next/navigation';
+import {useRouter, useParams, useSearchParams} from 'next/navigation';
 import axios from 'axios';
 import { backendLink } from '../../exports/variable';
 import CustomTextField from "../../components/components/CustomTextField";
@@ -17,6 +17,7 @@ import CustomTextField from "../../components/components/CustomTextField";
 const ResetPassword = () => {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
 
   const [form, setForm] = useState({
     password: '',
@@ -31,6 +32,14 @@ const ResetPassword = () => {
     }));
   };
 
+  useEffect(() => {
+    if (searchParams) {
+      if (searchParams.get("type")) {
+        router.push("bitely://reset/c64a033373b540cdc341ee47ba6a3e46fd8fb269")
+      }
+    }
+  }, [router]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
@@ -41,6 +50,13 @@ const ResetPassword = () => {
 
     try {
       await axios.put(`${backendLink}user/reset/${params.id}`, form);
+      if (typeof window !== 'undefined' && window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
+        try {
+          window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'passwordResetSuccess' }));
+        } catch (err) {
+          // no-op
+        }
+      }
       router.push('/login');
     } catch (err) {
       setErrorMessage('Password reset failed. Please try again!');
