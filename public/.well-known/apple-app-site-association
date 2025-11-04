@@ -1,0 +1,10 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["4MBF7UTUZD.org.reactjs.native.example.bitely"],
+        "paths": ["/reset/*"]
+      }
+    ]
+  }
+}
