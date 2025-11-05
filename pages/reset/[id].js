@@ -6,7 +6,7 @@ import {
   Button,
   Container,
   Typography,
-  Alert,
+  Alert, CircularProgress,
 } from "@mui/material";
 import { useRouter, useParams } from "next/navigation";
 import axios from "axios";
@@ -25,6 +25,7 @@ const ResetPassword = () => {
   const [userType, setUserType] = useState();
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setForm((prev) => ({
@@ -51,10 +52,12 @@ const ResetPassword = () => {
   }, [params]);
 
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     setErrorMessage("");
 
     if (form.password !== form.confirmPassword) {
+      setLoading(false);
       return setErrorMessage("Password and confirm password must match.");
     }
     try {
@@ -70,8 +73,10 @@ const ResetPassword = () => {
           "Password reset successfully. Please log in using our mobile app",
         );
       }
+      setLoading(false);
     } catch (err) {
       setErrorMessage("Password reset failed. Please try again!");
+      setLoading(false);
     }
   };
 
@@ -123,6 +128,12 @@ const ResetPassword = () => {
             </Alert>
           )}
 
+          {loading ? (
+              <Box display="flex" flexDirection="column" alignItems="center" mt={4}>
+                <CircularProgress />
+                <Typography mt={2}>Loading...</Typography>
+              </Box>
+          ) : (
           <Button
             fullWidth
             type="submit"
@@ -133,6 +144,7 @@ const ResetPassword = () => {
           >
             Update Password
           </Button>
+          )}
         </Box>
       </Box>
     </Container>
