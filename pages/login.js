@@ -37,9 +37,9 @@ class Login extends React.Component {
           }
         });
       })
-      .catch(() => {
+      .catch((e) => {
         this.setState({
-          errorMessage: "Invalid credentials. Please try again.",
+          errorMessage: e?.response?.data?.message,
           userName: "",
           password: "",
         });

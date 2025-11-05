@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Box, Typography, Button, Alert } from "@mui/material";
+import {Box, Typography, Button, Alert, Link as MuiLink} from "@mui/material";
 import axios from "axios";
 import { backendLink } from "../exports/variable";
 import CustomLabelTextField from "../components/components/CustomLabelTextField";
@@ -99,6 +99,18 @@ const ForgotPassword = () => {
             >
               Send Request
             </Button>
+            <Typography textAlign="center" sx={{ pt: 2 }}>
+              <MuiLink
+                  href="/login"
+                  underline="hover"
+                  sx={{
+                    color: "error.main",
+                    height: "100%",
+                  }}
+              >
+                Remember your password? Back to Login
+              </MuiLink>
+            </Typography>
           </Box>
         </Box>
       </Box>
