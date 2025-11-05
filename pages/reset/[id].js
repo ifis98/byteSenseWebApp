@@ -1,29 +1,30 @@
-'use client';
+"use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
   Container,
-  TextField,
   Typography,
   Alert,
-} from '@mui/material';
-import {useRouter, useParams, useSearchParams} from 'next/navigation';
-import axios from 'axios';
-import { backendLink } from '../../exports/variable';
+} from "@mui/material";
+import { useRouter, useParams } from "next/navigation";
+import axios from "axios";
+import { backendLink } from "../../exports/variable";
 import CustomTextField from "../../components/components/CustomTextField";
 
 const ResetPassword = () => {
   const router = useRouter();
   const params = useParams();
-  const searchParams = useSearchParams();
 
   const [form, setForm] = useState({
-    password: '',
-    confirmPassword: '',
+    password: "",
+    confirmPassword: "",
   });
-  const [errorMessage, setErrorMessage] = useState('');
+
+  const [userType, setUserType] = useState();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
   const handleChange = (e) => {
     setForm((prev) => ({
@@ -32,41 +33,56 @@ const ResetPassword = () => {
     }));
   };
 
-  useEffect(() => {
-    if (searchParams) {
-      if (searchParams.get("type")) {
-        router.push("bitely://reset/c64a033373b540cdc341ee47ba6a3e46fd8fb269")
+  const handleTokenUserFrom = async () => {
+    try {
+      const data = await axios.get(`${backendLink}user/tokenInfo/${params.id}`);
+      if (data?.data) {
+        setUserType(data?.data);
       }
+    } catch (err) {
+      console.log("Token info not found");
     }
-  }, [router]);
+  };
+
+  useEffect(() => {
+    if (params?.id) {
+      handleTokenUserFrom();
+    }
+  }, [params]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage('');
+    setErrorMessage("");
 
     if (form.password !== form.confirmPassword) {
-      return setErrorMessage('Password and confirm password must match.');
+      return setErrorMessage("Password and confirm password must match.");
     }
-
     try {
       await axios.put(`${backendLink}user/reset/${params.id}`, form);
-      if (typeof window !== 'undefined' && window.ReactNativeWebView && window.ReactNativeWebView.postMessage) {
-        try {
-          window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'passwordResetSuccess' }));
-        } catch (err) {
-          // no-op
-        }
+      if (userType === "web") {
+        router.push("/login");
+      } else {
+        setForm({
+          password: "",
+          confirmPassword: "",
+        });
+        setSuccessMessage(
+          "Password reset successfully. Please log in using our mobile app",
+        );
       }
-      router.push('/login');
     } catch (err) {
-      setErrorMessage('Password reset failed. Please try again!');
+      setErrorMessage("Password reset failed. Please try again!");
     }
   };
 
   return (
     <Container maxWidth="sm" sx={{ mt: 8 }}>
       <Box display="flex" flexDirection="column" alignItems="center">
-        <img src="/image.png" alt="Logo" style={{ width: 160, marginBottom: 16 }} />
+        <img
+          src="/image.png"
+          alt="Logo"
+          style={{ width: 160, marginBottom: 16 }}
+        />
         <Typography variant="h4" color="error" fontWeight={600}>
           Reset Password
         </Typography>
@@ -74,7 +90,7 @@ const ResetPassword = () => {
           Enter your new password below.
         </Typography>
 
-        <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ width: "100%" }}>
           <CustomTextField
             fullWidth
             label="New Password"
@@ -99,6 +115,11 @@ const ResetPassword = () => {
           {errorMessage && (
             <Alert severity="error" sx={{ mt: 2 }}>
               {errorMessage}
+            </Alert>
+          )}
+          {successMessage && (
+            <Alert severity="success" sx={{ mt: 2 }}>
+              {successMessage}
             </Alert>
           )}
 
