@@ -19,6 +19,7 @@ const withAuth = (WrappedComponent) => {
         .get(backendLink + "user/profile", {
           headers: {
             Authorization: "Bearer " + token,
+            "X-Is-Doctor": "true",
           },
         })
         .catch(() => {
