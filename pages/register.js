@@ -59,7 +59,9 @@ const Register = () => {
     }
 
     try {
-      await axios.post(backendLink + "user/signup", form);
+      // Web registrations are always doctor accounts (isDoctor = true)
+      const registrationData = { ...form, isDoctor: true };
+      await axios.post(backendLink + "user/signup", registrationData);
       localStorage.setItem('bytesense_order_popup_seen', 'true');
       router.push("/login");
     } catch (error) {
@@ -67,7 +69,7 @@ const Register = () => {
       if (msg.includes("userName")) {
         setErrorMessage("Username already exists. Please try again.");
       } else if (msg.includes("email")) {
-        setErrorMessage("Email already exists. Please try again.");
+        setErrorMessage(msg || "Email already exists. Please try again.");
       } else {
         setErrorMessage("Server error. Please try again later.");
       }

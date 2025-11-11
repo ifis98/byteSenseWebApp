@@ -18,7 +18,7 @@ const ForgotPassword = () => {
     setFeedbackMessage("");
 
     try {
-      await axios.post(`${backendLink}user/forgotpassword`, { email });
+      await axios.post(`${backendLink}user/forgotpassword`, { email, isDoctor: true });
       setFeedbackMessage("Email sent successfully to the account.");
       setSuccess(true);
       setEmail("");

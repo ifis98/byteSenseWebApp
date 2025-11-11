@@ -14,6 +14,7 @@ function updateToken() {
     header = {
       headers: {
         Authorization: "Bearer " + accessToken,
+        "X-Is-Doctor": "true",
       },
     };
   }
