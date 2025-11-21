@@ -711,8 +711,26 @@ export default function OrderForm() {
                   size={{ xs: 12 }}
                   sx={{ display: "flex", justifyContent: "center", mt: 4 }}
                 >
+                  {/* NOTE: Preserving previous submit implementation for future restoration. Do not delete. */}
+                  {false && (
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="error"
+                      size="large"
+                      sx={{
+                        py: 1.5,
+                        px: 6,
+                        minWidth: "240px",
+                        textTransform: "uppercase",
+                      }}
+                      disabled={loading}
+                    >
+                      {loading ? "Processing..." : "Proceed to Payment"}
+                    </Button>
+                  )}
                   <Button
-                    type="submit"
+                    type="button"
                     variant="contained"
                     color="error"
                     size="large"
@@ -723,8 +741,12 @@ export default function OrderForm() {
                       textTransform: "uppercase",
                     }}
                     disabled={loading}
+                    onClick={() => {
+                      window.location.href =
+                        "https://buy.stripe.com/3cI9AU7Cb9DFcS8gsU53O08";
+                    }}
                   >
-                    {loading ? "Processing..." : "Proceed to Payment"}
+                    Proceed to Payment
                   </Button>
                 </Grid>
               </Grid>
