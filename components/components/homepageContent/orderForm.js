@@ -726,7 +726,7 @@ export default function OrderForm() {
                       }}
                       disabled={loading}
                     >
-                      {loading ? "Processing..." : "Proceed to Payment"}
+                      {loading ? "Processing..." : "Proceed to Checkout"}
                     </Button>
                   )}
                   <Button
@@ -742,11 +742,32 @@ export default function OrderForm() {
                     }}
                     disabled={loading}
                     onClick={() => {
+                      if (
+                        !formData.caseName ||
+                        !formData.maxUndercut ||
+                        !formData.passiveSpacer
+                      ) {
+                        alert("Please complete all required fields.");
+                        return;
+                      }
+
+                      const isCanvasEmpty =
+                        !sigCanvas.current || sigCanvas.current.isEmpty();
+                      const selectedSignature = savedSignatures.find(
+                        (s) => s.id === selectedSignatureId,
+                      );
+                      if (!selectedSignature && isCanvasEmpty) {
+                        alert(
+                          "Please select an existing e-signature or draw a new one.",
+                        );
+                        return;
+                      }
+
                       window.location.href =
                         "https://buy.stripe.com/3cI9AU7Cb9DFcS8gsU53O08";
                     }}
                   >
-                    Proceed to Payment
+                    Proceed to Checkout
                   </Button>
                 </Grid>
               </Grid>
