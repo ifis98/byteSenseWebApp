@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -36,6 +36,12 @@ const Register = () => {
   });
   const [errorMessage, setErrorMessage] = useState("");
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.rewardful) {
+      window.rewardful("set", "referral_field", "#rewardful_referral");
+    }
+  }, []);
+
   const handleChange = (e) => {
     setForm((prev) => ({
       ...prev,
@@ -60,7 +66,14 @@ const Register = () => {
 
     try {
       // Web registrations are always doctor accounts (isDoctor = true)
-      const registrationData = { ...form, isDoctor: true };
+      const rewardful_referral =
+        document.getElementById("rewardful_referral")?.value?.trim();
+
+      const registrationData = {
+        ...form,
+        isDoctor: true,
+        ...(rewardful_referral ? { rewardful_referral } : {}),
+      };
       await axios.post(backendLink + "user/signup", registrationData);
       localStorage.setItem('bytesense_order_popup_seen', 'true');
       router.push("/login");
@@ -151,6 +164,12 @@ const Register = () => {
             component="form"
             onSubmit={handleSubmit}
           >
+            <input
+              type="hidden"
+              name="rewardful_referral"
+              id="rewardful_referral"
+              onChange={handleChange}
+            />
             <Typography
               variant="h5"
               fontWeight="bold"
