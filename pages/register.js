@@ -39,32 +39,20 @@ const Register = () => {
   const [rewardfulStatus, setRewardfulStatus] = useState("");
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.rewardful) {
-      window.rewardful("set", "referral_field", "#rewardful_referral");
-    }
-  }, []);
+    if (typeof window === "undefined" || !window.rewardful) return;
 
-  useEffect(() => {
-    const getHashReferral = () => {
-      if (typeof window === "undefined") return "";
-      const hash = window.location.hash || "";
-      const match = hash.match(/via=([^&]+)/);
-      return match?.[1] || "";
-    };
+    window.rewardful("ready", function () {
+      const id = window.Rewardful && window.Rewardful.referral;
 
-    const syncReferral = () => {
-      const referralFieldValue =
-        document.getElementById("rewardful_referral")?.value?.trim() || "";
-      const hashReferral = getHashReferral();
-      const referralValue = referralFieldValue || hashReferral;
+      if (id) {
+        setRewardfulReferral(id);
 
-      setRewardfulReferral(referralValue);
-    };
-
-    syncReferral();
-    const intervalId = setInterval(syncReferral, 1000);
-
-    return () => clearInterval(intervalId);
+        const hidden = document.getElementById("rewardful_referral");
+        if (hidden instanceof HTMLInputElement) {
+          hidden.value = id;
+        }
+      }
+    });
   }, []);
 
   const handleChange = (e) => {
@@ -100,17 +88,11 @@ const Register = () => {
         ...(rewardful_referral ? { rewardful_referral } : {}),
       };
       await axios.post(backendLink + "user/signup", registrationData);
-      if (
-        typeof window !== "undefined" &&
-        typeof window.rewardful === "function"
-      ) {
-        window.rewardful("convert", { email: form.email });
-        setRewardfulStatus(
-          `Rewardful conversion triggered for ${form.email}.`
-        );
+      if (rewardfulReferral) {
+        setRewardfulStatus(`Rewardful referral sent: ${rewardfulReferral}`);
       } else {
         setRewardfulStatus(
-          "Rewardful script unavailable; conversion call not triggered."
+          "No Rewardful referral id present for this signup."
         );
       }
       localStorage.setItem('bytesense_order_popup_seen', 'true');
@@ -229,7 +211,7 @@ const Register = () => {
               <Alert severity={rewardfulReferral ? "success" : "info"}>
                 {rewardfulReferral
                   ? `Rewardful referral detected: ${rewardfulReferral}`
-                  : "Rewardful referral not yet detected. Visit your referral link (e.g. #via=kyle) to populate it."}
+                  : "Rewardful referral not yet detected. Visit your referral link to populate it."}
               </Alert>
               {rewardfulStatus && (
                 <Alert severity="info">{rewardfulStatus}</Alert>
