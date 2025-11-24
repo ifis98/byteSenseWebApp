@@ -75,6 +75,12 @@ const Register = () => {
         ...(rewardful_referral ? { rewardful_referral } : {}),
       };
       await axios.post(backendLink + "user/signup", registrationData);
+      if (
+        typeof window !== "undefined" &&
+        typeof window.rewardful === "function"
+      ) {
+        window.rewardful("convert", { email: form.email });
+      }
       localStorage.setItem('bytesense_order_popup_seen', 'true');
       router.push("/login");
     } catch (error) {
