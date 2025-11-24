@@ -35,8 +35,6 @@ const Register = () => {
     termsAccepted: false,
   });
   const [errorMessage, setErrorMessage] = useState("");
-  const [rewardfulReferral, setRewardfulReferral] = useState("");
-  const [rewardfulStatus, setRewardfulStatus] = useState("");
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.rewardful) return;
@@ -45,8 +43,6 @@ const Register = () => {
       const id = window.Rewardful && window.Rewardful.referral;
 
       if (id) {
-        setRewardfulReferral(id);
-
         const hidden = document.getElementById("rewardful_referral");
         if (hidden instanceof HTMLInputElement) {
           hidden.value = id;
@@ -88,13 +84,6 @@ const Register = () => {
         ...(rewardful_referral ? { rewardful_referral } : {}),
       };
       await axios.post(backendLink + "user/signup", registrationData);
-      if (rewardfulReferral) {
-        setRewardfulStatus(`Rewardful referral sent: ${rewardfulReferral}`);
-      } else {
-        setRewardfulStatus(
-          "No Rewardful referral id present for this signup."
-        );
-      }
       localStorage.setItem('bytesense_order_popup_seen', 'true');
       router.push("/login");
     } catch (error) {
@@ -207,16 +196,6 @@ const Register = () => {
               />
               {steps[step]}
             </Typography>
-            <Box display="flex" flexDirection="column" gap={1} mb={2}>
-              <Alert severity={rewardfulReferral ? "success" : "info"}>
-                {rewardfulReferral
-                  ? `Rewardful referral detected: ${rewardfulReferral}`
-                  : "Rewardful referral not yet detected. Visit your referral link to populate it."}
-              </Alert>
-              {rewardfulStatus && (
-                <Alert severity="info">{rewardfulStatus}</Alert>
-              )}
-            </Box>
             {step === 1 && (
               <Typography
                 variant="subtitle1"
