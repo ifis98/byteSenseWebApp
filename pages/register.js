@@ -35,11 +35,36 @@ const Register = () => {
     termsAccepted: false,
   });
   const [errorMessage, setErrorMessage] = useState("");
+  const [rewardfulReferral, setRewardfulReferral] = useState("");
+  const [rewardfulStatus, setRewardfulStatus] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.rewardful) {
       window.rewardful("set", "referral_field", "#rewardful_referral");
     }
+  }, []);
+
+  useEffect(() => {
+    const getHashReferral = () => {
+      if (typeof window === "undefined") return "";
+      const hash = window.location.hash || "";
+      const match = hash.match(/via=([^&]+)/);
+      return match?.[1] || "";
+    };
+
+    const syncReferral = () => {
+      const referralFieldValue =
+        document.getElementById("rewardful_referral")?.value?.trim() || "";
+      const hashReferral = getHashReferral();
+      const referralValue = referralFieldValue || hashReferral;
+
+      setRewardfulReferral(referralValue);
+    };
+
+    syncReferral();
+    const intervalId = setInterval(syncReferral, 1000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   const handleChange = (e) => {
@@ -80,6 +105,13 @@ const Register = () => {
         typeof window.rewardful === "function"
       ) {
         window.rewardful("convert", { email: form.email });
+        setRewardfulStatus(
+          `Rewardful conversion triggered for ${form.email}.`
+        );
+      } else {
+        setRewardfulStatus(
+          "Rewardful script unavailable; conversion call not triggered."
+        );
       }
       localStorage.setItem('bytesense_order_popup_seen', 'true');
       router.push("/login");
@@ -193,6 +225,16 @@ const Register = () => {
               />
               {steps[step]}
             </Typography>
+            <Box display="flex" flexDirection="column" gap={1} mb={2}>
+              <Alert severity={rewardfulReferral ? "success" : "info"}>
+                {rewardfulReferral
+                  ? `Rewardful referral detected: ${rewardfulReferral}`
+                  : "Rewardful referral not yet detected. Visit your referral link (e.g. #via=kyle) to populate it."}
+              </Alert>
+              {rewardfulStatus && (
+                <Alert severity="info">{rewardfulStatus}</Alert>
+              )}
+            </Box>
             {step === 1 && (
               <Typography
                 variant="subtitle1"
