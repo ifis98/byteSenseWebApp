@@ -23,6 +23,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  CircularProgress,
 } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { useState, useEffect, useRef } from "react";
@@ -245,8 +246,6 @@ export default function OrderForm() {
     } catch (err) {
       console.error("Order submission error:", err);
       alert("Something went wrong. Please try again.");
-      setLoading(false);
-    } finally {
       setLoading(false);
     }
 
@@ -724,7 +723,18 @@ export default function OrderForm() {
                     }}
                     disabled={loading}
                   >
-                    {loading ? "Processing..." : "Proceed to Checkout"}
+                    {loading ? (
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <CircularProgress
+                          size={22}
+                          color="inherit"
+                          sx={{ mr: 1 }}
+                        />
+                        Processing...
+                      </Box>
+                    ) : (
+                      "Proceed to Checkout"
+                    )}
                   </Button>
                 </Grid>
               </Grid>
