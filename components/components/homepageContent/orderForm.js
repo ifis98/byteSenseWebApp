@@ -23,6 +23,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  CircularProgress,
 } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
 import { useState, useEffect, useRef } from "react";
@@ -227,7 +228,7 @@ export default function OrderForm() {
           // .doctorRequests()
           // .addOrder(payload)
           // .then((res) => {
-          //   // window.location.href = 'https://buy.stripe.com/28EdRag8H4jl2du0tW53O07'; // Redirect to Stripe payment link
+          //   // window.location.href = 'https://buy.stripe.com/3cI9AU7Cb9DFcS8gsU53O08'; // Redirect to Stripe payment link
           // })
           // .catch((e) => {
           //   alert("Unable to place order. Please try again.");
@@ -236,7 +237,7 @@ export default function OrderForm() {
         .doctorRequests()
         .addOrder(formPayload)
         .then((res) => {
-          window.location.href = 'https://buy.stripe.com/28EdRag8H4jl2du0tW53O07';
+          window.location.href = 'https://buy.stripe.com/3cI9AU7Cb9DFcS8gsU53O08';
         })
         .catch((e) => {
           alert("Unable to place order. Please try again.");
@@ -245,8 +246,6 @@ export default function OrderForm() {
     } catch (err) {
       console.error("Order submission error:", err);
       alert("Something went wrong. Please try again.");
-      setLoading(false);
-    } finally {
       setLoading(false);
     }
 
@@ -711,26 +710,8 @@ export default function OrderForm() {
                   size={{ xs: 12 }}
                   sx={{ display: "flex", justifyContent: "center", mt: 4 }}
                 >
-                  {/* NOTE: Preserving previous submit implementation for future restoration. Do not delete. */}
-                  {false && (
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="error"
-                      size="large"
-                      sx={{
-                        py: 1.5,
-                        px: 6,
-                        minWidth: "240px",
-                        textTransform: "uppercase",
-                      }}
-                      disabled={loading}
-                    >
-                      {loading ? "Processing..." : "Proceed to Checkout"}
-                    </Button>
-                  )}
                   <Button
-                    type="button"
+                    type="submit"
                     variant="contained"
                     color="error"
                     size="large"
@@ -741,33 +722,19 @@ export default function OrderForm() {
                       textTransform: "uppercase",
                     }}
                     disabled={loading}
-                    onClick={() => {
-                      if (
-                        !formData.caseName ||
-                        !formData.maxUndercut ||
-                        !formData.passiveSpacer
-                      ) {
-                        alert("Please complete all required fields.");
-                        return;
-                      }
-
-                      const isCanvasEmpty =
-                        !sigCanvas.current || sigCanvas.current.isEmpty();
-                      const selectedSignature = savedSignatures.find(
-                        (s) => s.id === selectedSignatureId,
-                      );
-                      if (!selectedSignature && isCanvasEmpty) {
-                        alert(
-                          "Please select an existing e-signature or draw a new one.",
-                        );
-                        return;
-                      }
-
-                      window.location.href =
-                        "https://buy.stripe.com/3cI9AU7Cb9DFcS8gsU53O08";
-                    }}
                   >
-                    Proceed to Checkout
+                    {loading ? (
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <CircularProgress
+                          size={22}
+                          color="inherit"
+                          sx={{ mr: 1 }}
+                        />
+                        Processing...
+                      </Box>
+                    ) : (
+                      "Proceed to Checkout"
+                    )}
                   </Button>
                 </Grid>
               </Grid>
