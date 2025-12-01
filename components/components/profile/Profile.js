@@ -33,11 +33,11 @@ const Profile = () => {
     gender: '',
     DOB: '',
     bio: '',
-    street: '',
+    addressLine1: '',
+    addressLine2: '',
     city: '',
     state: '',
     zipCode: '',
-    unitNo: '',
   });
 
   const fetchData = async () => {
@@ -58,11 +58,11 @@ const Profile = () => {
         gender: profile.gender || '',
         DOB: profile.dob || '',
         bio: profile.bio || '',
-        street: profile.address?.street || '',
+        addressLine1: profile.address?.street || '',
+        addressLine2: profile.address?.unitNo || '',
         city: profile.address?.city || '',
         state: profile.address?.state || '',
         zipCode: profile.address?.zip || '',
-        unitNo: profile.address?.unitNo || '',
       });
 
       setLoading(false);
@@ -83,7 +83,7 @@ const Profile = () => {
     )
       return;
     if (['DOB'].includes(name) && !/^[0-9/]*$/.test(value)) return;
-    if (['zipCode', 'unitNo'].includes(name) && !/^[0-9]*$/.test(value))
+    if (['zipCode'].includes(name) && !/^[0-9]*$/.test(value))
       return;
 
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -138,8 +138,8 @@ const Profile = () => {
       dob: form.DOB,
       gender: form.gender,
       address: {
-        street: form.street,
-        unitNo: form.unitNo,
+        street: form.addressLine1,
+        unitNo: form.addressLine2,
         city: form.city,
         state: form.state,
         zip: form.zipCode,
@@ -293,9 +293,9 @@ const Profile = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <CustomTextField
-                    label="Street"
-                    name="street"
-                    value={form.street}
+                    label="Address Line 1"
+                    name="addressLine1"
+                    value={form.addressLine1}
                     onChange={handleInputChange}
                     fullWidth
                     disabled={!editMode}
@@ -333,9 +333,9 @@ const Profile = () => {
                 </Grid>
                 <Grid item xs={6} sm={1.5}>
                   <CustomTextField
-                    label="Unit"
-                    name="unitNo"
-                    value={form.unitNo}
+                    label="Address Line 2"
+                    name="addressLine2"
+                    value={form.addressLine2}
                     onChange={handleInputChange}
                     fullWidth
                     disabled={!editMode}

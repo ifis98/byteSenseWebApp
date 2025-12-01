@@ -26,11 +26,11 @@ const Register = () => {
     password: "",
     confirmPassword: "",
     isDoctor: true,
-    streetAddress: "",
+    addressLine1: "",
+    addressLine2: "",
     city: "",
     state: "",
     zipCode: "",
-    unitNo: "",
     privacyAccepted: false,
     termsAccepted: false,
   });
@@ -54,7 +54,7 @@ const Register = () => {
   const handleChange = (e) => {
     setForm((prev) => ({
       ...prev,
-      [e.target.name]: ["unitNo", "zipCode"].includes(e.target.name)
+      [e.target.name]: ["zipCode"].includes(e.target.name)
         ? e.target.value.replace(/\D/g, "")
         : e.target.value,
     }));
@@ -65,12 +65,47 @@ const Register = () => {
     setForm((prev) => ({ ...prev, [name]: checked }));
   };
 
+  // Shared validation for step 1 (Create your account),
+  // mirroring backend rules in signupValidator.js
+  const validateAccountStep = () => {
+    // Required fields
+    if (
+      !form.fName ||
+      !form.lName ||
+      !form.userName ||
+      !form.email ||
+      !form.password ||
+      !form.confirmPassword
+    ) {
+      return "Please fill in all required fields.";
+    }
+
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(form.email)) {
+      return "Email is invalid. Please enter a valid email address.";
+    }
+
+    // Backend requires password length >= 4
+    if (form.password.length < 4) {
+      return "Password must be at least 4 characters.";
+    }
+
+    // Backend also validates that password === confirmPassword
+    if (form.password !== form.confirmPassword) {
+      return "Password and confirm password must match.";
+    }
+
+    return "";
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
 
-    if (form.password !== form.confirmPassword) {
-      return setErrorMessage("Password and confirm password must match.");
+    // Mirror backend validations from signupValidator.js before calling API
+    const validationError = validateAccountStep();
+    if (validationError) {
+      return setErrorMessage(validationError);
     }
 
     try {
@@ -109,36 +144,12 @@ const Register = () => {
   };
   const handleBack = () => setStep(step - 1);
   const handleContinueDisabled = () => {
-    // Disable if any required field on step 1 is empty
-    if (
-      !form.fName ||
-      !form.lName ||
-      !form.userName ||
-      !form.email ||
-      !form.password ||
-      !form.confirmPassword
-    ) {
-      return true;
-    }
-
-    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-    // Password must be at least 4 characters
-    if (form.password.length < 4) {
-      return true;
-    }
-
-    // Passwords must match
-    if (form.password !== form.confirmPassword) {
-      return true;
-    }
-
-    // Email must be valid
-    return !regex.test(form.email);
+    // Reuse shared validation: disabled when there is any validation error
+    return !!validateAccountStep();
   };
   const handlerSignupDisabled = () => {
     return !(
-      form.streetAddress &&
+      form.addressLine1 &&
       form.city &&
       form.state &&
       form.zipCode &&
@@ -317,12 +328,16 @@ const Register = () => {
                   error={
                     form.password.length > 0 &&
                     (form.password.length < 4 ||
-                      form.password !== form.confirmPassword)
+                      (form.password.length >= 4 &&
+                        // form.confirmPassword.length >= 4 &&
+                        form.password !== form.confirmPassword))
                   }
                   helperText={
                     form.password.length > 0 &&
                     (form.password.length < 4 ||
-                      form.password !== form.confirmPassword) &&
+                      (form.password.length >= 4 &&
+                        // form.confirmPassword.length >= 4 &&
+                        form.password !== form.confirmPassword)) &&
                     (form.password.length < 4
                       ? "Password must be at least 4 characters."
                       : "Password and confirm password must match.")
@@ -339,15 +354,17 @@ const Register = () => {
                   required
                   placeholder={"Confirm your password"}
                   error={
-                    form.password.length > 0 &&
-                    (form.password.length < 4 ||
-                      form.password !== form.confirmPassword)
+                    form.confirmPassword.length > 0 &&
+                    (form.confirmPassword.length < 4 ||
+                      (form.password.length >= 4 &&
+                        form.password !== form.confirmPassword))
                   }
                   helperText={
-                    form.password.length > 0 &&
-                    (form.password.length < 4 ||
-                      form.password !== form.confirmPassword) &&
-                    (form.password.length < 4
+                    form.confirmPassword.length > 0 &&
+                    (form.confirmPassword.length < 4 ||
+                      (form.password.length >= 4 &&
+                        form.password !== form.confirmPassword)) &&
+                    (form.confirmPassword.length < 4
                       ? "Password must be at least 4 characters."
                       : "Password and confirm password must match.")
                   }
@@ -393,34 +410,41 @@ const Register = () => {
               <Box className={"grid grid-cols-2 gap-4 mt-4"}>
                 <CustomLabelTextField
                   fullWidth
-                  label="Unit Number"
-                  name="unitNo"
-                  value={form.unitNo}
-                  onChange={handleChange}
-                  margin="normal"
-                  placeholder={"Enter your unit number"}
-                  wrapClassName={"col-span-2"}
-                />
-                <CustomLabelTextField
-                  fullWidth
-                  label="Street Address"
-                  name="streetAddress"
-                  value={form.streetAddress}
+                  label="Address Line 1"
+                  name="addressLine1"
+                  value={form.addressLine1}
                   onChange={handleChange}
                   margin="normal"
                   required
-                  multiline={true}
-                  rows={2}
-                  placeholder={"Enter your street address"}
+                  placeholder={"Enter address line 1"}
                   wrapClassName={"col-span-2"}
                   error={
-                    form.streetAddress.length > 0 &&
-                    form.streetAddress.length < 2
+                    form.addressLine1.length > 0 &&
+                    form.addressLine1.length < 2
                   }
                   helperText={
-                    form.streetAddress.length > 0 &&
-                    form.streetAddress.length < 2 &&
-                    "Street Address must be at least 2 characters."
+                    form.addressLine1.length > 0 &&
+                    form.addressLine1.length < 2 &&
+                    "Address Line 1 must be at least 2 characters."
+                  }
+                />
+                <CustomLabelTextField
+                  fullWidth
+                  label="Address Line 2"
+                  name="addressLine2"
+                  value={form.addressLine2}
+                  onChange={handleChange}
+                  margin="normal"
+                  placeholder={"Enter address line 2 (optional)"}
+                  wrapClassName={"col-span-2"}
+                  error={
+                      form.addressLine2.length > 0 &&
+                      form.addressLine2.length < 2
+                  }
+                  helperText={
+                      form.addressLine2.length > 0 &&
+                      form.addressLine2.length < 2 &&
+                      "Address Line 1 must be at least 2 characters."
                   }
                 />
                 <CustomLabelTextField
