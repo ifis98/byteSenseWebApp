@@ -84,7 +84,7 @@ const Register = () => {
         ...(rewardful_referral ? { rewardful_referral } : {}),
       };
       await axios.post(backendLink + "user/signup", registrationData);
-      localStorage.setItem('bytesense_order_popup_seen', 'true');
+      localStorage.setItem("bytesense_order_popup_seen", "true");
       router.push("/login");
     } catch (error) {
       const msg = error.response?.data?.message || "";
@@ -100,24 +100,41 @@ const Register = () => {
   const steps = ["Create your account", "Practice address"];
   const [step, setStep] = useState(0);
 
-  const handleNext = () => setStep(step + 1);
+  const handleNext = () => {
+    // Prevent navigation to Practice address if step 1 inputs are invalid
+    if (handleContinueDisabled()) {
+      return;
+    }
+    setStep(step + 1);
+  };
   const handleBack = () => setStep(step - 1);
   const handleContinueDisabled = () => {
+    // Disable if any required field on step 1 is empty
     if (
-      form.fName &&
-      form.lName &&
-      form.userName &&
-      form.email &&
-      form.password &&
-      form.confirmPassword
+      !form.fName ||
+      !form.lName ||
+      !form.userName ||
+      !form.email ||
+      !form.password ||
+      !form.confirmPassword
     ) {
-      const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (form.password !== form.confirmPassword) {
-        return true;
-      } else return !regex.test(form.email);
-    } else {
       return true;
     }
+
+    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    // Password must be at least 4 characters
+    if (form.password.length < 4) {
+      return true;
+    }
+
+    // Passwords must match
+    if (form.password !== form.confirmPassword) {
+      return true;
+    }
+
+    // Email must be valid
+    return !regex.test(form.email);
   };
   const handlerSignupDisabled = () => {
     return !(
@@ -154,7 +171,11 @@ const Register = () => {
           />
         </Box>
       </Box>
-      <Box className={"w-full flex flex-col justify-between items-center h-full overflow-y-auto"}>
+      <Box
+        className={
+          "w-full flex flex-col justify-between items-center h-full overflow-y-auto"
+        }
+      >
         <Grid
           item
           xs={12}
@@ -295,12 +316,16 @@ const Register = () => {
                   placeholder={"Enter your password"}
                   error={
                     form.password.length > 0 &&
-                    form.password !== form.confirmPassword
+                    (form.password.length < 4 ||
+                      form.password !== form.confirmPassword)
                   }
                   helperText={
                     form.password.length > 0 &&
-                    form.password !== form.confirmPassword &&
-                    "Password and confirm password must match."
+                    (form.password.length < 4 ||
+                      form.password !== form.confirmPassword) &&
+                    (form.password.length < 4
+                      ? "Password must be at least 4 characters."
+                      : "Password and confirm password must match.")
                   }
                 />
                 <CustomLabelTextField
@@ -315,25 +340,29 @@ const Register = () => {
                   placeholder={"Confirm your password"}
                   error={
                     form.password.length > 0 &&
-                    form.password !== form.confirmPassword
+                    (form.password.length < 4 ||
+                      form.password !== form.confirmPassword)
                   }
                   helperText={
                     form.password.length > 0 &&
-                    form.password !== form.confirmPassword &&
-                    "Password and confirm password must match."
+                    (form.password.length < 4 ||
+                      form.password !== form.confirmPassword) &&
+                    (form.password.length < 4
+                      ? "Password must be at least 4 characters."
+                      : "Password and confirm password must match.")
                   }
                 />
                 <Typography textAlign="left">
                   <MuiLink
-                      href="/login"
-                      underline="hover"
-                      sx={{
-                        color: "error.main",
-                        // display: "flex",
-                        // justifyContent: "center",
-                        // alignItems: "center",
-                        height: "100%",
-                      }}
+                    href="/login"
+                    underline="hover"
+                    sx={{
+                      color: "error.main",
+                      // display: "flex",
+                      // justifyContent: "center",
+                      // alignItems: "center",
+                      height: "100%",
+                    }}
                   >
                     Already have an account? Sign in
                   </MuiLink>
@@ -445,12 +474,28 @@ const Register = () => {
                 />
 
                 <FormControlLabel
-                  control={<Checkbox name={"privacyAccepted"} checked={form.privacyAccepted} onChange={handleCheckboxChange} color={"error"} sx={{ color: "white" }} />}
+                  control={
+                    <Checkbox
+                      name={"privacyAccepted"}
+                      checked={form.privacyAccepted}
+                      onChange={handleCheckboxChange}
+                      color={"error"}
+                      sx={{ color: "white" }}
+                    />
+                  }
                   label="Read Privacy Policy"
                   className={"col-span-2"}
                 />
-                  <FormControlLabel
-                  control={<Checkbox name={"termsAccepted"} checked={form.termsAccepted} onChange={handleCheckboxChange} color={"error"} sx={{ color: "white" }} />}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      name={"termsAccepted"}
+                      checked={form.termsAccepted}
+                      onChange={handleCheckboxChange}
+                      color={"error"}
+                      sx={{ color: "white" }}
+                    />
+                  }
                   label="Read Terms of Use"
                   className={"col-span-2"}
                 />
@@ -504,32 +549,43 @@ const Register = () => {
                 </Box>
               </Box>
             )}
-              <Box
-                  className={"w-full flex justify-center items-center flex-row gap-2 py-4"}
-              >
-                  {steps?.map((item, index) => (
-                      <span
-                          key={index}
-                          className={`${index === step ? "w-[30px] bg-red-500" : "w-[10px] bg-white"} h-[10px] rounded-full ${handleContinueDisabled() ? "cursor-not-allowed" : "cursor-pointer"} `}
-                          onClick={() => {
-                              if (!handleContinueDisabled()) {
-                                  setStep(index);
-                              }
-                          }}
-                      />
-                  ))}
-              </Box>
+            <Box
+              className={
+                "w-full flex justify-center items-center flex-row gap-2 py-4"
+              }
+            >
+              {steps?.map((item, index) => (
+                <span
+                  key={index}
+                  className={`${index === step ? "w-[30px] bg-red-500" : "w-[10px] bg-white"} h-[10px] rounded-full ${handleContinueDisabled() ? "cursor-not-allowed" : "cursor-pointer"} `}
+                  onClick={() => {
+                    if (!handleContinueDisabled()) {
+                      setStep(index);
+                    }
+                  }}
+                />
+              ))}
+            </Box>
           </Box>
           {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-
         </Grid>
-          <Box className={"w-full flex justify-between items-center gap-2 border-t border-[#808080] p-4"}>
-              <div className={"text-xs"}>Copyright &copy; 2025 byteSense. All rights reserved.</div>
-              <div className={"flex items-center gap-4 text-xs"}>
-                  <a href="https://www.bytesense.ai/privacy-policy" target={"_blank"} >Privacy Policy</a>
-                  <a href={"https://www.bytesense.ai/terms-of-use"} target={"_blank"}>Terms & Condition</a>
-              </div>
-          </Box>
+        <Box
+          className={
+            "w-full flex justify-between items-center gap-2 border-t border-[#808080] p-4"
+          }
+        >
+          <div className={"text-xs"}>
+            Copyright &copy; 2025 byteSense. All rights reserved.
+          </div>
+          <div className={"flex items-center gap-4 text-xs"}>
+            <a href="https://www.bytesense.ai/privacy-policy" target={"_blank"}>
+              Privacy Policy
+            </a>
+            <a href={"https://www.bytesense.ai/terms-of-use"} target={"_blank"}>
+              Terms & Condition
+            </a>
+          </div>
+        </Box>
       </Box>
     </Box>
   );
