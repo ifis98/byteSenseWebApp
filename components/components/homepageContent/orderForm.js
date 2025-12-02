@@ -119,7 +119,12 @@ export default function OrderForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.caseName || !formData.maxUndercut || !formData.passiveSpacer) {
+    // if (!formData.caseName || !formData.maxUndercut || !formData.passiveSpacer) {
+    //   alert("Please complete all required fields.");
+    //   return;
+    // }
+
+    if (!formData.caseName) {
       alert("Please complete all required fields.");
       return;
     }
@@ -140,8 +145,8 @@ export default function OrderForm() {
       caseName: formData.caseName,
       arch:formData.arch,
       type: formData.type,
-      maxUndercut: formData.maxUndercut,
-      passiveSpacer: formData.passiveSpacer,
+      // maxUndercut: formData.maxUndercut,
+      // passiveSpacer: formData.passiveSpacer,
       upperScan: formData.upperScan,
       lowerScan: formData.lowerScan,
       clientName: doctorName,
@@ -190,8 +195,8 @@ export default function OrderForm() {
     formPayload.append("caseName", String(payload.caseName));
     formPayload.append("arch", String(payload.arch));
     formPayload.append("type", String(payload.type));
-    formPayload.append("maxUndercut", String(payload.maxUndercut));
-    formPayload.append("passiveSpacer", String(payload.passiveSpacer));
+    // formPayload.append("maxUndercut", String(payload.maxUndercut));
+    // formPayload.append("passiveSpacer", String(payload.passiveSpacer));
     formPayload.append("clientName", String(payload.clientName));
     formPayload.append("doctor", String(payload.doctor));
     if (payload.instructions) formPayload.append("instructions", String(payload.instructions));
@@ -351,31 +356,31 @@ export default function OrderForm() {
                   </FormControl>
                 </Grid>
 
-                <Grid size={{ xs: 6 }}>
-                  <CustomTextField
-                    required
-                    label="Maximum Undercut (mm)"
-                    name="maxUndercut"
-                    type="number"
-                    inputProps={{ step: "0.01" }}
-                    value={formData.maxUndercut}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
+                {/*<Grid size={{ xs: 6 }}>*/}
+                {/*  <CustomTextField*/}
+                {/*    required*/}
+                {/*    label="Maximum Undercut (mm)"*/}
+                {/*    name="maxUndercut"*/}
+                {/*    type="number"*/}
+                {/*    inputProps={{ step: "0.01" }}*/}
+                {/*    value={formData.maxUndercut}*/}
+                {/*    onChange={handleChange}*/}
+                {/*    fullWidth*/}
+                {/*  />*/}
+                {/*</Grid>*/}
 
-                <Grid size={{ xs: 6 }}>
-                  <CustomTextField
-                    required
-                    label="Passive Spacer (mm)"
-                    name="passiveSpacer"
-                    type="number"
-                    inputProps={{ step: "0.01" }}
-                    value={formData.passiveSpacer}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
+                {/*<Grid size={{ xs: 6 }}>*/}
+                {/*  <CustomTextField*/}
+                {/*    required*/}
+                {/*    label="Passive Spacer (mm)"*/}
+                {/*    name="passiveSpacer"*/}
+                {/*    type="number"*/}
+                {/*    inputProps={{ step: "0.01" }}*/}
+                {/*    value={formData.passiveSpacer}*/}
+                {/*    onChange={handleChange}*/}
+                {/*    fullWidth*/}
+                {/*  />*/}
+                {/*</Grid>*/}
 
                 <Grid size={{ xs: 12 }}>
                   <Typography
@@ -394,14 +399,14 @@ export default function OrderForm() {
                   </Typography>
                 </Grid>
 
-                <Grid size={{ xs: 6 }}>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ fontWeight: 500, color: "white" }}
-                  >
-                    Option 1
-                  </Typography>
-                  <Grid size={{ xs: 12 }} sx={{ paddingY: "8px" }}>
+                {/*<Grid size={{ xs: 12 }}>*/}
+                  {/*<Typography*/}
+                  {/*  variant="subtitle1"*/}
+                  {/*  sx={{ fontWeight: 500, color: "white" }}*/}
+                  {/*>*/}
+                  {/*  Option 1*/}
+                  {/*</Typography>*/}
+                  <Grid size={{ xs: 12, sm: 6 }} sx={{ paddingY: "8px" }}>
                     <Button
                       component="label"
                       variant="outlined"
@@ -435,7 +440,7 @@ export default function OrderForm() {
                     )}
                   </Grid>
 
-                  <Grid size={{ xs: 12 }} sx={{ paddingY: "8px" }}>
+                  <Grid size={{ xs: 12, sm: 6 }} sx={{ paddingY: "8px" }}>
                     <Button
                       component="label"
                       variant="outlined"
@@ -502,34 +507,34 @@ export default function OrderForm() {
                       </Typography>
                     )}
                   </Grid>
-                </Grid>
-                <Grid size={{ xs: 6 }}>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ fontWeight: 500, color: "white" }}
-                  >
-                    Option 2 : Use your Digital Scanning Platform
-                  </Typography>
-                  <List dense sx={{ color: "white", listStyle: "none", pl: 0 }}>
-                    {[
-                      "3Shape",
-                      "iTero",
-                      "Sirona",
-                      "Carestream / Dexis",
-                      "EasyRx",
-                    ].map((platform) => (
-                      <ListItem key={platform} sx={{ py: 0.5 }}>
-                        <Typography sx={{ fontSize: "16px !important" }}>
-                          &#9679;&nbsp;
-                        </Typography>
-                        <ListItemText
-                          primary={platform}
-                          primaryTypographyProps={{ color: "white" }}
-                        />
-                      </ListItem>
-                    ))}
-                  </List>
-                </Grid>
+                {/*</Grid>*/}
+                {/*<Grid size={{ xs: 6 }}>*/}
+                {/*  <Typography*/}
+                {/*    variant="subtitle1"*/}
+                {/*    sx={{ fontWeight: 500, color: "white" }}*/}
+                {/*  >*/}
+                {/*    Option 2 : Use your Digital Scanning Platform*/}
+                {/*  </Typography>*/}
+                {/*  <List dense sx={{ color: "white", listStyle: "none", pl: 0 }}>*/}
+                {/*    {[*/}
+                {/*      "3Shape",*/}
+                {/*      "iTero",*/}
+                {/*      "Sirona",*/}
+                {/*      "Carestream / Dexis",*/}
+                {/*      "EasyRx",*/}
+                {/*    ].map((platform) => (*/}
+                {/*      <ListItem key={platform} sx={{ py: 0.5 }}>*/}
+                {/*        <Typography sx={{ fontSize: "16px !important" }}>*/}
+                {/*          &#9679;&nbsp;*/}
+                {/*        </Typography>*/}
+                {/*        <ListItemText*/}
+                {/*          primary={platform}*/}
+                {/*          primaryTypographyProps={{ color: "white" }}*/}
+                {/*        />*/}
+                {/*      </ListItem>*/}
+                {/*    ))}*/}
+                {/*  </List>*/}
+                {/*</Grid>*/}
 
                 <Grid size={{ xs: 12 }}>
                   <CustomTextField
