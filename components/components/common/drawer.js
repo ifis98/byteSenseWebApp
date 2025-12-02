@@ -237,6 +237,24 @@ const Sidebar = ({ variant = "permanent", drawerOpen, onClick }) => {
               ))}
             </List>
           )}
+          <ListItem
+            key={"/contact_support"}
+            disablePadding
+            onClick={() => handleNavigation("/contact_support")}
+            button
+          >
+            <ListItemButton selected={pathname === "/contact_support"}>
+              <ListItemText
+                primary={"Contact Support"}
+                primaryTypographyProps={{
+                  fontWeight:
+                    pathname === "/contact_support" ? "bold" : "normal",
+                  color:
+                    pathname === "/contact_support" ? "#ef5350" : "inherit",
+                }}
+              />
+            </ListItemButton>
+          </ListItem>
         </div>
       </div>
     </Drawer>
