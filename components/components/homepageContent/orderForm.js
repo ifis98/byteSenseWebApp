@@ -43,6 +43,7 @@ export default function OrderForm() {
     lowerScan: null,
     biteScans: null,
     instructions: "",
+    license: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -106,6 +107,28 @@ export default function OrderForm() {
     return () => window.removeEventListener("resize", resizeCanvasToContainer);
   }, []);
 
+  // Automatically close the ClickUp "first time" popup after the form is submitted
+  // ClickUp's embed script posts messages to the parent window; we listen for those
+  // and close the dialog when we receive a message from a ClickUp origin.
+  useEffect(() => {
+    if (!showFirstTimePopup) return;
+
+    const handleMessage = (event) => {
+      if (
+        typeof event.origin === "string" &&
+        event.origin.includes("clickup.com")
+      ) {
+        setShowFirstTimePopup(false);
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem("bytesense_order_popup_seen", "false");
+        }
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, [showFirstTimePopup]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -141,9 +164,9 @@ export default function OrderForm() {
 
     setLoading(true);
 
-    const payload= {
+    const payload = {
       caseName: formData.caseName,
-      arch:formData.arch,
+      arch: formData.arch,
       type: formData.type,
       // maxUndercut: formData.maxUndercut,
       // passiveSpacer: formData.passiveSpacer,
@@ -152,8 +175,9 @@ export default function OrderForm() {
       clientName: doctorName,
       doctor: state?.dentistDetail?.profile?.user || "",
       biteScans: formData.biteScans,
-      instructions:formData.instructions
-    }
+      instructions: formData.instructions,
+      license: formData.license,
+    };
 
     try {
       let blob;
@@ -161,32 +185,36 @@ export default function OrderForm() {
       if (selectedSignature) {
         const dataUrl = selectedSignature.dataUrl;
 
-        if (!dataUrl || !dataUrl.startsWith('data:image/')) {
-          throw new Error('Invalid signature data URL');
+        if (!dataUrl || !dataUrl.startsWith("data:image/")) {
+          throw new Error("Invalid signature data URL");
         }
 
         const response = await fetch(dataUrl);
         if (!response.ok) {
-          throw new Error('Failed to fetch signature data');
+          throw new Error("Failed to fetch signature data");
         }
         blob = await response.blob();
       } else {
         const canvas = sigCanvas.current.getTrimmedCanvas();
         blob = await new Promise((resolve, reject) => {
-          canvas.toBlob((blob) => {
-            if (blob) {
-              resolve(blob);
-            } else {
-              reject(new Error('Failed to convert canvas to blob'));
-            }
-          }, 'image/png', 0.9);
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                resolve(blob);
+              } else {
+                reject(new Error("Failed to convert canvas to blob"));
+              }
+            },
+            "image/png",
+            0.9,
+          );
         });
       }
       blob.name = "signature.png";
       payload.signature = blob;
     } catch (err) {
-      console.error('Failed to attach signature:', err);
-      alert('Unable to process signature. Please try again.');
+      console.error("Failed to attach signature:", err);
+      alert("Unable to process signature. Please try again.");
       setLoading(false);
       return;
     }
@@ -199,7 +227,9 @@ export default function OrderForm() {
     // formPayload.append("passiveSpacer", String(payload.passiveSpacer));
     formPayload.append("clientName", String(payload.clientName));
     formPayload.append("doctor", String(payload.doctor));
-    if (payload.instructions) formPayload.append("instructions", String(payload.instructions));
+    formPayload.append("license", String(payload.license));
+    if (payload.instructions)
+      formPayload.append("instructions", String(payload.instructions));
     // Files
     if (payload.upperScan) {
       formPayload.append(
@@ -223,26 +253,30 @@ export default function OrderForm() {
       );
     }
     // Signature
-    formPayload.append("signature", payload.signature, payload.signature?.name || "signature.png");
+    formPayload.append(
+      "signature",
+      payload.signature,
+      payload.signature?.name || "signature.png",
+    );
 
-
-    console.log('formPayload: ',formPayload);
+    console.log("formPayload: ", formPayload);
 
     try {
       doctor
-          // .doctorRequests()
-          // .addOrder(payload)
-          // .then((res) => {
-          //   // window.location.href = 'https://buy.stripe.com/3cI9AU7Cb9DFcS8gsU53O08'; // Redirect to Stripe payment link
-          // })
-          // .catch((e) => {
-          //   alert("Unable to place order. Please try again.");
-          //   setLoading(false);
-          // });
+        // .doctorRequests()
+        // .addOrder(payload)
+        // .then((res) => {
+        //   // window.location.href = 'https://buy.stripe.com/3cI9AU7Cb9DFcS8gsU53O08'; // Redirect to Stripe payment link
+        // })
+        // .catch((e) => {
+        //   alert("Unable to place order. Please try again.");
+        //   setLoading(false);
+        // });
         .doctorRequests()
         .addOrder(formPayload)
         .then((res) => {
-          window.location.href = 'https://buy.stripe.com/3cI9AU7Cb9DFcS8gsU53O08';
+          // window.location.href =
+          //   "https://buy.stripe.com/3cI9AU7Cb9DFcS8gsU53O08";
         })
         .catch((e) => {
           alert("Unable to place order. Please try again.");
@@ -253,7 +287,6 @@ export default function OrderForm() {
       alert("Something went wrong. Please try again.");
       setLoading(false);
     }
-
   };
 
   const getFileName = (file, maxLength = 20) => {
@@ -400,113 +433,113 @@ export default function OrderForm() {
                 </Grid>
 
                 {/*<Grid size={{ xs: 12 }}>*/}
-                  {/*<Typography*/}
-                  {/*  variant="subtitle1"*/}
-                  {/*  sx={{ fontWeight: 500, color: "white" }}*/}
-                  {/*>*/}
-                  {/*  Option 1*/}
-                  {/*</Typography>*/}
-                  <Grid size={{ xs: 12, sm: 6 }} sx={{ paddingY: "8px" }}>
-                    <Button
-                      component="label"
-                      variant="outlined"
-                      color="error"
-                      fullWidth
-                      sx={{ height: 56, textTransform: "none" }}
+                {/*<Typography*/}
+                {/*  variant="subtitle1"*/}
+                {/*  sx={{ fontWeight: 500, color: "white" }}*/}
+                {/*>*/}
+                {/*  Option 1*/}
+                {/*</Typography>*/}
+                <Grid size={{ xs: 12, sm: 6 }} sx={{ paddingY: "8px" }}>
+                  <Button
+                    component="label"
+                    variant="outlined"
+                    color="error"
+                    fullWidth
+                    sx={{ height: 56, textTransform: "none" }}
+                  >
+                    Upload Upper Scan STL
+                    <input
+                      hidden
+                      type="file"
+                      accept=".stl"
+                      name="upperScan"
+                      onChange={handleFileChange}
+                    />
+                  </Button>
+                  {formData.upperScan && (
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        mt: 1,
+                        display: "block",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        color: "white",
+                      }}
                     >
-                      Upload Upper Scan STL
-                      <input
-                        hidden
-                        type="file"
-                        accept=".stl"
-                        name="upperScan"
-                        onChange={handleFileChange}
-                      />
-                    </Button>
-                    {formData.upperScan && (
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          mt: 1,
-                          display: "block",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                          color: "white",
-                        }}
-                      >
-                        Selected: {getFileName(formData.upperScan, 30)}
-                      </Typography>
-                    )}
-                  </Grid>
+                      Selected: {getFileName(formData.upperScan, 30)}
+                    </Typography>
+                  )}
+                </Grid>
 
-                  <Grid size={{ xs: 12, sm: 6 }} sx={{ paddingY: "8px" }}>
-                    <Button
-                      component="label"
-                      variant="outlined"
-                      color="error"
-                      fullWidth
-                      sx={{ height: 56, textTransform: "none" }}
+                <Grid size={{ xs: 12, sm: 6 }} sx={{ paddingY: "8px" }}>
+                  <Button
+                    component="label"
+                    variant="outlined"
+                    color="error"
+                    fullWidth
+                    sx={{ height: 56, textTransform: "none" }}
+                  >
+                    Upload Lower Scan STL
+                    <input
+                      hidden
+                      type="file"
+                      accept=".stl"
+                      name="lowerScan"
+                      onChange={handleFileChange}
+                    />
+                  </Button>
+                  {formData.lowerScan && (
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        mt: 1,
+                        display: "block",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        color: "white",
+                      }}
                     >
-                      Upload Lower Scan STL
-                      <input
-                        hidden
-                        type="file"
-                        accept=".stl"
-                        name="lowerScan"
-                        onChange={handleFileChange}
-                      />
-                    </Button>
-                    {formData.lowerScan && (
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          mt: 1,
-                          display: "block",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                          color: "white",
-                        }}
-                      >
-                        Selected: {getFileName(formData.lowerScan, 30)}
-                      </Typography>
-                    )}
-                  </Grid>
+                      Selected: {getFileName(formData.lowerScan, 30)}
+                    </Typography>
+                  )}
+                </Grid>
 
-                  <Grid size={{ xs: 12 }} sx={{ paddingY: "8px" }}>
-                    <Button
-                      component="label"
-                      variant="outlined"
-                      color="error"
-                      fullWidth
-                      sx={{ height: 56, textTransform: "none" }}
+                <Grid size={{ xs: 12 }} sx={{ paddingY: "8px" }}>
+                  <Button
+                    component="label"
+                    variant="outlined"
+                    color="error"
+                    fullWidth
+                    sx={{ height: 56, textTransform: "none" }}
+                  >
+                    Upload Bite Scans
+                    <input
+                      hidden
+                      type="file"
+                      accept=".stl"
+                      name="biteScans"
+                      onChange={handleFileChange}
+                    />
+                  </Button>
+                  {formData.biteScans && (
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        mt: 1,
+                        display: "block",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        color: "white",
+                      }}
                     >
-                      Upload Bite Scans
-                      <input
-                        hidden
-                        type="file"
-                        accept=".stl"
-                        name="biteScans"
-                        onChange={handleFileChange}
-                      />
-                    </Button>
-                    {formData.biteScans && (
-                      <Typography
-                        variant="caption"
-                        sx={{
-                          mt: 1,
-                          display: "block",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                          color: "white",
-                        }}
-                      >
-                        Selected: {getFileName(formData.biteScans, 30)}
-                      </Typography>
-                    )}
-                  </Grid>
+                      Selected: {getFileName(formData.biteScans, 30)}
+                    </Typography>
+                  )}
+                </Grid>
                 {/*</Grid>*/}
                 {/*<Grid size={{ xs: 6 }}>*/}
                 {/*  <Typography*/}
@@ -578,13 +611,16 @@ export default function OrderForm() {
                           ))}
                         </CustomSelect>
                       </FormControl>
-                      {selectedSignatureId && (
+                    </Grid>
+                    <Grid size={{ xs: 6, md: 6 }}>
+                      {selectedSignatureId ? (
                         <Box
                           sx={{
-                            mt: 2,
+                            // mt: 2,
                             p: 2,
                             border: "1px solid #444",
                             borderRadius: 1,
+                            maxWidth: "100%",
                           }}
                         >
                           <Typography
@@ -613,10 +649,7 @@ export default function OrderForm() {
                             </Button>
                           </Box>
                         </Box>
-                      )}
-                    </Grid>
-                    {selectedSignatureId === "" && (
-                      <Grid size={{ xs: 6, md: 6 }}>
+                      ) : (
                         <Box
                           ref={sigContainerRef}
                           sx={{
@@ -706,8 +739,18 @@ export default function OrderForm() {
                             </Button>
                           </Box>
                         </Box>
-                      </Grid>
-                    )}
+                      )}
+                    </Grid>
+                    <Grid size={{ xs: 6, md: 6 }}>
+                      <CustomTextField
+                        required
+                        label="License"
+                        name="license"
+                        value={formData.license}
+                        onChange={handleChange}
+                        fullWidth
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
 
