@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { combineReducers } from "redux";
-// import { createSelector } from 'reselect';
+// Reserved import for selectors if memoization is reintroduced later
 import pageReducer from "./PageReducer";
 
-// Next.js adaptation note: This reducer needs to be used within a client component
+// In Next.js, this combined reducer is consumed only from client components
 
 export default combineReducers({
   page: pageReducer,

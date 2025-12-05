@@ -25,10 +25,8 @@ const navItems = [
   { href: "/", icon: <HomeIcon />, label: "Dashboard" },
   // { href: '/order', icon: <GroupAddIcon />, label: 'Order' },
   { href: "/order-list", icon: <GroupAddIcon />, label: "Order List" },
-  // NOTE: Patient List and Consumer Request pages are intentionally hidden from the
-  // sidebar for now. Please keep these entries commented out so the pages can be
-  // quickly reactivated later and so automated cleanup tools or AI coders do not
-  // delete them as unused code.
+  // Patient List and Consumer Request links remain commented so they can be re-enabled quickly
+  // without appearing in the sidebar today or being deleted as "unused" during refactors.
   // { href: "/list", icon: <PersonIcon />, label: "Patient List" },
   // { href: "/request", icon: <GroupAddIcon />, label: "Consumer Request" },
   // { href: '/chat', icon: <ChatBubbleOutlineIcon />, label: 'Chat Room' },
@@ -61,9 +59,7 @@ const Sidebar = ({ variant = "permanent", drawerOpen, onClick }) => {
   }, []);
 
   const handleNavigation = (href) => {
-    // Use router.push to force navigation.
-    // This ensures that if the target URL is the same path but with a different or missing hash,
-    // the navigation will trigger a re-render.
+    // Use router.push so navigation triggers even when only the hash portion differs
     router.push(href);
   };
 

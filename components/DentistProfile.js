@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Nav2 from "./components/common/nav2";
 import Profile from "./components/profile/Profile";
 
-import styles from "../styles/DentistProfile.module.scss"; // adjust path if needed
+import styles from "../styles/DentistProfile.module.scss"; // Styles for the profile layout and navigation shell
 
 
 

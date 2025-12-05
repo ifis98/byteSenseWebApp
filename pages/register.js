@@ -65,10 +65,9 @@ const Register = () => {
     setForm((prev) => ({ ...prev, [name]: checked }));
   };
 
-  // Shared validation for step 1 (Create your account),
-  // mirroring backend rules in signupValidator.js
+  // Validate "Create your account" fields using the same rules as signupValidator.js on the server
   const validateAccountStep = () => {
-    // Required fields
+    // Confirm all required account fields are present
     if (
       !form.fName ||
       !form.lName ||
@@ -85,12 +84,12 @@ const Register = () => {
       return "Email is invalid. Please enter a valid email address.";
     }
 
-    // Backend requires password length >= 4
+    // Enforce the backend's minimum password length of 4 characters
     if (form.password.length < 4) {
       return "Password must be at least 4 characters.";
     }
 
-    // Backend also validates that password === confirmPassword
+    // Match the backend rule that password and confirmation must be identical
     if (form.password !== form.confirmPassword) {
       return "Password and confirm password must match.";
     }
@@ -102,7 +101,7 @@ const Register = () => {
     e.preventDefault();
     setErrorMessage("");
 
-    // Mirror backend validations from signupValidator.js before calling API
+    // Run the same validations the backend performs before sending the request
     const validationError = validateAccountStep();
     if (validationError) {
       return setErrorMessage(validationError);
@@ -136,7 +135,7 @@ const Register = () => {
   const [step, setStep] = useState(0);
 
   const handleNext = () => {
-    // Prevent navigation to Practice address if step 1 inputs are invalid
+    // Block advancing to "Practice address" when account details are invalid
     if (handleContinueDisabled()) {
       return;
     }
@@ -144,7 +143,7 @@ const Register = () => {
   };
   const handleBack = () => setStep(step - 1);
   const handleContinueDisabled = () => {
-    // Reuse shared validation: disabled when there is any validation error
+    // Disable the Continue button whenever the shared validator reports an error
     return !!validateAccountStep();
   };
   const handlerSignupDisabled = () => {

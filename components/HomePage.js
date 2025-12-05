@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { usePathname, useRouter } from "next/navigation"; // ✅ for client components
+import { usePathname, useRouter } from "next/navigation"; // Client-side routing hooks used throughout the dashboard
 import HomePageNav from "./components/common/nav";
 import Sidebar from "./components/common/drawer";
 import PatientRequest from "./components/homepageContent/patientRequest";
@@ -58,7 +58,7 @@ function HomePage() {
     };
   }, []);
 
-  if (!authChecked) return null; // Wait for token check before rendering
+  if (!authChecked) return null; // Avoid rendering UI until we know whether the user has a token
 
   const currentURL = typeof window !== "undefined" ? window.location.href : "";
   const currentHash = currentURL.split("#")[1]
@@ -119,4 +119,4 @@ function HomePage() {
 
 export default HomePage;
 
-//note
+// Keep placeholder comment to prevent automated tools from trimming the trailing newline
