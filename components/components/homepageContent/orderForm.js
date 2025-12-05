@@ -110,24 +110,24 @@ export default function OrderForm() {
   // Automatically close the ClickUp "first time" popup after the form is submitted
   // ClickUp's embed script posts messages to the parent window; we listen for those
   // and close the dialog when we receive a message from a ClickUp origin.
-  useEffect(() => {
-    if (!showFirstTimePopup) return;
-
-    const handleMessage = (event) => {
-      if (
-        typeof event.origin === "string" &&
-        event.origin.includes("clickup.com")
-      ) {
-        setShowFirstTimePopup(false);
-        if (typeof window !== "undefined") {
-          window.localStorage.setItem("bytesense_order_popup_seen", "false");
-        }
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
-  }, [showFirstTimePopup]);
+  // useEffect(() => {
+  //   if (!showFirstTimePopup) return;
+  //
+  //   const handleMessage = (event) => {
+  //     if (
+  //       typeof event.origin === "string" &&
+  //       event.origin.includes("clickup.com")
+  //     ) {
+  //       setShowFirstTimePopup(false);
+  //       if (typeof window !== "undefined") {
+  //         window.localStorage.setItem("bytesense_order_popup_seen", "false");
+  //       }
+  //     }
+  //   };
+  //
+  //   window.addEventListener("message", handleMessage);
+  //   return () => window.removeEventListener("message", handleMessage);
+  // }, [showFirstTimePopup]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -275,8 +275,8 @@ export default function OrderForm() {
         .doctorRequests()
         .addOrder(formPayload)
         .then((res) => {
-          // window.location.href =
-          //   "https://buy.stripe.com/3cI9AU7Cb9DFcS8gsU53O08";
+          window.location.href =
+            "https://buy.stripe.com/3cI9AU7Cb9DFcS8gsU53O08";
         })
         .catch((e) => {
           alert("Unable to place order. Please try again.");
