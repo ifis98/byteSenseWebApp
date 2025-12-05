@@ -52,10 +52,10 @@ export default function OrderForm() {
   const sigContainerRef = useRef(null);
 
   // E-signature state
-  const [savedSignatures, setSavedSignatures] = useState([]); // [{ id, name, dataUrl }]
+  const [savedSignatures, setSavedSignatures] = useState([]); // Persisted signatures in the format: { id, name, dataUrl }
   const [selectedSignatureId, setSelectedSignatureId] = useState("");
 
-  // First time user popup state
+  // Tracks whether the introductory popup should display for first-time users
   const [showFirstTimePopup, setShowFirstTimePopup] = useState(false);
 
   const state = useSelector((state) => state.page);
@@ -77,7 +77,7 @@ export default function OrderForm() {
     };
 
     fetchDoctorName();
-    // Load saved signatures from localStorage
+    // Restore any previously saved signatures from localStorage
     try {
       const raw =
         typeof window !== "undefined"
@@ -90,7 +90,7 @@ export default function OrderForm() {
     } catch (e) {
       console.warn("Unable to load saved signatures");
     }
-    // Resize signature canvas to container width
+    // Resize the signature canvas so it always matches the container width
     const resizeCanvasToContainer = () => {
       if (!sigCanvas.current || !sigContainerRef.current) return;
       const containerWidth = sigContainerRef.current.clientWidth || 600;
@@ -152,7 +152,7 @@ export default function OrderForm() {
       return;
     }
 
-    // Ensure a signature is provided (selected or drawn)
+    // Require either a stored signature or a newly drawn one before submission
     const isCanvasEmpty = !sigCanvas.current || sigCanvas.current.isEmpty();
     const selectedSignature = savedSignatures.find(
       (s) => s.id === selectedSignatureId,

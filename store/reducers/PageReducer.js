@@ -8,7 +8,7 @@ import {
   UPDATE_PATIENT_ID
 } from '../actions/actionTypes/ActionTypes';
 
-// Next.js adaptation note: This reducer needs to be used within a client component
+// This reducer bundle is intended for client-side usage within Next.js pages
 
 const patientId = (state = {}, { type, payload }) => {
   switch (type) {
