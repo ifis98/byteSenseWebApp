@@ -35,7 +35,7 @@
     "lodash": "4.17.21",
     "material-react-table": "^3.2.1",
     "moment": "2.29.4",
-    "next": "15.2.4",
+    "next": "15.2.6",
     "postcss": "^8.5.3",
     "react": "^19.0.0",
     "react-bootstrap": "2.9.1",
@@ -63,7 +63,7 @@
     "@tailwindcss/postcss": "^4.1.7",
     "@types/node": "22.15.18",
     "eslint": "^9",
-    "eslint-config-next": "15.2.4",
+    "eslint-config-next": "15.2.6",
     "sass": "1.69.5",
     "tailwindcss": "^4.1.7",
     "typescript": "5.8.3"
