@@ -168,15 +168,16 @@ const Profile = () => {
         </Box>
       ) : (
         <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
-            <Card sx={{ p: 3, background: '#1d1d1d' }}>
+          {/*<Grid item xs={12} md={4}>*/}
+          <Grid item size={2}>
+            <Card sx={{ p: 3, background: '#1d1d1d', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', gap:2 }}>
               <Typography variant="subtitle1" fontWeight={500} sx={{ color: 'white' }}>
                 Profile Photo
               </Typography>
               <Avatar
                 src={imgPresent ? img : '/tempLogo.png'}
                 alt="Profile"
-                sx={{ width: 100, height: 100, mt: 2 }}
+                sx={{ width: 150, height: 150 }}
               />
               <input
                 ref={inputRef}
@@ -185,25 +186,24 @@ const Profile = () => {
                 type="file"
                 onChange={handleFileChange}
               />
-              <Box mt={2}>
+              <Box>
                 {!fileName ? (
                   <Button variant="contained" color="error" onClick={handleUploadClick}>
                     Upload Image
                   </Button>
                 ) : (
-                  <>
+                  <Box display="flex" alignItems="center" justifyContent="space-between" gap={2}>
                     <Button variant="contained" color="error" onClick={saveImage}>
                       Save
                     </Button>
                     <Button
                       variant="outlined"
                       color="error"
-                      sx={{ ml: 2 }}
                       onClick={fetchData}
                     >
                       Cancel
                     </Button>
-                  </>
+                  </Box>
                 )}
               </Box>
               {fileName && (
@@ -219,7 +219,8 @@ const Profile = () => {
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={8}>
+          {/*<Grid item xs={12} md={8}>*/}
+          <Grid item size={10}>
             <Card sx={{ p: 3, background: '#1d1d1d' }}>
               <Box display="flex" justifyContent="flex-end">
                 {!editMode && (
@@ -230,7 +231,7 @@ const Profile = () => {
               </Box>
 
               <Grid container spacing={2} mt={1}>
-                <Grid item xs={12}>
+                <Grid item size={{xs: 12}} >
                   <CustomTextField
                     label="Observer ID"
                     name="userInfo"
@@ -239,7 +240,7 @@ const Profile = () => {
                     InputProps={{ readOnly: true }}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{xs:12, sm:6}}>
                   <CustomTextField
                     label="First Name"
                     name="firstName"
@@ -249,7 +250,7 @@ const Profile = () => {
                     disabled={!editMode}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{xs:12, sm:6}}>
                   <CustomTextField
                     label="Last Name"
                     name="lastName"
@@ -259,7 +260,7 @@ const Profile = () => {
                     disabled={!editMode}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{xs:12, sm:6}}>
                   <CustomTextField
                     label="DOB (MM/DD/YYYY)"
                     name="DOB"
@@ -269,7 +270,7 @@ const Profile = () => {
                     disabled={!editMode}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{xs:12, sm:6}}>
                   <CustomTextField
                     label="Gender"
                     name="gender"
@@ -279,7 +280,7 @@ const Profile = () => {
                     disabled={!editMode}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item size={{xs:12}}>
                   <CustomTextField
                     label="Bio"
                     name="bio"
@@ -291,7 +292,7 @@ const Profile = () => {
                     disabled={!editMode}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item size={{xs:12}}>
                   <CustomTextField
                     label="Address Line 1"
                     name="addressLine1"
@@ -301,7 +302,17 @@ const Profile = () => {
                     disabled={!editMode}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item size={{xs:12}}>
+                  <CustomTextField
+                      label="Address Line 2"
+                      name="addressLine2"
+                      value={form.addressLine2}
+                      onChange={handleInputChange}
+                      fullWidth
+                      disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{xs:12, sm:4}}>
                   <CustomTextField
                     label="City"
                     name="city"
@@ -311,7 +322,7 @@ const Profile = () => {
                     disabled={!editMode}
                   />
                 </Grid>
-                <Grid item xs={12} sm={3}>
+                <Grid item size={{xs:12, sm:4}}>
                   <CustomTextField
                     label="State"
                     name="state"
@@ -321,7 +332,7 @@ const Profile = () => {
                     disabled={!editMode}
                   />
                 </Grid>
-                <Grid item xs={6} sm={1.5}>
+                <Grid item size={{xs:12, sm:4}}>
                   <CustomTextField
                     label="Zip"
                     name="zipCode"
@@ -331,16 +342,7 @@ const Profile = () => {
                     disabled={!editMode}
                   />
                 </Grid>
-                <Grid item xs={6} sm={1.5}>
-                  <CustomTextField
-                    label="Address Line 2"
-                    name="addressLine2"
-                    value={form.addressLine2}
-                    onChange={handleInputChange}
-                    fullWidth
-                    disabled={!editMode}
-                  />
-                </Grid>
+
               </Grid>
 
               {editMode && (

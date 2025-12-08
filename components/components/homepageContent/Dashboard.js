@@ -25,7 +25,7 @@ const Dashboard = () => {
           style={{
             position: "relative",
             width: "100%",
-            paddingTop: "56.25%",
+            paddingTop: "40%",
             border: "1px solid #000",
             borderRadius: "8px",
             overflow: "hidden",

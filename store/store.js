@@ -1,7 +1,7 @@
 'use client'
 
 import { applyMiddleware, createStore, compose } from 'redux';
-import thunkMiddleware from 'redux-thunk'; // Changed import
+import thunkMiddleware from 'redux-thunk'; // Middleware for dispatching async actions
 import rootReducer from './reducers';
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from "redux-persist/lib/storage"
@@ -13,7 +13,7 @@ const persistConfig = {
   storage,
 }
 const persistedReducer = persistReducer(persistConfig, rootReducer)
-const middlewareArray = [thunkMiddleware]; // Using thunkMiddleware
+const middlewareArray = [thunkMiddleware]; // Configure store with thunk as the sole middleware
 const store = createStore(
   persistedReducer,
   initialState,

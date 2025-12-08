@@ -15,38 +15,36 @@ const zeroArray = [];
 const halfsec = 500;
 
 function pair(pressure, time){
-    //let date = new Date(time)
     return {
         gr: pressure,
         ts: new Date (time)
     };
 };
 
-//testing new
-//change to date objects
+// Utility harness below exercises fillZero with various timestamp gaps using Date objects
 
 
-//Test 1: should create 4 new arrays before last index
+// Test 1: expect four zero-filled arrays before the final reading
 console.log("TEST 1: \n")
 var dataArray1 = [pair([1],1651535597580), pair([1],1651535597585),pair([1],1651535597590),pair([1],1651535599594)];
 console.log(analyze(dataArray1));
 console.log("\n")
-//Test 2: Should create no new arrays
+// Test 2: consecutive readings are within half-second, so no padding
 console.log("TEST 2: \n")
 var dataArray2 = [pair([1,2],1651535597580), pair([1,2],1651535597585),pair([1,2],1651535597590),pair([1,2],1651535597595)];
 console.log(analyze(dataArray2));
 console.log("\n")
-//Test 3: Should create 1 array after index 0
+// Test 3: a single half-second gap should produce one padded entry
 console.log("TEST 3: \n")
 var dataArray3 = [pair([1,2],1651535599999), pair([1,2],1651535600500),pair([1,2],1651535600510),pair([1,2],1651535600511)];
 console.log(analyze(dataArray3));
 console.log("\n")
-//Test 4: Should create an array between each point
+// Test 4: every interval exceeds half a second, so each gap is padded
 console.log("TEST 4: \n")
 var dataArray4 = [pair([1,2],1651535600500), pair([1,2],1651535601001),pair([1,2],1651535601502),pair([1,2],1651535602003)];
 console.log(analyze(dataArray4));
 console.log("\n")
-//Test 5: Should create 2 arrays between each point
+// Test 5: larger gaps require two padded arrays between readings
 console.log("TEST 5: \n")
 var dataArray5 = [pair([1,2],1651535600500), pair([1,2],1651535601502),pair([1,2],1651535602504),pair([1,2],1651535603507)];
 console.log(analyze(dataArray5));
@@ -56,10 +54,10 @@ console.log("\n")
 
 console.log(zeroArray);
 
-// .5 seconds
+// Half-second gap threshold in milliseconds
 
 
-//given function
+// Fill gaps between readings and run clustering
 
 export function analyze(arr){
     return findEpisodes(fillZero(arr))
@@ -67,17 +65,17 @@ export function analyze(arr){
 
 export function fillZero(arr){
     var fixedArr = [];
-    //grab first array
+    // Seed with the first timestamp to establish a starting point
     var prevtime = new Date(arr[0].ts);
     var currtime = new Date(arr[1].ts);
     prevtime = prevtime.getTime();
     currtime = currtime.getTime();
-    //create zero array
+    // Prepare reusable arrays for padding and normalization
     var zeroLen = arr[0].gr.length;
     var zeroArray = createArray(zeroLen);
     var oneArray = createArray(zeroLen);
     oneArray.fill(1)
-    //loop through array
+    // Walk the remaining data, inserting zero arrays wherever gaps exist
     fixedArr.push(pair(oneArray,new Date(prevtime)))
     for(let i = 1; i < arr.length; i++) {
          prevtime = new Date(arr[i-1].ts);
@@ -86,11 +84,11 @@ export function fillZero(arr){
         currtime = currtime.getTime();
         const diff = currtime - prevtime;
         const arraysToAdd = Math.trunc(diff/halfsec);
-        //if there is more than a half second of space
+        // Only pad when there is more than a half-second gap
         
         if (diff >  halfsec){
            
-        //add a zero array at every half second since prevtime
+        // Insert zero arrays at each half-second increment from the previous timestamp
             var temp = prevtime+ halfsec;
            // var date = new Date (temp);
             for (let j = 0; j < arraysToAdd; j++){
@@ -110,17 +108,17 @@ export function fillZero(arr){
 
 export function fillZeroRaw(arr){
     var fixedArr = [];
-    //grab first array
+    // Seed with the first timestamp to establish a starting point
     var prevtime = new Date(arr[0].ts);
     var currtime = new Date(arr[1].ts);
     prevtime = prevtime.getTime();
     currtime = currtime.getTime();
-    //create zero array
+    // Prepare reusable arrays for padding and normalization
     var zeroLen = arr[1].gr.length;
     var zeroArray = createArray(zeroLen);
     var oneArray = createArray(zeroLen);
     oneArray.fill(1)
-    //loop through array
+    // Walk the remaining data, inserting zero arrays wherever gaps exist
     fixedArr.push(pair(arr[0].gr,new Date(prevtime)))
     for(let i = 1; i < arr.length; i++) {
         prevtime = new Date(arr[i-1].ts);
@@ -129,11 +127,11 @@ export function fillZeroRaw(arr){
         currtime = currtime.getTime();
         const diff = currtime - prevtime;
         const arraysToAdd = Math.trunc(diff/halfsec);
-        //if there is more than a half second of space
+        // Only pad when there is more than a half-second gap
         
         if (diff >  halfsec){
            
-        //add a zero array at every half second since prevtime
+        // Insert zero arrays at each half-second increment from the previous timestamp
             var temp = prevtime+ halfsec;
            // var date = new Date (temp);
             for (let j = 0; j < arraysToAdd; j++){
