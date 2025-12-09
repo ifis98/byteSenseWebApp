@@ -234,22 +234,20 @@ const Sidebar = ({ variant = "permanent", drawerOpen, onClick }) => {
             </List>
           )}
           <ListItem
-            key={"/contact_support"}
+            key={"contact_support"}
             disablePadding
-            onClick={() => handleNavigation("/contact_support")}
+            onClick={() =>
+              window.open(
+                "/api/proxy?url=https://tawk.to/chat/691e1e6b3c3c13194fe65a35/1jaeqdl1b",
+                "_blank",
+              )
+            }
             button
           >
-            <ListItemButton selected={pathname === "/contact_support"}>
-              <ListItemText
-                primary={"Contact Support"}
-                primaryTypographyProps={{
-                  fontWeight:
-                    pathname === "/contact_support" ? "bold" : "normal",
-                  color:
-                    pathname === "/contact_support" ? "#ef5350" : "inherit",
-                }}
-              />
-            </ListItemButton>
+            <ListItemText
+              primary={"Contact Support"}
+              sx={{ cursor: "pointer" }}
+            />
           </ListItem>
         </div>
       </div>

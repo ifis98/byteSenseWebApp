@@ -14,7 +14,6 @@ import PreorderSuccess from "./components/homepageContent/preorderSuccess";
 
 import styles from "../styles/HomePage.module.scss";
 import FAQ from "./components/homepageContent/FAQ";
-import ContactSupport from "./components/homepageContent/ContactSupport";
 import ConsumerFAQ from "./components/homepageContent/ConsumerFAQ";
 import OfficeFAQ from "./components/homepageContent/OfficeFAQ";
 import ProductInformation from "./components/homepageContent/ProductInformation";
@@ -95,7 +94,6 @@ function HomePage() {
     if (path === "/policies") return <Policies />;
     if (path === "/lab_slip") return <LabSlip />;
     // if (path === "/staff_training") return <StaffTraining />;
-    if (path === "/contact_support") return <ContactSupport />;
     return <ComingSoon />;
   };
   const closeDrawer = () => {
