@@ -41,41 +41,41 @@ const OrderList = ({ setIsLoading }) => {
         ),
       },
       { accessorKey: "status", header: "Status" },
-      {
-        accessorKey: "design",
-        header: "Design",
-        Cell: ({ row }) => (
-          <Link
-            underline="hover"
-            sx={{ color: "error.main" }} // 🔴 red link
-            href={"https://app.bytesense.ai/"}
-            target={"_blank"}
-          >
-            Design
-          </Link>
-        ),
-      },
-      {
-        accessorKey: "-",
-        header: "Action",
-        Cell: ({ row }) => (
-          <Button
-            variant="contained"
-            color="error"
-            size="small"
-            sx={{
-              textTransform: "uppercase",
-            }}
-            disabled={true}
-            onClick={(e) => {
-              e.stopPropagation(); // Prevent row click
-              // Example: show modal or perform action
-            }}
-          >
-            Approve
-          </Button>
-        ),
-      },
+      // {
+      //   accessorKey: "design",
+      //   header: "Design",
+      //   Cell: ({ row }) => (
+      //     <Link
+      //       underline="hover"
+      //       sx={{ color: "error.main" }} // 🔴 red link
+      //       href={"https://app.bytesense.ai/"}
+      //       target={"_blank"}
+      //     >
+      //       Design
+      //     </Link>
+      //   ),
+      // },
+      // {
+      //   accessorKey: "-",
+      //   header: "Action",
+      //   Cell: ({ row }) => (
+      //     <Button
+      //       variant="contained"
+      //       color="error"
+      //       size="small"
+      //       sx={{
+      //         textTransform: "uppercase",
+      //       }}
+      //       disabled={true}
+      //       onClick={(e) => {
+      //         e.stopPropagation(); // Prevent row click
+      //         // Example: show modal or perform action
+      //       }}
+      //     >
+      //       Approve
+      //     </Button>
+      //   ),
+      // },
     ],
     [orders]
   );
