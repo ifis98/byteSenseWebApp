@@ -17,11 +17,11 @@ import FAQ from "./components/homepageContent/FAQ";
 import ContactSupport from "./components/homepageContent/ContactSupport";
 import ConsumerFAQ from "./components/homepageContent/ConsumerFAQ";
 import OfficeFAQ from "./components/homepageContent/OfficeFAQ";
-import StaffTraining from "./components/homepageContent/StaffTraining";
 import ProductInformation from "./components/homepageContent/ProductInformation";
 import SalesMaterial from "./components/homepageContent/SalesMaterial";
 import Policies from "./components/homepageContent/Policies";
 import LabSlip from "./components/homepageContent/LabSlip";
+// import StaffTraining from "./components/homepageContent/StaffTraining";
 import Dashboard from "./components/homepageContent/Dashboard";
 import OrderList from "./components/homepageContent/orderList";
 
@@ -90,11 +90,11 @@ function HomePage() {
     if (path === "/faq") return <FAQ />;
     if (path === "/consumer") return <ConsumerFAQ />;
     if (path === "/office") return <OfficeFAQ />;
-    if (path === "/staff_training") return <StaffTraining />;
     if (path === "/product_information") return <ProductInformation />;
     if (path === "/sales_material") return <SalesMaterial />;
     if (path === "/policies") return <Policies />;
     if (path === "/lab_slip") return <LabSlip />;
+    // if (path === "/staff_training") return <StaffTraining />;
     if (path === "/contact_support") return <ContactSupport />;
     return <ComingSoon />;
   };
