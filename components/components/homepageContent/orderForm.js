@@ -152,6 +152,11 @@ export default function OrderForm() {
       return;
     }
 
+    if (!formData.upperScan || !formData.lowerScan) {
+      alert("Please upload both upper and lower scan STLs.");
+      return;
+    }
+
     // Require either a stored signature or a newly drawn one before submission
     const isCanvasEmpty = !sigCanvas.current || sigCanvas.current.isEmpty();
     const selectedSignature = savedSignatures.find(
@@ -447,7 +452,7 @@ export default function OrderForm() {
                     fullWidth
                     sx={{ height: 56, textTransform: "none" }}
                   >
-                    Upload Upper Scan STL
+                    Upload Upper Scan STL (Required)
                     <input
                       hidden
                       type="file"
@@ -481,7 +486,7 @@ export default function OrderForm() {
                     fullWidth
                     sx={{ height: 56, textTransform: "none" }}
                   >
-                    Upload Lower Scan STL
+                    Upload Lower Scan STL (Required)
                     <input
                       hidden
                       type="file"
@@ -744,7 +749,7 @@ export default function OrderForm() {
                     <Grid size={{ xs: 6, md: 6 }}>
                       <CustomTextField
                         required
-                        label="License"
+                        label="License Number"
                         name="license"
                         value={formData.license}
                         onChange={handleChange}
