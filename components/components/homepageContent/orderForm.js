@@ -179,7 +179,7 @@ export default function OrderForm() {
     }
 
     // Require either a stored signature or a newly drawn one before proceeding
-    const isCanvasEmpty = !sigCanvas.current || sigCanvas.current.isEmpty();
+    // const isCanvasEmpty = !sigCanvas.current || sigCanvas.current.isEmpty();
     // const selectedSignature = savedSignatures.find(
     //   (s) => s.id === selectedSignatureId,
     // );
@@ -215,7 +215,7 @@ export default function OrderForm() {
     }
 
     // Require either a stored signature or a newly drawn one before submission
-    const isCanvasEmpty = !sigCanvas.current || sigCanvas.current.isEmpty();
+    // const isCanvasEmpty = !sigCanvas.current || sigCanvas.current.isEmpty();
     // const selectedSignature = savedSignatures.find(
     //   (s) => s.id === selectedSignatureId,
     // );
@@ -252,45 +252,45 @@ export default function OrderForm() {
       license: formData.license,
     };
 
-    try {
-      let blob;
-
-      // if (selectedSignature) {
-      //   const dataUrl = selectedSignature.dataUrl;
-      //
-      //   if (!dataUrl || !dataUrl.startsWith("data:image/")) {
-      //     throw new Error("Invalid signature data URL");
-      //   }
-      //
-      //   const response = await fetch(dataUrl);
-      //   if (!response.ok) {
-      //     throw new Error("Failed to fetch signature data");
-      //   }
-      //   blob = await response.blob();
-      // } else {
-      const canvas = sigCanvas.current.getTrimmedCanvas();
-      blob = await new Promise((resolve, reject) => {
-        canvas.toBlob(
-          (blob) => {
-            if (blob) {
-              resolve(blob);
-            } else {
-              reject(new Error("Failed to convert canvas to blob"));
-            }
-          },
-          "image/png",
-          0.9,
-        );
-      });
-      // }
-      blob.name = "signature.png";
-      payload.signature = blob;
-    } catch (err) {
-      console.error("Failed to attach signature:", err);
-      alert("Unable to process signature. Please try again.");
-      setLoading(false);
-      return;
-    }
+    // try {
+    //   let blob;
+    //
+    //   if (selectedSignature) {
+    //     const dataUrl = selectedSignature.dataUrl;
+    //
+    //     if (!dataUrl || !dataUrl.startsWith("data:image/")) {
+    //       throw new Error("Invalid signature data URL");
+    //     }
+    //
+    //     const response = await fetch(dataUrl);
+    //     if (!response.ok) {
+    //       throw new Error("Failed to fetch signature data");
+    //     }
+    //     blob = await response.blob();
+    //   } else {
+    //   const canvas = sigCanvas.current.getTrimmedCanvas();
+    //   blob = await new Promise((resolve, reject) => {
+    //     canvas.toBlob(
+    //       (blob) => {
+    //         if (blob) {
+    //           resolve(blob);
+    //         } else {
+    //           reject(new Error("Failed to convert canvas to blob"));
+    //         }
+    //       },
+    //       "image/png",
+    //       0.9,
+    //     );
+    //   });
+    //   }
+    //   blob.name = "signature.png";
+    //   payload.signature = blob;
+    // } catch (err) {
+    //   console.error("Failed to attach signature:", err);
+    //   alert("Unable to process signature. Please try again.");
+    //   setLoading(false);
+    //   return;
+    // }
     // Build FormData including files and signature
     const formPayload = new FormData();
     formPayload.append("caseName", String(payload.caseName));
