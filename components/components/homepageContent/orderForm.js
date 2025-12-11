@@ -26,6 +26,8 @@ import {
   CircularProgress,
 } from "@mui/material";
 import HelpOutlineIcon from "@mui/icons-material/HelpOutline";
+import DownloadIcon from "@mui/icons-material/Download";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import { useState, useEffect, useRef } from "react";
 import CustomTextField from "../CustomTextField";
 import { CustomInputLabel, CustomSelect } from "../CustomSelect";
@@ -376,6 +378,26 @@ export default function OrderForm() {
     const extension = name.split(".").pop();
     const base = name.slice(0, name.length - extension.length - 1);
     return `${base.slice(0, maxLength - extension.length - 4)}....${extension}`;
+  };
+
+  const handleFileDownload = (file, fileName) => {
+    if (!file) return;
+    
+    try {
+      // Create a temporary URL for the file
+      const url = URL.createObjectURL(file);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = fileName || file.name;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      // Clean up the URL after a short delay
+      setTimeout(() => URL.revokeObjectURL(url), 100);
+    } catch (error) {
+      console.error("Error downloading file:", error);
+      alert("Failed to download file. Please try again.");
+    }
   };
 
   const renderFormSection = () => {
@@ -1195,6 +1217,234 @@ export default function OrderForm() {
                       </Typography>
                     </Box>
                   )}
+                </Box>
+
+                {/* Uploaded Files Section */}
+                <Box sx={{ mt: 3 }}>
+                  <Typography
+                    variant="subtitle2"
+                    sx={{ color: "#aaa", mb: 2, fontSize: "0.875rem" }}
+                  >
+                    Uploaded Files
+                  </Typography>
+
+                  {formData.upperScan && (
+                    <Card
+                      elevation={0}
+                      sx={{
+                        background: "#1e1e1e",
+                        border: "1px solid #444",
+                        borderRadius: 2,
+                        mb: 2,
+                        "&:hover": {
+                          borderColor: "#666",
+                        },
+                      }}
+                    >
+                      <CardContent
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          py: 1.5,
+                          px: 2,
+                        }}
+                      >
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 2, flex: 1 }}>
+                          <InsertDriveFileIcon
+                            sx={{ color: "#ef5350", fontSize: 32 }}
+                          />
+                          <Box sx={{ flex: 1, minWidth: 0 }}>
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "#aaa", mb: 0.5, fontSize: "0.75rem" }}
+                            >
+                              Upper Scan
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: "white",
+                                wordBreak: "break-word",
+                                fontWeight: 500,
+                              }}
+                            >
+                              {getFileName(formData.upperScan, 40)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <IconButton
+                          onClick={() =>
+                            handleFileDownload(
+                              formData.upperScan,
+                              formData.upperScan.name,
+                            )
+                          }
+                          sx={{
+                            color: "#ef5350",
+                            "&:hover": {
+                              backgroundColor: "rgba(239, 83, 80, 0.1)",
+                            },
+                          }}
+                        >
+                          <DownloadIcon />
+                        </IconButton>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {formData.lowerScan && (
+                    <Card
+                      elevation={0}
+                      sx={{
+                        background: "#1e1e1e",
+                        border: "1px solid #444",
+                        borderRadius: 2,
+                        mb: 2,
+                        "&:hover": {
+                          borderColor: "#666",
+                        },
+                      }}
+                    >
+                      <CardContent
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          py: 1.5,
+                          px: 2,
+                        }}
+                      >
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 2, flex: 1 }}>
+                          <InsertDriveFileIcon
+                            sx={{ color: "#ef5350", fontSize: 32 }}
+                          />
+                          <Box sx={{ flex: 1, minWidth: 0 }}>
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "#aaa", mb: 0.5, fontSize: "0.75rem" }}
+                            >
+                              Lower Scan
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: "white",
+                                wordBreak: "break-word",
+                                fontWeight: 500,
+                              }}
+                            >
+                              {getFileName(formData.lowerScan, 40)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <IconButton
+                          onClick={() =>
+                            handleFileDownload(
+                              formData.lowerScan,
+                              formData.lowerScan.name,
+                            )
+                          }
+                          sx={{
+                            color: "#ef5350",
+                            "&:hover": {
+                              backgroundColor: "rgba(239, 83, 80, 0.1)",
+                            },
+                          }}
+                        >
+                          <DownloadIcon />
+                        </IconButton>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {formData.biteScans && (
+                    <Card
+                      elevation={0}
+                      sx={{
+                        background: "#1e1e1e",
+                        border: "1px solid #444",
+                        borderRadius: 2,
+                        mb: 2,
+                        "&:hover": {
+                          borderColor: "#666",
+                        },
+                      }}
+                    >
+                      <CardContent
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          py: 1.5,
+                          px: 2,
+                        }}
+                      >
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 2, flex: 1 }}>
+                          <InsertDriveFileIcon
+                            sx={{ color: "#ef5350", fontSize: 32 }}
+                          />
+                          <Box sx={{ flex: 1, minWidth: 0 }}>
+                            <Typography
+                              variant="body2"
+                              sx={{ color: "#aaa", mb: 0.5, fontSize: "0.75rem" }}
+                            >
+                              Bite Scans
+                            </Typography>
+                            <Typography
+                              variant="body2"
+                              sx={{
+                                color: "white",
+                                wordBreak: "break-word",
+                                fontWeight: 500,
+                              }}
+                            >
+                              {getFileName(formData.biteScans, 40)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <IconButton
+                          onClick={() =>
+                            handleFileDownload(
+                              formData.biteScans,
+                              formData.biteScans.name,
+                            )
+                          }
+                          sx={{
+                            color: "#ef5350",
+                            "&:hover": {
+                              backgroundColor: "rgba(239, 83, 80, 0.1)",
+                            },
+                          }}
+                        >
+                          <DownloadIcon />
+                        </IconButton>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {!formData.upperScan &&
+                    !formData.lowerScan &&
+                    !formData.biteScans && (
+                      <Card
+                        elevation={0}
+                        sx={{
+                          background: "#1e1e1e",
+                          border: "1px dashed #444",
+                          borderRadius: 2,
+                          py: 3,
+                          px: 2,
+                          textAlign: "center",
+                        }}
+                      >
+                        <Typography
+                          variant="body2"
+                          sx={{ color: "#aaa", fontStyle: "italic" }}
+                        >
+                          No files uploaded
+                        </Typography>
+                      </Card>
+                    )}
                 </Box>
               </Grid>
 
