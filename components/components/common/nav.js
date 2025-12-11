@@ -88,7 +88,12 @@ const HomePageNav = ({ updateDoctorDetail, setDrawerOpen }) => {
 
         {/* Right icons and menu */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <IconButton>
+          <IconButton onClick={() =>
+              window.open(
+                  "/api/proxy?url=https://tawk.to/chat/691e1e6b3c3c13194fe65a35/1jaeqdl1b",
+                  "_blank",
+              )
+          }>
             <MessageIcon sx={{ color: "#fff" }} />
           </IconButton>
           <Button
