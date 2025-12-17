@@ -992,13 +992,13 @@ export default function OrderForm() {
                 </Box>
               </Grid>
 
-              {/* Right Side - Treatment Summary */}
+              {/* Right Side - Order Summary */}
               <Grid size={{ xs: 12, md: 8 }}>
                 <Typography
                   variant="h5"
                   sx={{ fontWeight: 600, color: "white", mb: 1 }}
                 >
-                  Treatment summary
+                  Order summary
                 </Typography>
                 <Typography
                   variant="body2"
@@ -1122,15 +1122,6 @@ export default function OrderForm() {
                           variant="body2"
                           sx={{ color: "#aaa", fontSize: "0.875rem" }}
                         >
-                          ID: AAAW-LUSH
-                        </Typography>
-                      </Box>
-
-                      <Box sx={{ mb: 1 }}>
-                        <Typography
-                          variant="body2"
-                          sx={{ color: "#aaa", fontSize: "0.875rem" }}
-                        >
                           Design Turnaround Time: 1 Business Day
                         </Typography>
                       </Box>
@@ -1145,22 +1136,6 @@ export default function OrderForm() {
                       </Box>
                     </Box>
 
-                    {/* Price */}
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-end",
-                        justifyContent: "center",
-                      }}
-                    >
-                      <Typography
-                        variant="body1"
-                        sx={{ color: "white", textAlign: "right" }}
-                      >
-                        Starting from $90.00 Per Case
-                      </Typography>
-                    </Box>
                   </Box>
                 </Card>
 
