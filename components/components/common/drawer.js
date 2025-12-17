@@ -43,7 +43,7 @@ const bottomNavItems = [
   // { href: "/faq", label: "FAQ" },
 ];
 const faqNavItems = [
-  { href: "/consumer", label: "Consumer FAQ" },
+  // { href: "/faq", label: "Consumer FAQ" },
   { href: "/office", label: "Office FAQ" },
 ];
 
