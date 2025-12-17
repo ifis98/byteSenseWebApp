@@ -1004,7 +1004,7 @@ export default function OrderForm() {
                   variant="body2"
                   sx={{ color: "#aaa", mb: 4, fontSize: "0.875rem" }}
                 >
-                  Your treatment details are displayed here
+                  Your order details are displayed here
                 </Typography>
 
                 {/* Product Card */}
