@@ -180,6 +180,11 @@ export default function OrderForm() {
       return;
     }
 
+    if (!formData.license.trim()) {
+      alert("Please enter your license number.");
+      return;
+    }
+
     // Require either a stored signature or a newly drawn one before proceeding
     // const isCanvasEmpty = !sigCanvas.current || sigCanvas.current.isEmpty();
     // const selectedSignature = savedSignatures.find(
