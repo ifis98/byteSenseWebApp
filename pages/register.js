@@ -506,7 +506,20 @@ const Register = () => {
                       sx={{ color: "white" }}
                     />
                   }
-                  label="Read Privacy Policy"
+                  label={
+                    <Typography variant="body2" sx={{ color: "white" }}>
+                      Read{" "}
+                      <MuiLink
+                        href="https://www.bytesense.ai/privacy-policy"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                        sx={{ color: "error.main" }}
+                      >
+                        Privacy Policy
+                      </MuiLink>
+                    </Typography>
+                  }
                   className={"col-span-2"}
                 />
                 <FormControlLabel
@@ -519,7 +532,20 @@ const Register = () => {
                       sx={{ color: "white" }}
                     />
                   }
-                  label="Read Terms of Use"
+                  label={
+                    <Typography variant="body2" sx={{ color: "white" }}>
+                      Read{" "}
+                      <MuiLink
+                        href="https://www.bytesense.ai/terms-of-use"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        underline="hover"
+                        sx={{ color: "error.main" }}
+                      >
+                        Terms of Use
+                      </MuiLink>
+                    </Typography>
+                  }
                   className={"col-span-2"}
                 />
                 <Box

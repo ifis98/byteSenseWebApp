@@ -23,6 +23,7 @@ import LabSlip from "./components/homepageContent/LabSlip";
 // import StaffTraining from "./components/homepageContent/StaffTraining";
 import Dashboard from "./components/homepageContent/Dashboard";
 import OrderList from "./components/homepageContent/orderList";
+import Footer from "./Footer";
 
 function HomePage() {
   const path = usePathname();
@@ -110,6 +111,7 @@ function HomePage() {
       <div className={styles.mainContent}>
         <HomePageNav setDrawerOpen={setDrawerOpen} />
         {renderComponent()}
+        <Footer />
       </div>
     </div>
   );
