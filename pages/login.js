@@ -51,8 +51,8 @@ class Login extends React.Component {
 
     return (
       <Box
-        className={"flex flex-row justify-center items-center w-full"}
-        sx={{ height: "100vh", width: "100%" }}
+        className={"flex flex-row justify-center items-center w-full h-screen"}
+        // sx={{ height: "100vh", width: "100%" }}
         style={{ backgroundColor: "#1d1d1d" }}
       >
         <Box
@@ -69,7 +69,7 @@ class Login extends React.Component {
             <img
               src="/signin.png"
               alt="login Logo"
-              className={"h-4/5 object-contain object-center rotate-50"}
+              className={"max-w-4/5 object-contain object-center rotate-50"}
             />
           </Box>
         </Box>
