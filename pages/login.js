@@ -105,13 +105,13 @@ class Login extends React.Component {
             >
               <CustomLabelTextField
                 fullWidth
-                label="Username"
+                label="Username or Email"
                 name="userName"
                 value={userName}
                 onChange={this.handleChange}
                 margin="normal"
                 required
-                placeholder={"Enter your username"}
+                placeholder={"Enter your username or email"}
               />
               <CustomLabelTextField
                 fullWidth
