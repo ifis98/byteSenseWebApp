@@ -45,7 +45,6 @@ export default function OrderForm() {
     lowerScan: null,
     biteScans: null,
     instructions: "",
-    license: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -180,11 +179,6 @@ export default function OrderForm() {
       return;
     }
 
-    if (!formData.license.trim()) {
-      alert("Please enter your license number.");
-      return;
-    }
-
     // Require either a stored signature or a newly drawn one before proceeding
     // const isCanvasEmpty = !sigCanvas.current || sigCanvas.current.isEmpty();
     // const selectedSignature = savedSignatures.find(
@@ -256,7 +250,6 @@ export default function OrderForm() {
       doctor: state?.dentistDetail?.profile?.user || "",
       biteScans: formData.biteScans,
       instructions: formData.instructions,
-      license: formData.license,
     };
 
     // try {
@@ -307,7 +300,6 @@ export default function OrderForm() {
     // formPayload.append("passiveSpacer", String(payload.passiveSpacer));
     formPayload.append("clientName", String(payload.clientName));
     formPayload.append("doctor", String(payload.doctor));
-    formPayload.append("license", String(payload.license));
     if (payload.instructions)
       formPayload.append("instructions", String(payload.instructions));
 
@@ -827,17 +819,6 @@ export default function OrderForm() {
                 {/*    </Grid>*/}
                 {/*  </Grid>*/}
                 {/*</Grid>*/}
-
-                <Grid size={{ xs: 12, md: 12 }}>
-                  <CustomTextField
-                    required
-                    label="License Number"
-                    name="license"
-                    value={formData.license}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
 
                 <Grid
                   size={{ xs: 12 }}
