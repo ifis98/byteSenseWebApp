@@ -37,8 +37,8 @@ const navItems = [
 const bottomNavItems = [
   { href: "/lab_slip", label: "Start Here" },
   // { href: "/staff_training", label: "Staff Training" },
+  { href: "/sales_material", label: "Pilot Info" },
   { href: "/product_information", label: "Product Information" },
-  { href: "/sales_material", label: "Sales Materials" },
   { href: "/policies", label: "Policies" },
   // { href: "/faq", label: "FAQ" },
 ];

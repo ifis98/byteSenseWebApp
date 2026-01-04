@@ -10,6 +10,12 @@ import {
   Grid,
   FormControlLabel,
   Checkbox,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  TextField,
+  CircularProgress,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -33,8 +39,26 @@ const Register = () => {
     zipCode: "",
     privacyAccepted: false,
     termsAccepted: false,
+    preferredPhoneNumber: "",
+    companyName: "",
+    preferredContactMethodPhone: false,
+    preferredContactMethodEmail: false,
+    primaryContactName: "",
+    primaryContactRole: "",
+    primaryContactPhoneNumber: "",
+    officeEmail: "",
+    attentionRecipientName: "",
+    deliveryPhoneNumber: "",
+    receivingPreference: "",
+    preferredNotificationMethod: "",
+    additionalShippingInstructions: "",
+    estimatedOrdersPerMonth: "",
+    dentalLicenseNumber: "",
+    additionalOperationalInstructions: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
+  const [touchedFields, setTouchedFields] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.rewardful) return;
@@ -52,11 +76,25 @@ const Register = () => {
   }, []);
 
   const handleChange = (e) => {
+    const fieldName = e.target.name;
     setForm((prev) => ({
       ...prev,
-      [e.target.name]: ["zipCode"].includes(e.target.name)
+      [fieldName]: ["zipCode"].includes(fieldName)
         ? e.target.value.replace(/\D/g, "")
         : e.target.value,
+    }));
+    // Mark field as touched
+    setTouchedFields((prev) => ({
+      ...prev,
+      [fieldName]: true,
+    }));
+  };
+
+  const handleBlur = (e) => {
+    const fieldName = e.target.name;
+    setTouchedFields((prev) => ({
+      ...prev,
+      [fieldName]: true,
     }));
   };
 
@@ -107,10 +145,12 @@ const Register = () => {
       return setErrorMessage(validationError);
     }
 
+    setIsLoading(true);
     try {
       // Web registrations are always doctor accounts (isDoctor = true)
-      const rewardful_referral =
-        document.getElementById("rewardful_referral")?.value?.trim();
+      const rewardful_referral = document
+        .getElementById("rewardful_referral")
+        ?.value?.trim();
 
       const registrationData = {
         ...form,
@@ -121,6 +161,7 @@ const Register = () => {
       localStorage.setItem("bytesense_order_popup_seen", "true");
       router.push("/login");
     } catch (error) {
+      setIsLoading(false);
       const msg = error.response?.data?.message || "";
       if (msg.includes("userName")) {
         setErrorMessage("Username already exists. Please try again.");
@@ -131,11 +172,11 @@ const Register = () => {
       }
     }
   };
-  const steps = ["Create your account", "Practice address"];
+  const steps = ["Create your account", "Practice Information"];
   const [step, setStep] = useState(0);
 
   const handleNext = () => {
-    // Block advancing to "Practice address" when account details are invalid
+    // Block advancing to "Practice Information" when account details are invalid
     if (handleContinueDisabled()) {
       return;
     }
@@ -148,6 +189,17 @@ const Register = () => {
   };
   const handlerSignupDisabled = () => {
     return !(
+      form.preferredPhoneNumber &&
+      form.companyName &&
+      (form.preferredContactMethodPhone || form.preferredContactMethodEmail) &&
+      form.primaryContactName &&
+      form.primaryContactRole &&
+      form.primaryContactPhoneNumber &&
+      form.officeEmail &&
+      form.attentionRecipientName &&
+      form.preferredNotificationMethod &&
+      form.estimatedOrdersPerMonth &&
+      form.dentalLicenseNumber &&
       form.addressLine1 &&
       form.city &&
       form.state &&
@@ -232,9 +284,11 @@ const Register = () => {
                 variant="subtitle1"
                 style={{ textAlign: "center", color: "white" }}
               >
-                This is where your orders will be shipped,
+                This information helps us onboard your practice correctly and
+                ensure devices are delivered without delays.
                 <br />
-                this information can be changed in your profile settings
+                You can update these details at any time in your profile
+                settings
               </Typography>
             )}
 
@@ -249,12 +303,14 @@ const Register = () => {
                   margin="normal"
                   required
                   placeholder={"Enter your first name"}
-                  error={form.fName.length > 0 && form.fName.length < 2}
+                  error={touchedFields.fName && form.fName.length > 0 && form.fName.length < 2}
                   helperText={
+                    touchedFields.fName &&
                     form.fName.length > 0 &&
                     form.fName.length < 2 &&
                     "First Name must be at least 2 characters."
                   }
+                  onBlur={handleBlur}
                 />
                 <CustomLabelTextField
                   fullWidth
@@ -265,12 +321,14 @@ const Register = () => {
                   margin="normal"
                   required
                   placeholder={"Enter your last name"}
-                  error={form.lName.length > 0 && form.lName.length < 2}
+                  error={touchedFields.lName && form.lName.length > 0 && form.lName.length < 2}
                   helperText={
+                    touchedFields.lName &&
                     form.lName.length > 0 &&
                     form.lName.length < 2 &&
                     "Last Name must be at least 2 characters."
                   }
+                  onBlur={handleBlur}
                 />
                 <CustomLabelTextField
                   fullWidth
@@ -282,12 +340,14 @@ const Register = () => {
                   required
                   placeholder={"Enter your username"}
                   wrapClassName={"col-span-2"}
-                  error={form.userName.length > 0 && form.userName.length < 2}
+                  error={touchedFields.userName && form.userName.length > 0 && form.userName.length < 2}
                   helperText={
+                    touchedFields.userName &&
                     form.userName.length > 0 &&
                     form.userName.length < 2 &&
                     "Username must be at least 2 characters."
                   }
+                  onBlur={handleBlur}
                 />
                 <CustomLabelTextField
                   fullWidth
@@ -301,18 +361,21 @@ const Register = () => {
                   placeholder={"Enter your email"}
                   wrapClassName={"col-span-2"}
                   error={
+                    touchedFields.email &&
                     form.email.length > 0 &&
                     !form.email.match(
                       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                     )
                   }
                   helperText={
+                    touchedFields.email &&
                     form.email.length > 0 &&
                     !form.email.match(
                       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
                     ) &&
                     "Email is invalid. Please enter a valid email address."
                   }
+                  onBlur={handleBlur}
                 />
                 <CustomLabelTextField
                   fullWidth
@@ -325,6 +388,7 @@ const Register = () => {
                   required
                   placeholder={"Enter your password"}
                   error={
+                    touchedFields.password &&
                     form.password.length > 0 &&
                     (form.password.length < 4 ||
                       (form.password.length >= 4 &&
@@ -332,6 +396,7 @@ const Register = () => {
                         form.password !== form.confirmPassword))
                   }
                   helperText={
+                    touchedFields.password &&
                     form.password.length > 0 &&
                     (form.password.length < 4 ||
                       (form.password.length >= 4 &&
@@ -341,6 +406,7 @@ const Register = () => {
                       ? "Password must be at least 4 characters."
                       : "Password and confirm password must match.")
                   }
+                  onBlur={handleBlur}
                 />
                 <CustomLabelTextField
                   fullWidth
@@ -353,12 +419,14 @@ const Register = () => {
                   required
                   placeholder={"Confirm your password"}
                   error={
+                    touchedFields.confirmPassword &&
                     form.confirmPassword.length > 0 &&
                     (form.confirmPassword.length < 4 ||
                       (form.password.length >= 4 &&
                         form.password !== form.confirmPassword))
                   }
                   helperText={
+                    touchedFields.confirmPassword &&
                     form.confirmPassword.length > 0 &&
                     (form.confirmPassword.length < 4 ||
                       (form.password.length >= 4 &&
@@ -367,6 +435,7 @@ const Register = () => {
                       ? "Password must be at least 4 characters."
                       : "Password and confirm password must match.")
                   }
+                  onBlur={handleBlur}
                 />
                 <Typography textAlign="left">
                   <MuiLink
@@ -406,195 +475,563 @@ const Register = () => {
             )}
 
             {step === 1 && (
-              <Box className={"grid grid-cols-2 gap-4 mt-4"}>
-                <CustomLabelTextField
-                  fullWidth
-                  label="Address Line 1"
-                  name="addressLine1"
-                  value={form.addressLine1}
-                  onChange={handleChange}
-                  margin="normal"
-                  required
-                  placeholder={"Enter address line 1"}
-                  wrapClassName={"col-span-2"}
-                  error={
-                    form.addressLine1.length > 0 &&
-                    form.addressLine1.length < 2
-                  }
-                  helperText={
-                    form.addressLine1.length > 0 &&
-                    form.addressLine1.length < 2 &&
-                    "Address Line 1 must be at least 2 characters."
-                  }
-                />
-                <CustomLabelTextField
-                  fullWidth
-                  label="Address Line 2"
-                  name="addressLine2"
-                  value={form.addressLine2}
-                  onChange={handleChange}
-                  margin="normal"
-                  placeholder={"Enter address line 2 (optional)"}
-                  wrapClassName={"col-span-2"}
-                  error={
-                      form.addressLine2.length > 0 &&
-                      form.addressLine2.length < 2
-                  }
-                  helperText={
-                      form.addressLine2.length > 0 &&
-                      form.addressLine2.length < 2 &&
-                      "Address Line 1 must be at least 2 characters."
-                  }
-                />
-                <CustomLabelTextField
-                  fullWidth
-                  label="City"
-                  name="city"
-                  value={form.city}
-                  onChange={handleChange}
-                  margin="normal"
-                  required
-                  placeholder={"Enter your city"}
-                  error={form.city.length > 0 && form.city.length < 2}
-                  helperText={
-                    form.city.length > 0 &&
-                    form.city.length < 2 &&
-                    "City must be at least 2 characters."
-                  }
-                />
-                <CustomLabelTextField
-                  fullWidth
-                  label="State"
-                  name="state"
-                  value={form.state}
-                  onChange={handleChange}
-                  margin="normal"
-                  required
-                  placeholder={"Enter your state"}
-                  error={form.state.length > 0 && form.state.length < 2}
-                  helperText={
-                    form.state.length > 0 &&
-                    form.state.length < 2 &&
-                    "State must be at least 2 characters."
-                  }
-                />
-                <CustomLabelTextField
-                  fullWidth
-                  label="Zip Code"
-                  name="zipCode"
-                  value={form.zipCode}
-                  onChange={handleChange}
-                  margin="normal"
-                  required
-                  placeholder={"Enter your zip code"}
-                  wrapClassName={"col-span-2"}
-                  error={form.zipCode.length > 0 && form.zipCode.length < 5}
-                  helperText={
-                    form.zipCode.length > 0 &&
-                    form.zipCode.length < 5 &&
-                    "Zip Code must be at least 5 characters."
-                  }
-                />
+              <Box className={"flex flex-col gap-4 mt-10 w-full"}>
+                {/*Contact Information Section*/}
+                <Box className={"w-full flex flex-col gap-4"}>
+                  <Box className={"border-b border-white w-full"}>
+                    <p className={"w-full font-bold"}>Contact Information</p>
+                  </Box>
+                  <Box className={"grid grid-cols-2 gap-4 mt-4"}>
+                    <CustomLabelTextField
+                      fullWidth
+                      label="Preferred Phone Number"
+                      name="preferredPhoneNumber"
+                      value={form.preferredPhoneNumber}
+                      onChange={handleChange}
+                      margin="normal"
+                      required
+                      placeholder={"Enter preferred phone number"}
+                    />
+                    <CustomLabelTextField
+                      fullWidth
+                      label="Company name"
+                      name="companyName"
+                      value={form.companyName}
+                      onChange={handleChange}
+                      margin="normal"
+                      required
+                      placeholder={"Enter company name"}
+                    />
+                    <Box className={"col-span-2"}>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "white", mb: 1 }}
+                      >
+                        Preferred contact method (required)
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        sx={{ color: "gray", mb: 1, display: "block" }}
+                      >
+                        Must select at least one
+                      </Typography>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            name="preferredContactMethodPhone"
+                            checked={form.preferredContactMethodPhone}
+                            onChange={handleCheckboxChange}
+                            color={"error"}
+                            sx={{ color: "white" }}
+                          />
+                        }
+                        label={
+                          <Typography variant="body2" sx={{ color: "white" }}>
+                            Phone
+                          </Typography>
+                        }
+                      />
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            name="preferredContactMethodEmail"
+                            checked={form.preferredContactMethodEmail}
+                            onChange={handleCheckboxChange}
+                            color={"error"}
+                            sx={{ color: "white" }}
+                          />
+                        }
+                        label={
+                          <Typography variant="body2" sx={{ color: "white" }}>
+                            Email
+                          </Typography>
+                        }
+                      />
+                    </Box>
+                    <CustomLabelTextField
+                      fullWidth
+                      label="Primary Contact for Orders and Onboarding Name"
+                      name="primaryContactName"
+                      value={form.primaryContactName}
+                      onChange={handleChange}
+                      margin="normal"
+                      required
+                      placeholder={"Enter primary contact name"}
+                    />
+                    <CustomLabelTextField
+                        fullWidth
+                        label="Primary Contact for Orders and Onboarding Phone Number"
+                        name="primaryContactPhoneNumber"
+                        value={form.primaryContactPhoneNumber}
+                        onChange={handleChange}
+                        margin="normal"
+                        required
+                        placeholder={"Enter primary contact phone number"}
+                    />
+                    <CustomLabelTextField
+                      fullWidth
+                      label="Primary Contact for Orders and Onboarding Role"
+                      name="primaryContactRole"
+                      value={form.primaryContactRole}
+                      onChange={handleChange}
+                      margin="normal"
+                      required
+                      placeholder={
+                        "Owner / Office Manager / Treatment Coordinator / etc."
+                      }
+                      wrapClassName={"col-span-2"}
+                    />
+                    <Box className={"col-span-2"}>
+                      <CustomLabelTextField
+                        fullWidth
+                        label="Office Email"
+                        name="officeEmail"
+                        type="email"
+                        value={form.officeEmail}
+                        onChange={handleChange}
+                        margin="normal"
+                        required
+                        placeholder={"Enter office email"}
+                        error={
+                          touchedFields.officeEmail &&
+                          form.officeEmail.length > 0 &&
+                          !form.officeEmail.match(
+                            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                          )
+                        }
+                        helperText={
+                          touchedFields.officeEmail &&
+                          form.officeEmail.length > 0 &&
+                          !form.officeEmail.match(
+                            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                          )
+                            ? "Email is invalid. Please enter a valid email address."
+                            : "For invoices, shipping info, etc"
+                        }
+                        onBlur={handleBlur}
+                      />
+                    </Box>
+                  </Box>
+                </Box>
 
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name={"privacyAccepted"}
-                      checked={form.privacyAccepted}
-                      onChange={handleCheckboxChange}
-                      color={"error"}
-                      sx={{ color: "white" }}
+                {/*Shipping Information Section*/}
+                <Box className={"w-full flex flex-col gap-4"}>
+                  <Box className={"border-b border-white w-full"}>
+                    <p className={"w-full font-bold"}>Shipping Information</p>
+                  </Box>
+                  <Box className={"grid grid-cols-2 gap-4 mt-4"}>
+                    <CustomLabelTextField
+                      fullWidth
+                      label="Attention/Recipient Name"
+                      name="attentionRecipientName"
+                      value={form.attentionRecipientName}
+                      onChange={handleChange}
+                      margin="normal"
+                      required
+                      placeholder={"Enter attention/recipient name"}
+                      wrapClassName={"col-span-2"}
                     />
-                  }
-                  label={
-                    <Typography variant="body2" sx={{ color: "white" }}>
-                      Read{" "}
-                      <MuiLink
-                        href="https://www.bytesense.ai/privacy-policy"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        underline="hover"
-                        sx={{ color: "error.main" }}
-                      >
-                        Privacy Policy
-                      </MuiLink>
-                    </Typography>
-                  }
-                  className={"col-span-2"}
-                />
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      name={"termsAccepted"}
-                      checked={form.termsAccepted}
-                      onChange={handleCheckboxChange}
-                      color={"error"}
-                      sx={{ color: "white" }}
+                    <CustomLabelTextField
+                      fullWidth
+                      label="Shipping Address Line 1"
+                      name="addressLine1"
+                      value={form.addressLine1}
+                      onChange={handleChange}
+                      margin="normal"
+                      required
+                      placeholder={"Enter shipping address line 1"}
+                      wrapClassName={"col-span-2"}
+                      error={
+                        touchedFields.addressLine1 &&
+                        form.addressLine1.length > 0 &&
+                        form.addressLine1.length < 2
+                      }
+                      helperText={
+                        touchedFields.addressLine1 &&
+                        form.addressLine1.length > 0 &&
+                        form.addressLine1.length < 2 &&
+                        "Shipping Address Line 1 must be at least 2 characters."
+                      }
+                      onBlur={handleBlur}
                     />
-                  }
-                  label={
-                    <Typography variant="body2" sx={{ color: "white" }}>
-                      Read{" "}
-                      <MuiLink
-                        href="https://www.bytesense.ai/terms-of-use"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        underline="hover"
-                        sx={{ color: "error.main" }}
+                    <CustomLabelTextField
+                      fullWidth
+                      label="Shipping Address Line 2"
+                      name="addressLine2"
+                      value={form.addressLine2}
+                      onChange={handleChange}
+                      margin="normal"
+                      placeholder={"Enter shipping address line 2 (optional)"}
+                      wrapClassName={"col-span-2"}
+                      error={
+                        touchedFields.addressLine2 &&
+                        form.addressLine2.length > 0 &&
+                        form.addressLine2.length < 2
+                      }
+                      helperText={
+                        touchedFields.addressLine2 &&
+                        form.addressLine2.length > 0 &&
+                        form.addressLine2.length < 2 &&
+                        "Shipping Address Line 2 must be at least 2 characters."
+                      }
+                      onBlur={handleBlur}
+                    />
+                    <CustomLabelTextField
+                      fullWidth
+                      label="Phone number for delivery issues"
+                      name="deliveryPhoneNumber"
+                      value={form.deliveryPhoneNumber}
+                      onChange={handleChange}
+                      margin="normal"
+                      placeholder={"Enter phone number for delivery issues"}
+                    />
+                    <CustomLabelTextField
+                      fullWidth
+                      label="Receiving Preference"
+                      name="receivingPreference"
+                      value={form.receivingPreference}
+                      onChange={handleChange}
+                      margin="normal"
+                      placeholder={"Front Desk / Back Office / Lab / etc."}
+                    />
+                    <Box className={"col-span-2"}>
+                      <FormControl fullWidth margin="normal" required>
+                        <InputLabel sx={{ color: "white" }}>
+                          Preferred notification method of item shipped
+                        </InputLabel>
+                        <Select
+                          name="preferredNotificationMethod"
+                          value={form.preferredNotificationMethod}
+                          onChange={handleChange}
+                          label="Preferred notification method of item shipped"
+                          sx={{
+                            color: "white",
+                            "& .MuiOutlinedInput-notchedOutline": {
+                              borderColor: "white",
+                            },
+                            "&:hover .MuiOutlinedInput-notchedOutline": {
+                              borderColor: "white",
+                            },
+                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                              borderColor: "white",
+                            },
+                            "& .MuiSvgIcon-root": {
+                              color: "white",
+                            },
+                          }}
+                        >
+                          <MenuItem value="Email">Email</MenuItem>
+                          <MenuItem value="Text">Text</MenuItem>
+                          <MenuItem value="None">
+                            None (You can still track your orders on this web
+                            application)
+                          </MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                    <Box className={"col-span-2"}>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "white", mb: 1 }}
                       >
-                        Terms of Use
-                      </MuiLink>
-                    </Typography>
-                  }
-                  className={"col-span-2"}
-                />
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  mt={2}
-                  flexDirection={"row"}
-                  className={"col-span-2"}
-                  gap={2}
-                >
-                  <Button
-                    onClick={handleBack}
-                    variant={"text"}
-                    size="large"
-                    color="error"
-                  >
-                    ← Back
-                  </Button>
-                  <Typography textAlign="center">
-                    <MuiLink
-                      href="/login"
-                      underline="hover"
-                      sx={{
-                        color: "error.main",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        height: "100%",
-                      }}
+                        Additional Shipping Instructions (Optional)
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        sx={{ color: "gray", mb: 1, display: "block" }}
+                      >
+                        If any special instructions to ship to your office.
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        name="additionalShippingInstructions"
+                        value={form.additionalShippingInstructions}
+                        onChange={handleChange}
+                        multiline
+                        rows={4}
+                        placeholder={"Enter additional shipping instructions"}
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            color: "white",
+                            "& fieldset": {
+                              borderColor: "white",
+                            },
+                            "&:hover fieldset": {
+                              borderColor: "white",
+                            },
+                            "&.Mui-focused fieldset": {
+                              borderColor: "white",
+                            },
+                          },
+                          "& .MuiInputLabel-root": {
+                            color: "white",
+                          },
+                        }}
+                      />
+                    </Box>
+                    <CustomLabelTextField
+                      fullWidth
+                      label="City"
+                      name="city"
+                      value={form.city}
+                      onChange={handleChange}
+                      margin="normal"
+                      required
+                      placeholder={"Enter your city"}
+                      error={touchedFields.city && form.city.length > 0 && form.city.length < 2}
+                      helperText={
+                        touchedFields.city &&
+                        form.city.length > 0 &&
+                        form.city.length < 2 &&
+                        "City must be at least 2 characters."
+                      }
+                      onBlur={handleBlur}
+                    />
+                    <CustomLabelTextField
+                      fullWidth
+                      label="State"
+                      name="state"
+                      value={form.state}
+                      onChange={handleChange}
+                      margin="normal"
+                      required
+                      placeholder={"Enter your state"}
+                      error={touchedFields.state && form.state.length > 0 && form.state.length < 2}
+                      helperText={
+                        touchedFields.state &&
+                        form.state.length > 0 &&
+                        form.state.length < 2 &&
+                        "State must be at least 2 characters."
+                      }
+                      onBlur={handleBlur}
+                    />
+                    <CustomLabelTextField
+                      fullWidth
+                      label="Zip Code"
+                      name="zipCode"
+                      value={form.zipCode}
+                      onChange={handleChange}
+                      margin="normal"
+                      required
+                      placeholder={"Enter your zip code"}
+                      wrapClassName={"col-span-2"}
+                      error={touchedFields.zipCode && form.zipCode.length > 0 && form.zipCode.length < 5}
+                      helperText={
+                        touchedFields.zipCode &&
+                        form.zipCode.length > 0 &&
+                        form.zipCode.length < 5 &&
+                        "Zip Code must be at least 5 characters."
+                      }
+                      onBlur={handleBlur}
+                    />
+                  </Box>
+                </Box>
+
+                {/*Operational information Section*/}
+                <Box className={"w-full flex flex-col gap-4"}>
+                  <Box className={"border-b border-white w-full"}>
+                    <p className={"w-full font-bold"}>
+                      Operational information
+                    </p>
+                  </Box>
+                  <Box className={"grid grid-cols-2 gap-4 mt-4"}>
+                    <Box className={"col-span-2"}>
+                      <FormControl fullWidth margin="normal" required>
+                        <InputLabel sx={{ color: "white" }}>
+                          Estimated Orders per Month
+                        </InputLabel>
+                        <Select
+                          name="estimatedOrdersPerMonth"
+                          value={form.estimatedOrdersPerMonth}
+                          onChange={handleChange}
+                          label="Estimated Orders per Month"
+                          sx={{
+                            color: "white",
+                            "& .MuiOutlinedInput-notchedOutline": {
+                              borderColor: "white",
+                            },
+                            "&:hover .MuiOutlinedInput-notchedOutline": {
+                              borderColor: "white",
+                            },
+                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                              borderColor: "white",
+                            },
+                            "& .MuiSvgIcon-root": {
+                              color: "white",
+                            },
+                          }}
+                        >
+                          <MenuItem value="1-2">1-2</MenuItem>
+                          <MenuItem value="3-5">3-5</MenuItem>
+                          <MenuItem value="6-9">6-9</MenuItem>
+                          <MenuItem value="10+">10+</MenuItem>
+                        </Select>
+                      </FormControl>
+                    </Box>
+                    <CustomLabelTextField
+                      fullWidth
+                      label="Dental License Number"
+                      name="dentalLicenseNumber"
+                      value={form.dentalLicenseNumber}
+                      onChange={handleChange}
+                      margin="normal"
+                      required
+                      placeholder={"Enter dental license number"}
+                      wrapClassName={"col-span-2"}
+                    />
+                    <Box className={"col-span-2"}>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "white", mb: 1 }}
+                      >
+                        Additional Operational Instructions
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        sx={{ color: "gray", mb: 1, display: "block" }}
+                      >
+                        If you have any instructions <strong>unique</strong> to
+                        your office in terms of{" "}
+                        <strong>operations/logistics</strong>, please{" "}
+                        <strong>input</strong> here.
+                      </Typography>
+                      <TextField
+                        fullWidth
+                        name="additionalOperationalInstructions"
+                        value={form.additionalOperationalInstructions}
+                        onChange={handleChange}
+                        multiline
+                        rows={4}
+                        placeholder={
+                          "Enter additional operational instructions"
+                        }
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            color: "white",
+                            "& fieldset": {
+                              borderColor: "white",
+                            },
+                            "&:hover fieldset": {
+                              borderColor: "white",
+                            },
+                            "&.Mui-focused fieldset": {
+                              borderColor: "white",
+                            },
+                          },
+                          "& .MuiInputLabel-root": {
+                            color: "white",
+                          },
+                        }}
+                      />
+                    </Box>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          name={"privacyAccepted"}
+                          checked={form.privacyAccepted}
+                          onChange={handleCheckboxChange}
+                          color={"error"}
+                          sx={{ color: "white" }}
+                        />
+                      }
+                      label={
+                        <Typography variant="body2" sx={{ color: "white" }}>
+                          Read{" "}
+                          <MuiLink
+                            href="https://www.bytesense.ai/privacy-policy"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            underline="hover"
+                            sx={{ color: "error.main" }}
+                          >
+                            Privacy Policy
+                          </MuiLink>
+                        </Typography>
+                      }
+                      className={"col-span-2"}
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          name={"termsAccepted"}
+                          checked={form.termsAccepted}
+                          onChange={handleCheckboxChange}
+                          color={"error"}
+                          sx={{ color: "white" }}
+                        />
+                      }
+                      label={
+                        <Typography variant="body2" sx={{ color: "white" }}>
+                          Read{" "}
+                          <MuiLink
+                            href="https://www.bytesense.ai/terms-of-use"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            underline="hover"
+                            sx={{ color: "error.main" }}
+                          >
+                            Terms of Use
+                          </MuiLink>
+                        </Typography>
+                      }
+                      className={"col-span-2"}
+                    />
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      mt={2}
+                      flexDirection={"row"}
+                      className={"col-span-2"}
+                      gap={2}
                     >
-                      Already have an account? Sign in
-                    </MuiLink>
-                  </Typography>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    size="large"
-                    color="error"
-                    disabled={handlerSignupDisabled()}
-                    sx={{
-                      "&.Mui-disabled": {
-                        color: "gray",
-                        cursor: "not-allowed !important",
-                        pointerEvents: "auto !important",
-                      },
-                    }}
-                  >
-                    Sign Up
-                  </Button>
+                      <Button
+                        onClick={handleBack}
+                        variant={"text"}
+                        size="large"
+                        color="error"
+                      >
+                        ← Back
+                      </Button>
+                      <Typography textAlign="center">
+                        <MuiLink
+                          href="/login"
+                          underline="hover"
+                          sx={{
+                            color: "error.main",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "100%",
+                          }}
+                        >
+                          Already have an account? Sign in
+                        </MuiLink>
+                      </Typography>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        size="large"
+                        color="error"
+                        disabled={handlerSignupDisabled() || isLoading}
+                        sx={{
+                          "&.Mui-disabled": {
+                            color: "gray",
+                            cursor: "not-allowed !important",
+                            pointerEvents: "auto !important",
+                          },
+                        }}
+                      >
+                        {isLoading ? (
+                          <Box display="flex" alignItems="center" gap={1}>
+                            <CircularProgress size={20} sx={{ color: "white" }} />
+                            <span>Signing Up...</span>
+                          </Box>
+                        ) : (
+                          "Sign Up"
+                        )}
+                      </Button>
+                    </Box>
+                  </Box>
                 </Box>
               </Box>
             )}

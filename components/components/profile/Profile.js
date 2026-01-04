@@ -11,6 +11,12 @@ import {
   Avatar,
   Alert,
   CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  FormControlLabel,
+  Checkbox,
 } from '@mui/material';
 import moment from 'moment';
 import { backendLink } from '../../../exports/variable';
@@ -38,6 +44,25 @@ const Profile = () => {
     city: '',
     state: '',
     zipCode: '',
+    // Practice Information - Contact Information
+    preferredPhoneNumber: '',
+    companyName: '',
+    preferredContactMethodPhone: false,
+    preferredContactMethodEmail: false,
+    primaryContactName: '',
+    primaryContactRole: '',
+    primaryContactPhoneNumber: '',
+    officeEmail: '',
+    // Practice Information - Shipping Information
+    attentionRecipientName: '',
+    deliveryPhoneNumber: '',
+    receivingPreference: '',
+    preferredNotificationMethod: '',
+    additionalShippingInstructions: '',
+    // Practice Information - Operational Information
+    estimatedOrdersPerMonth: '',
+    dentalLicenseNumber: '',
+    additionalOperationalInstructions: '',
   });
 
   const fetchData = async () => {
@@ -58,11 +83,30 @@ const Profile = () => {
         gender: profile.gender || '',
         DOB: profile.dob || '',
         bio: profile.bio || '',
-        addressLine1: profile.address?.street || '',
-        addressLine2: profile.address?.unitNo || '',
+        addressLine1: profile.address?.addressLine1 || profile.address?.street || '',
+        addressLine2: profile.address?.addressLine2 || profile.address?.unitNo || '',
         city: profile.address?.city || '',
         state: profile.address?.state || '',
         zipCode: profile.address?.zip || '',
+        // Practice Information - Contact Information
+        preferredPhoneNumber: profile.preferredPhoneNumber || '',
+        companyName: profile.companyName || '',
+        preferredContactMethodPhone: profile.preferredContactMethodPhone || false,
+        preferredContactMethodEmail: profile.preferredContactMethodEmail || false,
+        primaryContactName: profile.primaryContactName || '',
+        primaryContactRole: profile.primaryContactRole || '',
+        primaryContactPhoneNumber: profile.primaryContactPhoneNumber || '',
+        officeEmail: profile.officeEmail || '',
+        // Practice Information - Shipping Information
+        attentionRecipientName: profile.attentionRecipientName || '',
+        deliveryPhoneNumber: profile.deliveryPhoneNumber || '',
+        receivingPreference: profile.receivingPreference || '',
+        preferredNotificationMethod: profile.preferredNotificationMethod || '',
+        additionalShippingInstructions: profile.additionalShippingInstructions || '',
+        // Practice Information - Operational Information
+        estimatedOrdersPerMonth: profile.estimatedOrdersPerMonth || '',
+        dentalLicenseNumber: profile.dentalLicenseNumber || '',
+        additionalOperationalInstructions: profile.additionalOperationalInstructions || '',
       });
 
       setLoading(false);
@@ -87,6 +131,11 @@ const Profile = () => {
       return;
 
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { name, checked } = e.target;
+    setForm((prev) => ({ ...prev, [name]: checked }));
   };
 
   const handleUploadClick = () => inputRef.current.click();
@@ -138,12 +187,31 @@ const Profile = () => {
       dob: form.DOB,
       gender: form.gender,
       address: {
-        street: form.addressLine1,
-        unitNo: form.addressLine2,
+        addressLine1: form.addressLine1,
+        addressLine2: form.addressLine2,
         city: form.city,
         state: form.state,
         zip: form.zipCode,
       },
+      // Practice Information - Contact Information
+      preferredPhoneNumber: form.preferredPhoneNumber,
+      companyName: form.companyName,
+      preferredContactMethodPhone: form.preferredContactMethodPhone,
+      preferredContactMethodEmail: form.preferredContactMethodEmail,
+      primaryContactName: form.primaryContactName,
+      primaryContactRole: form.primaryContactRole,
+      primaryContactPhoneNumber: form.primaryContactPhoneNumber,
+      officeEmail: form.officeEmail,
+      // Practice Information - Shipping Information
+      attentionRecipientName: form.attentionRecipientName,
+      deliveryPhoneNumber: form.deliveryPhoneNumber,
+      receivingPreference: form.receivingPreference,
+      preferredNotificationMethod: form.preferredNotificationMethod,
+      additionalShippingInstructions: form.additionalShippingInstructions,
+      // Practice Information - Operational Information
+      estimatedOrdersPerMonth: form.estimatedOrdersPerMonth,
+      dentalLicenseNumber: form.dentalLicenseNumber,
+      additionalOperationalInstructions: form.additionalOperationalInstructions,
     };
 
     try {
@@ -199,7 +267,11 @@ const Profile = () => {
                     <Button
                       variant="outlined"
                       color="error"
-                      onClick={fetchData}
+                      onClick={() => {
+                        fetchData();
+                        setFileName('');
+                        setImgPresent(false);
+                      }}
                     >
                       Cancel
                     </Button>
@@ -294,7 +366,7 @@ const Profile = () => {
                 </Grid>
                 <Grid item size={{xs:12}}>
                   <CustomTextField
-                    label="Address Line 1"
+                    label="Shipping Address Line 1"
                     name="addressLine1"
                     value={form.addressLine1}
                     onChange={handleInputChange}
@@ -304,7 +376,7 @@ const Profile = () => {
                 </Grid>
                 <Grid item size={{xs:12}}>
                   <CustomTextField
-                      label="Address Line 2"
+                      label="Shipping Address Line 2"
                       name="addressLine2"
                       value={form.addressLine2}
                       onChange={handleInputChange}
@@ -343,6 +415,306 @@ const Profile = () => {
                   />
                 </Grid>
 
+                {/* Practice Information - Contact Information Section */}
+                <Grid item size={{xs:12}}>
+                  <Box sx={{ borderBottom: '1px solid white', mb: 2, mt: 3 }}>
+                    <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
+                      Contact Information
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item size={{xs:12, sm:6}}>
+                  <CustomTextField
+                    label="Preferred Phone Number"
+                    name="preferredPhoneNumber"
+                    value={form.preferredPhoneNumber}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{xs:12, sm:6}}>
+                  <CustomTextField
+                    label="Company Name"
+                    name="companyName"
+                    value={form.companyName}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{xs:12}}>
+                  <Typography variant="body2" sx={{ color: 'white', mb: 1 }}>
+                    Preferred Contact Method
+                  </Typography>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name="preferredContactMethodPhone"
+                        checked={form.preferredContactMethodPhone}
+                        onChange={handleCheckboxChange}
+                        disabled={!editMode}
+                        sx={{
+                          color: 'white',
+                          '&.Mui-checked': {
+                            color: 'gray',
+                          },
+                          '& .MuiSvgIcon-root': {
+                            fontSize: 28,
+                          },
+                        }}
+                      />
+                    }
+                    label={<Typography variant="body2" sx={{ color: 'white' }}>Phone</Typography>}
+                  />
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        name="preferredContactMethodEmail"
+                        checked={form.preferredContactMethodEmail}
+                        onChange={handleCheckboxChange}
+                        disabled={!editMode}
+                        sx={{
+                          color: 'white',
+                          '&.Mui-checked': {
+                            color: 'gray',
+                          },
+                          '& .MuiSvgIcon-root': {
+                            fontSize: 28,
+                          },
+                        }}
+                      />
+                    }
+                    label={<Typography variant="body2" sx={{ color: 'white' }}>Email</Typography>}
+                  />
+                </Grid>
+                <Grid item size={{xs:12, sm:6}}>
+                  <CustomTextField
+                    label="Primary Contact for Orders and Onboarding Name"
+                    name="primaryContactName"
+                    value={form.primaryContactName}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{xs:12, sm:6}}>
+                  <CustomTextField
+                    label="Primary Contact Phone Number"
+                    name="primaryContactPhoneNumber"
+                    value={form.primaryContactPhoneNumber}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{xs:12}}>
+                  <CustomTextField
+                    label="Primary Contact Role (Owner / Office Manager / Treatment Coordinator / etc.)"
+                    name="primaryContactRole"
+                    value={form.primaryContactRole}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{xs:12}}>
+                  <CustomTextField
+                    label="Office Email"
+                    name="officeEmail"
+                    type="email"
+                    value={form.officeEmail}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+
+                {/* Practice Information - Shipping Information Section */}
+                <Grid item size={{xs:12}}>
+                  <Box sx={{ borderBottom: '1px solid white', mb: 2, mt: 3 }}>
+                    <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
+                      Shipping Information
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item size={{xs:12}}>
+                  <CustomTextField
+                    label="Attention/Recipient Name"
+                    name="attentionRecipientName"
+                    value={form.attentionRecipientName}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{xs:12, sm:6}}>
+                  <CustomTextField
+                    label="Phone Number for Delivery Issues"
+                    name="deliveryPhoneNumber"
+                    value={form.deliveryPhoneNumber}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{xs:12, sm:6}}>
+                  <CustomTextField
+                    label="Receiving Preference (Front Desk / Back Office / Lab / etc.)"
+                    name="receivingPreference"
+                    value={form.receivingPreference}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{xs:12}}>
+                  <FormControl fullWidth disabled={!editMode}>
+                    <InputLabel 
+                      sx={{ 
+                        color: 'white',
+                        '&.Mui-disabled': {
+                          color: '#b0b0b0',
+                        },
+                      }}
+                    >
+                      Preferred Notification Method of Item Shipped
+                    </InputLabel>
+                    <Select
+                      name="preferredNotificationMethod"
+                      value={form.preferredNotificationMethod}
+                      onChange={handleInputChange}
+                      label="Preferred Notification Method of Item Shipped"
+                      sx={{
+                        color: 'white',
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'white',
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'white',
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'white',
+                        },
+                        '& .MuiSvgIcon-root': {
+                          color: 'white',
+                        },
+                        // Disabled state styling to match CustomTextField
+                        '&.Mui-disabled': {
+                          backgroundColor: '#242424',
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#aaaaaa',
+                          },
+                        },
+                        '& .MuiInputBase-input.Mui-disabled': {
+                          color: '#888888',
+                          WebkitTextFillColor: '#888888',
+                        },
+                      }}
+                    >
+                      <MenuItem value="Email">Email</MenuItem>
+                      <MenuItem value="Text">Text</MenuItem>
+                      <MenuItem value="None">
+                        None (You can still track your orders on this web application)
+                      </MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item size={{xs:12}}>
+                  <CustomTextField
+                    label="Additional Shipping Instructions (Optional)"
+                    name="additionalShippingInstructions"
+                    value={form.additionalShippingInstructions}
+                    onChange={handleInputChange}
+                    fullWidth
+                    multiline
+                    rows={4}
+                    disabled={!editMode}
+                  />
+                </Grid>
+
+                {/* Practice Information - Operational Information Section */}
+                <Grid item size={{xs:12}}>
+                  <Box sx={{ borderBottom: '1px solid white', mb: 2, mt: 3 }}>
+                    <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
+                      Operational Information
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item size={{xs:12}}>
+                  <FormControl fullWidth disabled={!editMode}>
+                    <InputLabel 
+                      sx={{ 
+                        color: 'white',
+                        '&.Mui-disabled': {
+                          color: '#b0b0b0',
+                        },
+                      }}
+                    >
+                      Estimated Orders per Month
+                    </InputLabel>
+                    <Select
+                      name="estimatedOrdersPerMonth"
+                      value={form.estimatedOrdersPerMonth}
+                      onChange={handleInputChange}
+                      label="Estimated Orders per Month"
+                      sx={{
+                        color: 'white',
+                        '& .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'white',
+                        },
+                        '&:hover .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'white',
+                        },
+                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                          borderColor: 'white',
+                        },
+                        '& .MuiSvgIcon-root': {
+                          color: 'white',
+                        },
+                        // Disabled state styling to match CustomTextField
+                        '&.Mui-disabled': {
+                          backgroundColor: '#242424',
+                          '& .MuiOutlinedInput-notchedOutline': {
+                            borderColor: '#aaaaaa',
+                          },
+                        },
+                        '& .MuiInputBase-input.Mui-disabled': {
+                          color: '#888888',
+                          WebkitTextFillColor: '#888888',
+                        },
+                      }}
+                    >
+                      <MenuItem value="1-2">1-2</MenuItem>
+                      <MenuItem value="3-5">3-5</MenuItem>
+                      <MenuItem value="6-9">6-9</MenuItem>
+                      <MenuItem value="10+">10+</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item size={{xs:12}}>
+                  <CustomTextField
+                    label="Dental License Number"
+                    name="dentalLicenseNumber"
+                    value={form.dentalLicenseNumber}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{xs:12}}>
+                  <CustomTextField
+                    label="Additional Operational Instructions"
+                    name="additionalOperationalInstructions"
+                    value={form.additionalOperationalInstructions}
+                    onChange={handleInputChange}
+                    fullWidth
+                    multiline
+                    rows={4}
+                    disabled={!editMode}
+                  />
+                </Grid>
+
               </Grid>
 
               {editMode && (
@@ -350,7 +722,14 @@ const Profile = () => {
                   <Button variant="contained" color="error" onClick={saveChanges}>
                     Save Changes
                   </Button>
-                  <Button variant="outlined" color="error" onClick={fetchData}>
+                  <Button 
+                    variant="outlined" 
+                    color="error" 
+                    onClick={() => {
+                      fetchData();
+                      setEditMode(false);
+                    }}
+                  >
                     Cancel
                   </Button>
                 </Box>
