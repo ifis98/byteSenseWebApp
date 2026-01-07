@@ -60,6 +60,11 @@ export default function OrderForm() {
     city: "",
     state: "",
     zip: "",
+    attention: "",
+    email: "",
+    deliveryPhone: "",
+    receivingPreference: "",
+    additionalShippingInstructions: "",
   });
 
   // E-signature state
@@ -79,7 +84,8 @@ export default function OrderForm() {
       try {
         const res = await user.userRequests().getProfile();
         if (res?.data?.profile) {
-          const { fName = "", lName = "", address } = res.data.profile;
+          const profile = res.data.profile;
+          const { fName = "", lName = "", address } = profile;
           setDoctorName(`${fName} ${lName}`.trim());
 
           // Prefill shipping address from backend
@@ -87,6 +93,7 @@ export default function OrderForm() {
           const addressLine1 = address?.addressLine1 || address?.street || "";
           const addressLine2 = address?.addressLine2 || address?.unitNo || "";
           const zip = address?.zip || address?.zipCode || "";
+          const email = profile.email || profile.officeEmail || "";
 
           const shippingData = {
             addressLine1: addressLine1,
@@ -94,6 +101,12 @@ export default function OrderForm() {
             city: address?.city || "",
             state: address?.state || "",
             zip: zip,
+            attention: profile.attentionRecipientName || "",
+            email: email,
+            deliveryPhone: profile.deliveryPhoneNumber || "",
+            receivingPreference: profile.receivingPreference || "",
+            additionalShippingInstructions:
+              profile.additionalShippingInstructions || "",
           };
 
           setShippingAddress(shippingData);
@@ -309,6 +322,23 @@ export default function OrderForm() {
     formPayload.append("city", String(shippingAddress.city));
     formPayload.append("state", String(shippingAddress.state));
     formPayload.append("zip", String(shippingAddress.zip));
+    formPayload.append("zipCode", String(shippingAddress.zip));
+    if (shippingAddress.attention)
+      formPayload.append("attention", String(shippingAddress.attention));
+    if (shippingAddress.email)
+      formPayload.append("email", String(shippingAddress.email));
+    if (shippingAddress.deliveryPhone)
+      formPayload.append("deliveryPhone", String(shippingAddress.deliveryPhone));
+    if (shippingAddress.receivingPreference)
+      formPayload.append(
+        "receivingPreference",
+        String(shippingAddress.receivingPreference),
+      );
+    if (shippingAddress.additionalShippingInstructions)
+      formPayload.append(
+        "additionalShippingInstructions",
+        String(shippingAddress.additionalShippingInstructions),
+      );
     // Files
     if (payload.upperScan) {
       formPayload.append(
