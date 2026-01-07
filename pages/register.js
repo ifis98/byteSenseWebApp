@@ -303,7 +303,11 @@ const Register = () => {
                   margin="normal"
                   required
                   placeholder={"Enter your first name"}
-                  error={touchedFields.fName && form.fName.length > 0 && form.fName.length < 2}
+                  error={
+                    touchedFields.fName &&
+                    form.fName.length > 0 &&
+                    form.fName.length < 2
+                  }
                   helperText={
                     touchedFields.fName &&
                     form.fName.length > 0 &&
@@ -321,7 +325,11 @@ const Register = () => {
                   margin="normal"
                   required
                   placeholder={"Enter your last name"}
-                  error={touchedFields.lName && form.lName.length > 0 && form.lName.length < 2}
+                  error={
+                    touchedFields.lName &&
+                    form.lName.length > 0 &&
+                    form.lName.length < 2
+                  }
                   helperText={
                     touchedFields.lName &&
                     form.lName.length > 0 &&
@@ -340,7 +348,11 @@ const Register = () => {
                   required
                   placeholder={"Enter your username"}
                   wrapClassName={"col-span-2"}
-                  error={touchedFields.userName && form.userName.length > 0 && form.userName.length < 2}
+                  error={
+                    touchedFields.userName &&
+                    form.userName.length > 0 &&
+                    form.userName.length < 2
+                  }
                   helperText={
                     touchedFields.userName &&
                     form.userName.length > 0 &&
@@ -505,13 +517,14 @@ const Register = () => {
                     <Box className={"col-span-2"}>
                       <Typography
                         variant="body2"
-                        sx={{ color: "white", mb: 1 }}
+                        sx={{ color: "white", mb: 0.5 }}
                       >
-                        Preferred contact method (required)
+                        Preferred Contact Method{" "}
+                        <span style={{ color: "red" }}>*</span>
                       </Typography>
                       <Typography
                         variant="caption"
-                        sx={{ color: "gray", mb: 1, display: "block" }}
+                        sx={{ color: "#b0b0b0", mb: 1, display: "block" }}
                       >
                         Must select at least one
                       </Typography>
@@ -527,7 +540,7 @@ const Register = () => {
                         }
                         label={
                           <Typography variant="body2" sx={{ color: "white" }}>
-                            Phone
+                            Text
                           </Typography>
                         }
                       />
@@ -559,14 +572,14 @@ const Register = () => {
                       placeholder={"Enter primary contact name"}
                     />
                     <CustomLabelTextField
-                        fullWidth
-                        label="Primary Contact for Orders and Onboarding Phone Number"
-                        name="primaryContactPhoneNumber"
-                        value={form.primaryContactPhoneNumber}
-                        onChange={handleChange}
-                        margin="normal"
-                        required
-                        placeholder={"Enter primary contact phone number"}
+                      fullWidth
+                      label="Primary Contact for Orders and Onboarding Phone Number"
+                      name="primaryContactPhoneNumber"
+                      value={form.primaryContactPhoneNumber}
+                      onChange={handleChange}
+                      margin="normal"
+                      required
+                      placeholder={"Enter primary contact phone number"}
                     />
                     <CustomLabelTextField
                       fullWidth
@@ -778,7 +791,11 @@ const Register = () => {
                       margin="normal"
                       required
                       placeholder={"Enter your city"}
-                      error={touchedFields.city && form.city.length > 0 && form.city.length < 2}
+                      error={
+                        touchedFields.city &&
+                        form.city.length > 0 &&
+                        form.city.length < 2
+                      }
                       helperText={
                         touchedFields.city &&
                         form.city.length > 0 &&
@@ -796,7 +813,11 @@ const Register = () => {
                       margin="normal"
                       required
                       placeholder={"Enter your state"}
-                      error={touchedFields.state && form.state.length > 0 && form.state.length < 2}
+                      error={
+                        touchedFields.state &&
+                        form.state.length > 0 &&
+                        form.state.length < 2
+                      }
                       helperText={
                         touchedFields.state &&
                         form.state.length > 0 &&
@@ -815,7 +836,11 @@ const Register = () => {
                       required
                       placeholder={"Enter your zip code"}
                       wrapClassName={"col-span-2"}
-                      error={touchedFields.zipCode && form.zipCode.length > 0 && form.zipCode.length < 5}
+                      error={
+                        touchedFields.zipCode &&
+                        form.zipCode.length > 0 &&
+                        form.zipCode.length < 5
+                      }
                       helperText={
                         touchedFields.zipCode &&
                         form.zipCode.length > 0 &&
@@ -1023,7 +1048,10 @@ const Register = () => {
                       >
                         {isLoading ? (
                           <Box display="flex" alignItems="center" gap={1}>
-                            <CircularProgress size={20} sx={{ color: "white" }} />
+                            <CircularProgress
+                              size={20}
+                              sx={{ color: "white" }}
+                            />
                             <span>Signing Up...</span>
                           </Box>
                         ) : (
