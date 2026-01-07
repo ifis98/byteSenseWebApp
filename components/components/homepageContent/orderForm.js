@@ -355,7 +355,7 @@ export default function OrderForm() {
         .addOrder(formPayload)
         .then((res) => {
           window.location.href =
-            "https://buy.stripe.com/3cI9AU7Cb9DFcS8gsU53O08";
+            "https://buy.stripe.com/7sYaEY7CbeXZaK04Kc53O09";
         })
         .catch((e) => {
           alert("Unable to place order. Please try again.");
@@ -934,7 +934,7 @@ export default function OrderForm() {
                       variant="h6"
                       sx={{ color: "#ef5350", fontWeight: 600 }}
                     >
-                      $379.00
+                      $229.00
                     </Typography>
                   </Box>
                 </Box>
