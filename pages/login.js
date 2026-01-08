@@ -18,6 +18,15 @@ class Login extends React.Component {
     };
   }
 
+  componentDidMount() {
+    // Check if user is already logged in
+    const token = localStorage.getItem("token");
+    if (token) {
+      // User is already logged in, redirect to Dashboard
+      window.location.href = "/";
+    }
+  }
+
   handleChange = (event) => {
     this.setState({ [event.target.name]: event.target.value });
   };

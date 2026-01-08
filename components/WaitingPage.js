@@ -1,16 +1,50 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Typography, Button, Container } from "@mui/material";
 import { useRouter } from "next/navigation";
 import PersonIcon from "@mui/icons-material/Person";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useDispatch } from "react-redux";
 import { RESET_USER_DETAIL } from "../store/actions/actionTypes/ActionTypes";
+import axios from "axios";
+import { backendLink } from "../exports/variable";
 
 const WaitingPage = () => {
   const router = useRouter();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const checkApprovalStatus = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        router.push("/login");
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          backendLink + "user/approvalStatus",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+              "X-Is-Doctor": "true",
+            },
+          }
+        );
+
+        // If user is approved, redirect to Dashboard
+        if (response.data.isAccepted === true) {
+          router.push("/");
+        }
+      } catch (error) {
+        // If check fails, stay on waiting page
+        console.error("Error checking approval status:", error);
+      }
+    };
+
+    checkApprovalStatus();
+  }, [router]);
 
   const handleLogout = () => {
     dispatch({ type: RESET_USER_DETAIL });

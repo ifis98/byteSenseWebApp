@@ -61,6 +61,14 @@ const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    // Check if user is already logged in
+    const token = localStorage.getItem("token");
+    if (token) {
+      // User is already logged in, redirect to Dashboard
+      router.push("/");
+      return;
+    }
+
     if (typeof window === "undefined" || !window.rewardful) return;
 
     window.rewardful("ready", function () {
@@ -73,7 +81,7 @@ const Register = () => {
         }
       }
     });
-  }, []);
+  }, [router]);
 
   const handleChange = (e) => {
     const fieldName = e.target.name;
