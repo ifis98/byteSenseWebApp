@@ -52,6 +52,8 @@ export default function OrderForm() {
   const [currentStep, setCurrentStep] = useState("form"); // "form" or "review"
   const sigCanvas = useRef(null);
   const sigContainerRef = useRef(null);
+  const [editAddressMode, setEditAddressMode] = useState(false);
+  const [originalShippingAddress, setOriginalShippingAddress] = useState(null);
 
   // Shipping address state
   const [shippingAddress, setShippingAddress] = useState({
@@ -892,12 +894,27 @@ export default function OrderForm() {
               {/* Left Side - Shipping Address, Payment, Cost Breakdown, Turnaround Time */}
               <Grid size={{ xs: 12, md: 4 }}>
                 {/* Shipping Address Section */}
-                <Typography
-                  variant="h6"
-                  sx={{ fontWeight: 600, color: "white", mb: 3 }}
-                >
-                  Shipping address
-                </Typography>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 600, color: "white" }}
+                  >
+                    Shipping address
+                  </Typography>
+                  {!editAddressMode && (
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                      onClick={() => {
+                        setOriginalShippingAddress({ ...shippingAddress });
+                        setEditAddressMode(true);
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  )}
+                </Box>
 
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   <CustomTextField
@@ -907,6 +924,7 @@ export default function OrderForm() {
                     onChange={handleAddressChange}
                     fullWidth
                     required
+                    disabled={!editAddressMode}
                   />
 
                   <CustomTextField
@@ -915,6 +933,7 @@ export default function OrderForm() {
                     value={shippingAddress.addressLine2}
                     onChange={handleAddressChange}
                     fullWidth
+                    disabled={!editAddressMode}
                   />
 
                   <CustomTextField
@@ -924,6 +943,7 @@ export default function OrderForm() {
                     onChange={handleAddressChange}
                     fullWidth
                     required
+                    disabled={!editAddressMode}
                   />
                   <CustomTextField
                     label="City"
@@ -932,6 +952,7 @@ export default function OrderForm() {
                     onChange={handleAddressChange}
                     fullWidth
                     required
+                    disabled={!editAddressMode}
                   />
 
                   <CustomTextField
@@ -941,8 +962,36 @@ export default function OrderForm() {
                     onChange={handleAddressChange}
                     fullWidth
                     required
+                    disabled={!editAddressMode}
                   />
                 </Box>
+
+                {editAddressMode && (
+                  <Box sx={{ display: "flex", gap: 2, mt: 2 }}>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() => {
+                        setEditAddressMode(false);
+                      }}
+                    >
+                      Save Changes
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => {
+                        if (originalShippingAddress) {
+                          setShippingAddress(originalShippingAddress);
+                        }
+                        setEditAddressMode(false);
+                        setOriginalShippingAddress(null);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </Box>
+                )}
 
                 <Divider sx={{ my: 4, borderColor: "#444" }} />
 
@@ -1045,78 +1094,15 @@ export default function OrderForm() {
                         border: "1px solid rgba(255,255,255,0.1)",
                       }}
                     >
-                      {/* SVG Night Guard Icon */}
-                      <svg
-                        width="80"
-                        height="80"
-                        viewBox="0 0 100 100"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        {/* Main guard shape */}
-                        <path
-                          d="M20 40 Q20 25 35 25 L65 25 Q80 25 80 40 L80 60 Q80 75 65 75 L35 75 Q20 75 20 60 Z"
-                          fill="rgba(255,255,255,0.15)"
-                          stroke="rgba(255,255,255,0.4)"
-                          strokeWidth="2"
-                        />
-                        {/* Teeth impressions */}
-                        <ellipse
-                          cx="30"
-                          cy="45"
-                          rx="8"
-                          ry="6"
-                          fill="rgba(255,255,255,0.2)"
-                          stroke="rgba(255,255,255,0.3)"
-                          strokeWidth="1"
-                        />
-                        <ellipse
-                          cx="50"
-                          cy="45"
-                          rx="8"
-                          ry="6"
-                          fill="rgba(255,255,255,0.2)"
-                          stroke="rgba(255,255,255,0.3)"
-                          strokeWidth="1"
-                        />
-                        <ellipse
-                          cx="70"
-                          cy="45"
-                          rx="8"
-                          ry="6"
-                          fill="rgba(255,255,255,0.2)"
-                          stroke="rgba(255,255,255,0.3)"
-                          strokeWidth="1"
-                        />
-                        {/* Bottom teeth */}
-                        <ellipse
-                          cx="30"
-                          cy="60"
-                          rx="8"
-                          ry="6"
-                          fill="rgba(255,255,255,0.2)"
-                          stroke="rgba(255,255,255,0.3)"
-                          strokeWidth="1"
-                        />
-                        <ellipse
-                          cx="50"
-                          cy="60"
-                          rx="8"
-                          ry="6"
-                          fill="rgba(255,255,255,0.2)"
-                          stroke="rgba(255,255,255,0.3)"
-                          strokeWidth="1"
-                        />
-                        <ellipse
-                          cx="70"
-                          cy="60"
-                          rx="8"
-                          ry="6"
-                          fill="rgba(255,255,255,0.2)"
-                          stroke="rgba(255,255,255,0.3)"
-                          strokeWidth="1"
-                        />
-                      </svg>
+                      <img
+                        src="/night-guard.png"
+                        alt="bioSense device"
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "contain",
+                        }}
+                      />
                     </Box>
 
                     {/* Product Details */}
@@ -1125,26 +1111,8 @@ export default function OrderForm() {
                         variant="h6"
                         sx={{ fontWeight: 600, color: "white", mb: 2 }}
                       >
-                        Night Guard
+                        bioSense
                       </Typography>
-
-                      <Box sx={{ mb: 1 }}>
-                        <Typography
-                          variant="body2"
-                          sx={{ color: "#aaa", fontSize: "0.875rem" }}
-                        >
-                          Design Turnaround Time: 1 Business Day
-                        </Typography>
-                      </Box>
-
-                      <Box>
-                        <Typography
-                          variant="body2"
-                          sx={{ color: "#aaa", fontSize: "0.875rem" }}
-                        >
-                          Print Turnaround Time: 2 Business Days
-                        </Typography>
-                      </Box>
                     </Box>
 
                   </Box>
