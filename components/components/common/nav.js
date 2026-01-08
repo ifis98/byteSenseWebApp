@@ -17,15 +17,17 @@ import {
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MessageIcon from "@mui/icons-material/Message";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { getDentistDetail } from "../../../store/reducers";
 import { backendLink } from "../../../exports/variable";
 import { user } from "../../../exports/apiCalls";
 import { updateDoctorDetail } from "../../../actions/APIAction";
 import MenuIcon from "@mui/icons-material/Menu";
+import { RESET_USER_DETAIL } from "../../../store/actions/actionTypes/ActionTypes";
 
 const HomePageNav = ({ updateDoctorDetail, setDrawerOpen }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState(null);
   const [img, setImg] = useState("");
   const [imgPresent, setImgPresent] = useState(false);
@@ -62,6 +64,7 @@ const HomePageNav = ({ updateDoctorDetail, setDrawerOpen }) => {
   };
 
   const logOut = () => {
+    dispatch({ type: RESET_USER_DETAIL });
     localStorage.removeItem("token");
     window.location.href = "/login";
   };

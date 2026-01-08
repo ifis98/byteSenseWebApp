@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 // This file contains variables that are exported for use throughout the application
 // Modify the backendLink to point to your backend API

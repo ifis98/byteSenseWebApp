@@ -1,12 +1,11 @@
-'use client'
+"use client";
 
-import React from 'react';
-import { combineReducers } from 'redux';
+import { combineReducers } from "redux";
 import {
   UPDATE_DENTIST_DETAIL,
   UPDATE_PATIENT_DETAIL,
-  UPDATE_PATIENT_ID
-} from '../actions/actionTypes/ActionTypes';
+  UPDATE_PATIENT_ID,
+} from "../actions/actionTypes/ActionTypes";
 
 // This reducer bundle is intended for client-side usage within Next.js pages
 
@@ -28,7 +27,7 @@ const dentistDetail = (state = {}, { type, payload }) => {
   }
 };
 
-const patient = (state ={}, { type, payload }) => {
+const patient = (state = {}, { type, payload }) => {
   switch (type) {
     case UPDATE_PATIENT_DETAIL:
       return payload;
@@ -40,5 +39,5 @@ const patient = (state ={}, { type, payload }) => {
 export default combineReducers({
   patientId,
   patient,
-  dentistDetail
+  dentistDetail,
 });

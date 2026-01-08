@@ -1,14 +1,15 @@
-'use client'
+"use client";
 
-import React from 'react';
 import { combineReducers } from "redux";
 // Reserved import for selectors if memoization is reintroduced later
 import pageReducer from "./PageReducer";
+import userDetails from "./UserReducer";
 
 // In Next.js, this combined reducer is consumed only from client components
 
 export default combineReducers({
   page: pageReducer,
+  user: userDetails,
 });
 
 export const getPatientId = (state) => state.page.patientId;
