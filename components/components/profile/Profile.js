@@ -36,9 +36,9 @@ const Profile = () => {
     userInfo: "",
     firstName: "",
     lastName: "",
-    gender: "",
-    DOB: "",
-    bio: "",
+    // gender: "",
+    // DOB: "",
+    // bio: "",
     addressLine1: "",
     addressLine2: "",
     city: "",
@@ -80,9 +80,9 @@ const Profile = () => {
         userInfo: profile.user || "",
         firstName: profile.fName || "",
         lastName: profile.lName || "",
-        gender: profile.gender || "",
-        DOB: profile.dob || "",
-        bio: profile.bio || "",
+        // gender: profile.gender || "",
+        // DOB: profile.dob || "",
+        // bio: profile.bio || "",
         addressLine1:
           profile.address?.addressLine1 || profile.address?.street || "",
         addressLine2:
@@ -129,7 +129,7 @@ const Profile = () => {
     const { name, value } = e.target;
     if (["firstName", "lastName"].includes(name) && !/^[a-zA-Z ]*$/.test(value))
       return;
-    if (["DOB"].includes(name) && !/^[0-9/]*$/.test(value)) return;
+    // if (["DOB"].includes(name) && !/^[0-9/]*$/.test(value)) return;
     if (["zipCode"].includes(name) && !/^[0-9]*$/.test(value)) return;
 
     setForm((prev) => ({ ...prev, [name]: value }));
@@ -175,11 +175,11 @@ const Profile = () => {
   };
 
   const saveChanges = async () => {
-    const dobValid = moment(form.DOB, "MM/DD/YYYY", true).isValid();
-    if (form.DOB && !dobValid) {
-      setUploadError("DOB must be in MM/DD/YYYY format");
-      return;
-    }
+    // const dobValid = moment(form.DOB, "MM/DD/YYYY", true).isValid();
+    // if (form.DOB && !dobValid) {
+    //   setUploadError("DOB must be in MM/DD/YYYY format");
+    //   return;
+    // }
 
     // Validate that at least one preferred contact method is selected
     if (
@@ -194,9 +194,9 @@ const Profile = () => {
       user: { _id: form.userInfo },
       fName: form.firstName,
       lName: form.lastName,
-      bio: form.bio,
-      dob: form.DOB,
-      gender: form.gender,
+      // bio: form.bio,
+      // dob: form.DOB,
+      // gender: form.gender,
       address: {
         addressLine1: form.addressLine1,
         addressLine2: form.addressLine2,
@@ -374,88 +374,38 @@ const Profile = () => {
                     disabled={!editMode}
                   />
                 </Grid>
-                <Grid item size={{ xs: 12, sm: 6 }}>
-                  <CustomTextField
-                    label="DOB (MM/DD/YYYY)"
-                    name="DOB"
-                    value={form.DOB}
-                    onChange={handleInputChange}
-                    fullWidth
-                    disabled={!editMode}
-                  />
-                </Grid>
-                <Grid item size={{ xs: 12, sm: 6 }}>
-                  <CustomTextField
-                    label="Gender"
-                    name="gender"
-                    value={form.gender}
-                    onChange={handleInputChange}
-                    fullWidth
-                    disabled={!editMode}
-                  />
-                </Grid>
-                <Grid item size={{ xs: 12 }}>
-                  <CustomTextField
-                    label="Bio"
-                    name="bio"
-                    value={form.bio}
-                    onChange={handleInputChange}
-                    fullWidth
-                    multiline
-                    rows={4}
-                    disabled={!editMode}
-                  />
-                </Grid>
-                <Grid item size={{ xs: 12 }}>
-                  <CustomTextField
-                    label="Shipping Address Line 1"
-                    name="addressLine1"
-                    value={form.addressLine1}
-                    onChange={handleInputChange}
-                    fullWidth
-                    disabled={!editMode}
-                  />
-                </Grid>
-                <Grid item size={{ xs: 12 }}>
-                  <CustomTextField
-                    label="Shipping Address Line 2"
-                    name="addressLine2"
-                    value={form.addressLine2}
-                    onChange={handleInputChange}
-                    fullWidth
-                    disabled={!editMode}
-                  />
-                </Grid>
-                <Grid item size={{ xs: 12, sm: 4 }}>
-                  <CustomTextField
-                    label="City"
-                    name="city"
-                    value={form.city}
-                    onChange={handleInputChange}
-                    fullWidth
-                    disabled={!editMode}
-                  />
-                </Grid>
-                <Grid item size={{ xs: 12, sm: 4 }}>
-                  <CustomTextField
-                    label="State"
-                    name="state"
-                    value={form.state}
-                    onChange={handleInputChange}
-                    fullWidth
-                    disabled={!editMode}
-                  />
-                </Grid>
-                <Grid item size={{ xs: 12, sm: 4 }}>
-                  <CustomTextField
-                    label="Zip"
-                    name="zipCode"
-                    value={form.zipCode}
-                    onChange={handleInputChange}
-                    fullWidth
-                    disabled={!editMode}
-                  />
-                </Grid>
+                {/*<Grid item size={{ xs: 12, sm: 6 }}>*/}
+                {/*  <CustomTextField*/}
+                {/*    label="DOB (MM/DD/YYYY)"*/}
+                {/*    name="DOB"*/}
+                {/*    value={form.DOB}*/}
+                {/*    onChange={handleInputChange}*/}
+                {/*    fullWidth*/}
+                {/*    disabled={!editMode}*/}
+                {/*  />*/}
+                {/*</Grid>*/}
+                {/*<Grid item size={{ xs: 12, sm: 6 }}>*/}
+                {/*  <CustomTextField*/}
+                {/*    label="Gender"*/}
+                {/*    name="gender"*/}
+                {/*    value={form.gender}*/}
+                {/*    onChange={handleInputChange}*/}
+                {/*    fullWidth*/}
+                {/*    disabled={!editMode}*/}
+                {/*  />*/}
+                {/*</Grid>*/}
+                {/*<Grid item size={{ xs: 12 }}>*/}
+                {/*  <CustomTextField*/}
+                {/*    label="Bio"*/}
+                {/*    name="bio"*/}
+                {/*    value={form.bio}*/}
+                {/*    onChange={handleInputChange}*/}
+                {/*    fullWidth*/}
+                {/*    multiline*/}
+                {/*    rows={4}*/}
+                {/*    disabled={!editMode}*/}
+                {/*  />*/}
+                {/*</Grid>*/}
 
                 {/* Practice Information - Contact Information Section */}
                 <Grid item size={{ xs: 12 }}>
@@ -600,6 +550,56 @@ const Profile = () => {
                       Shipping Information
                     </Typography>
                   </Box>
+                </Grid>
+                <Grid item size={{ xs: 12 }}>
+                  <CustomTextField
+                    label="Shipping Address Line 1"
+                    name="addressLine1"
+                    value={form.addressLine1}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{ xs: 12 }}>
+                  <CustomTextField
+                    label="Shipping Address Line 2"
+                    name="addressLine2"
+                    value={form.addressLine2}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{ xs: 12, sm: 4 }}>
+                  <CustomTextField
+                    label="City"
+                    name="city"
+                    value={form.city}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{ xs: 12, sm: 4 }}>
+                  <CustomTextField
+                    label="State"
+                    name="state"
+                    value={form.state}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
+                </Grid>
+                <Grid item size={{ xs: 12, sm: 4 }}>
+                  <CustomTextField
+                    label="Zip"
+                    name="zipCode"
+                    value={form.zipCode}
+                    onChange={handleInputChange}
+                    fullWidth
+                    disabled={!editMode}
+                  />
                 </Grid>
                 <Grid item size={{ xs: 12 }}>
                   <CustomTextField
