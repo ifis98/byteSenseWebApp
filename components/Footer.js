@@ -6,18 +6,11 @@ const Footer = () => {
     <Box
       component="footer"
       sx={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
         width: "100%",
         borderTop: "1px solid #5f5f5f",
         px: 2,
         backgroundColor: "#242424",
-        zIndex: 1000,
-        "@media (min-width: 768px)": {
-          pl: "256px",
-        },
+        mt: "auto",
       }}
     >
       <Box

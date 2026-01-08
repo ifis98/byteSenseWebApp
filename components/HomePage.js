@@ -109,8 +109,10 @@ function HomePage() {
         <Sidebar variant={""} drawerOpen={drawerOpen} onClick={closeDrawer} />
       </div>
       <div className={styles.mainContent}>
-        <HomePageNav setDrawerOpen={setDrawerOpen} />
-        {renderComponent()}
+        <div style={{ flex: "1 0 auto" }}>
+          <HomePageNav setDrawerOpen={setDrawerOpen} />
+          {renderComponent()}
+        </div>
         <Footer />
       </div>
     </div>
