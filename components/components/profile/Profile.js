@@ -168,6 +168,10 @@ const Profile = () => {
 
     try {
       await user.userRequests().uploadImage(formData);
+      setFileName("");
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
       fetchData();
     } catch (err) {
       console.error(err);
